@@ -46,7 +46,7 @@ The fastest option for pruning pre-merge blocks is to perform an offline prune. 
     On completion, you'll receive the `Pruning pre-merge blocks and transaction receipts completed` log message.
     It should only take a few minutes to complete but has been known to take up to two hours on occasion.
 
-1. Add the following RocksDB garbage collection options and restart Besu to apply to help free up space:
+1. Add the following RocksDB garbage collection options and restart Besu to help free up space:
 
    - `--Xplugin-rocksdb-blockchain-blob-garbage-collection-enabled`
    - `--Xplugin-rocksdb-blob-garbage-collection-age-cutoff=0.5`: The fraction of file age that makes a blob file eligible for garbage collection; `0.5` means only the oldest 50% of files are eligible.
