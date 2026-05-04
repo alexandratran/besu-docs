@@ -54,6 +54,14 @@ html[data-theme="dark"] .header-github-link::before {
     no-repeat;
 }
 
+/* Target the welcome screen container by its prefix */
+[class*="welcomeScreen_"] p{
+  white-space: pre-wrap !important;
+  font-size: 0.85rem !important;    /* Shrinks the text (approx 13.6px) */
+  line-height: 1.5;             /* Adds a bit of breathing room between lines */
+  color: var(--ifm-color-emphasis-700); /* Optional: softens the text color slightly */
+}
+
 /* chatbot */
 .header-chatbot-link:hover {
   opacity: 0.6;
@@ -373,4 +381,67 @@ img {
 .navbar__link {
   color: var(--ifm-navbar-link-color);
   font-weight: var(--ifm-font-weight-semibold);
+}
+
+/* Match light mode navbar hover color to dark mode */
+html[data-theme="light"] .navbar__link:hover {
+  color: #8BB8FF;
+}
+
+/* Active top nav section highlighting */
+.navbar__link--active {
+  color: #fff !important;
+  border-bottom: 3px solid rgb(255 255 255 / 90%);
+  padding-bottom: calc(var(--ifm-navbar-padding-vertical) - 3px);
+}
+
+/* Search bar customization */
+.navbar__search-input {
+  width: 14rem;
+}
+
+.navbar__search-input::placeholder {
+  color: #5a5a5a;
+}
+
+html[data-theme="dark"] .navbar__search-input::placeholder {
+  color: #b0b0b0;
+}
+
+/* Floating Ask AI button */
+.floating-ask-ai-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.1rem;
+  border: none;
+  border-radius: 2rem;
+  background-color: var(--ifm-color-primary);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 20%);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.floating-ask-ai-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 28%);
+}
+
+.floating-ask-ai-btn:active {
+  transform: translateY(0);
+}
+
+html[data-theme="dark"] .floating-ask-ai-btn {
+  box-shadow: 0 4px 14px rgb(0 0 0 / 40%);
+}
+
+html[data-theme="dark"] .floating-ask-ai-btn:hover {
+  box-shadow: 0 6px 20px rgb(0 0 0 / 50%);
 }

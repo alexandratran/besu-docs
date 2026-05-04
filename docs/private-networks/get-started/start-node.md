@@ -2,8 +2,6 @@
 title: Start Besu
 description: Start Besu on a private Ethereum network.
 sidebar_position: 3
-tags:
-  - private networks
 ---
 
 # Start Besu
@@ -30,7 +28,7 @@ Predefined genesis configurations for named networks are in the [Besu source fil
 
 ## Confirm node is running
 
-If you started Besu with the [`--rpc-http-enabled`](../../public-networks/reference/cli/options.md#rpc-http-enabled) option, use [cURL](https://curl.haxx.se/) to call [JSON-RPC API methods](../reference/api/index.md) to confirm the node is running.
+If you started Besu with the [`--rpc-http-enabled`](../../public-networks/reference/cli/options.md#rpc-http-enabled) option, use [cURL](https://curl.haxx.se/) to call [JSON-RPC API methods](../reference/api.md) to confirm the node is running.
 
 - `eth_chainId` returns the chain ID of the network.
 
@@ -60,18 +58,16 @@ If you started Besu with the [`--rpc-http-enabled`](../../public-networks/refere
 
 ## Run a node for testing
 
-To run a node that mines blocks at a rate suitable for testing purposes:
+To run a node for testing purposes:
 
 ```bash
-besu --network=dev --miner-enabled --miner-coinbase=0xfe3b557e8fb62b89f4916b721be55ceb828dbd73 --rpc-http-cors-origins="all" --host-allowlist="*" --rpc-ws-enabled --rpc-http-enabled --data-path=/tmp/tmpDatdir
+besu --network=dev --rpc-http-cors-origins="all" --host-allowlist="*" --rpc-ws-enabled --rpc-http-enabled --data-path=/tmp/tmpDatdir
 ```
 
 You can also use the following [configuration file](../../public-networks/how-to/configure-besu/index.md) on the command line to start a node with the same options as above:
 
 ```toml
 network="dev"
-miner-enabled=true
-miner-coinbase="0xfe3b557e8fb62b89f4916b721be55ceb828dbd73"
 rpc-http-cors-origins=["all"]
 host-allowlist=["*"]
 rpc-ws-enabled=true

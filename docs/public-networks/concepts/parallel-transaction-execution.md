@@ -2,27 +2,19 @@
 title: Parallel transaction execution
 sidebar_position: 5
 description: Learn about parallel transaction execution.
-tags:
-- public networks
 ---
 
 # Parallel transaction execution
 
 Besu supports parallel transaction execution, using an optimistic approach to parallelize
 transactions within a block.
-You can enable this feature when using the [Bonsai Tries](data-storage-formats.md#bonsai-tries) data
-storage format.
+This optional feature is available when using the [Bonsai Tries](data-storage-formats.md#bonsai-tries) data storage format.
 This page provides an [overview of the parallelization mechanism](#parallelization-mechanism-overview),
 and [metrics](#metrics) that highlight Besu's improved performance.
 
-:::warning Important
-Parallel transaction execution is an early access feature.
-You can enable it using the `--Xbonsai-parallel-tx-processing-enabled` option.
-:::
-
 ## Parallelization mechanism overview
 
-When parallel transaction execution is enabled, Besu initially executes all transactions within a
+When [parallel transaction execution is enabled](../reference/cli/options.md#bonsai-parallel-tx-processing-enabled), Besu initially executes all transactions within a
 block in parallel, operating under the optimistic assumption that they can all be executed
 concurrently without conflict.
 This parallel execution runs in the background, and Besu proceeds to sequentially process the
@@ -110,13 +102,9 @@ In particular:
    into the block's list.
 
 :::info Note
-The following are excluded from the conflict check:
 
-- Unchanged accounts read by the block.
-- Rewards given to the validator coinbase address at the end of each transaction.
-  If these were considered, every transaction would conflict with the coinbase address.
-  Besu identifies this address as a conflict only if it is accessed for reasons other than receiving
-  rewards at the transaction's conclusion.
+Unchanged accounts read by the block are excluded from the conflict check.
+
 :::
 
 The following flowchart outlines how Besu maintains the lists of tracked addresses:
@@ -151,14 +139,14 @@ With this approach to parallel transaction execution,
 [approximately 40% of transactions do not require replay](#metrics).
 In the future, the conflict detection strategy may be refined to reduce false positives.
 
-You can enable parallel transaction execution using the `--Xbonsai-parallel-tx-processing-enabled` option.
+You can enable parallel transaction execution using the [`--bonsai-parallel-tx-processing-enabled`](../reference/cli/options.md#bonsai-parallel-tx-processing-enabled) option.
 
 ## Metrics
 
 Parallel transaction execution uses Besu's resources more efficiently than traditional
 sequential execution, significantly improving performance.
 
-The following metrics were collected on nodes running on Azure VMs (Standard D8as v5 – 8 vCPUs, 32
+The following metrics were collected on nodes running on Azure Virtual Machines (Standard D8as v5–8 vCPUs, 32
 GiB memory), with Teku and Nimbus as consensus layer (CL) clients:
 
 - **Block processing time** - With Teku as CL client, block processing time improves by at least 25%.
@@ -170,8 +158,24 @@ GiB memory), with Teku and Nimbus as consensus layer (CL) clients:
   Besu running with Nimbus has better performance than with Teku because Nimbus has less overhead on
   Besu, meaning less context switching and fewer cache misses.
 
-- **Execution throughput** - Execution throughput increases, with an average of 96 Mgas/s and peaks
-  of up to 250 Mgas/s.
+- **Execution throughput** - Benchmarking against mainnet big blocks shows a significant increase in
+  execution throughput (measured in megagas per second, Mgas/s) compared to sequential processing.
+  These results were collected on the following hardware:
+
+  - CPU: AMD EPYC 4344P, 8 cores/16 threads, 3.8 GHz base / 5.3 GHz boost
+  - RAM: 64 GB DDR5 5200 MHz
+  - Storage: 2x 960 GB NVMe SSD
+
+  The following table shows the throughput results:
+
+  | Metric | Throughput |
+  |--------|-----------|
+  | Minimum | 194.55 Mgas/s |
+  | Maximum | 445.99 Mgas/s |
+  | Average | 348.17 Mgas/s |
+  | 50th percentile | 352.57 Mgas/s |
+  | 95th percentile | 404.93 Mgas/s |
+  | 99th percentile | 418.13 Mgas/s |
 
 - **Parallel transactions** - Parallel transaction execution introduces two new metrics, which
   indicate that approximately 40% of transactions are parallelized using this feature:

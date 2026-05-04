@@ -2,9 +2,6 @@
 title: Subcommands
 description: Besu command line interface subcommands
 sidebar_position: 2
-tags:
-  - public networks
-  - private networks
 ---
 
 import Tabs from '@theme/Tabs';
@@ -89,7 +86,7 @@ besu blocks export [--start-block=<LONG>] [--end-block=<LONG>] --to=<block-file>
 <TabItem value="Example" label="Example">
 
 ```bash
-besu --network=holesky --data-path=/home/data/ blocks export --start-block=100 --end-block=300 --to=/home/exportblock.bin
+besu --network=sepolia --data-path=/home/data/ blocks export --start-block=100 --end-block=300 --to=/home/exportblock.bin
 ```
 
 </TabItem>
@@ -121,7 +118,7 @@ besu operator generate-log-bloom-cache [--start-block=<BLOCK_NUMBER>] [--end-blo
 <TabItem value="Example" label="Example">
 
 ```bash
-besu --network=holesky --data-path=/project/holesky operator generate-log-bloom-cache --start-block=0 --end-block=100000
+besu --network=sepolia --data-path=/project/sepolia operator generate-log-bloom-cache --start-block=0 --end-block=100000
 ```
 
 </TabItem>
@@ -281,6 +278,36 @@ The command accepts the following command line options:
 ## `storage`
 
 Provides storage related actions.
+
+### `prune-pre-merge-blocks`
+
+<Tabs>
+
+<TabItem value="Syntax" label="Syntax" default>
+
+```bash
+besu --data-path=/path/to/your/database storage prune-pre-merge-blocks [--prune-range-size=<INTEGER>] [--threads=<INTEGER>]
+```
+
+</TabItem>
+
+<TabItem value="Example" label="Example">
+
+```bash
+besu --data-path=/path/to/your/database storage prune-pre-merge-blocks --prune-range-size=5000 --threads=4
+```
+
+</TabItem>
+
+</Tabs>
+
+[Prunes all pre-merge Proof of Work blocks](../../how-to/pre-merge-history-expiry.md#offline-pruning) and associated
+transaction receipts, leaving only headers and genesis block.
+
+Specify the size of the block ranges to prune with the `--prune-range-size` option. The default range is `10000`.
+
+Specify the number of concurrent threads to use while pruning with the `--threads` option. The default is 1 less than
+the total CPU count.
 
 ### `revert-metadata`
 

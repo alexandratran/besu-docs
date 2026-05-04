@@ -2,9 +2,6 @@
 title: Transaction types
 sidebar_position: 1
 description: Description of the different transaction types
-tags:
-  - public networks
-  - private networks
 ---
 
 # Transaction types
@@ -63,6 +60,12 @@ availability for their security and operation).
 
 Blobs are temporarily stored by consensus clients such as Teku, and blocks on the execution layer permanently store
 the reference to the blob.
+
+:::tip
+Configure the maximum number of blobs per block and transaction using the
+[`--max-blobs-per-block`](../../reference/cli/options.md#max-blobs-per-block) and
+[`--max-blobs-per-transaction`](../../reference/cli/options.md#max-blobs-per-transaction) CLI options.
+:::
 
 ### View blob transaction costs
 

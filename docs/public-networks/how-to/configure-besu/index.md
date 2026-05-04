@@ -2,9 +2,6 @@
 title: Configure Besu
 description: Specify options in the Besu configuration file.
 sidebar_position: 1
-tags:
-  - public networks
-  - private networks
 ---
 
 # Configure Besu
@@ -54,7 +51,7 @@ The [command line reference](../../reference/cli/options.md) includes configurat
 
 ```toml title="Sample TOML configuration file"
 # Valid TOML config file
-data-path="~/besudata" # Path
+data-path="/path/to/besudata" # Path
 
 # Network
 bootnodes=["enode://001@123:4567", "enode://002@123:4567", "enode://003@123:4567"]
@@ -70,11 +67,8 @@ rpc-ws-host="9.10.11.12"
 rpc-ws-port=9101
 
 # Chain
-genesis-file="~/genesis.json" # Path to the custom genesis file
+genesis-file="/path/to/genesis.json" # Path to the custom genesis file
 
-# Mining
-miner-enabled=true
-miner-coinbase="0xfe3b557e8fb62b89f4916b721be55ceb828dbd73"
 ```
 
 ```bash title="Starting Besu with a configuration file"

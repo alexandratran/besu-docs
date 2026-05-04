@@ -3,18 +3,22 @@ title: Public networks
 sidebar_position: 1
 sidebar_label: Introduction
 description: Public networks overview
-tags:
-  - public networks
 ---
 
 # Besu for public networks
 
 Besu serves as an [execution client](concepts/node-clients.md#execution-clients) on public proof-of-stake Ethereum networks such as:
+
 - Ethereum Mainnet
 - Hoodi
-- Holesky
 - Ephemery
 - Sepolia
+
+:::note
+
+Besu is also compatible with [Linea](https://docs.linea.build/get-started/how-to/run-a-node/besu), the Ethereum L2.
+
+:::
 
 Get started by [installing Besu](get-started/install/index.md).
 

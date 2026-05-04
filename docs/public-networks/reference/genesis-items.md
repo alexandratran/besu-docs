@@ -2,9 +2,6 @@
 title: Genesis file items
 sidebar_position: 4
 description: Genesis file configuration items reference
-tags:
-  - public networks
-  - private networks
 ---
 
 # Genesis file items
@@ -20,7 +17,6 @@ Network configuration items are specified in the genesis file in the `config` ob
 | Milestone blocks    | [Milestone blocks for the network](#milestone-blocks).                                                                                                                                                            |
 | `chainID`           | [Chain ID for the network](../concepts/network-and-chain-id.md).                                                                                                                                                  |
 | `ethash`            | Specifies network uses [Ethash](../../private-networks/how-to/configure/consensus/index.md) and contains [`fixeddifficulty`](#fixed-difficulty).                                                                  |
-| `clique`            | Specifies network uses [Clique](../../private-networks/how-to/configure/consensus/clique.md) and contains [Clique configuration items](../../private-networks/how-to/configure/consensus/clique.md#genesis-file). |
 | `ibft2`             | Specifies network uses [IBFT 2.0](../../private-networks/how-to/configure/consensus/ibft.md) and contains [IBFT 2.0 configuration items](../../private-networks/how-to/configure/consensus/ibft.md#genesis-file). |
 | `qbft`              | Specifies network uses [QBFT](../../private-networks/how-to/configure/consensus/qbft.md) and contains [QBFT configuration items](../../private-networks/how-to/configure/consensus/qbft.md#genesis-file).         |
 | `transitions`       | Specifies block at which to [change IBFT 2.0 or QBFT validators](../../private-networks/how-to/configure/consensus/add-validators-without-voting.md).                                                             |
@@ -33,7 +29,7 @@ Network configuration items are specified in the genesis file in the `config` ob
 
 ## Genesis block parameters
 
-The purpose of some genesis block parameters varies depending on the consensus protocol (Ethash, [Clique](../../private-networks/how-to/configure/consensus/clique.md), [IBFT 2.0](../../private-networks/how-to/configure/consensus/ibft.md), or [QBFT](../../private-networks/how-to/configure/consensus/qbft.md)). These parameters include:
+The purpose of some genesis block parameters varies depending on the consensus protocol (Ethash, [IBFT 2.0](../../private-networks/how-to/configure/consensus/ibft.md), or [QBFT](../../private-networks/how-to/configure/consensus/qbft.md)). These parameters include:
 
 - `difficulty`.
 - `extraData`.
@@ -43,7 +39,6 @@ The following table describes the genesis block parameters with the same purpose
 
 | Item | Description                                                                                                                                                      |
 | --- |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `coinbase` | Address to pay mining rewards to. Can be any value in the genesis block (commonly set to `0x0000000000000000000000000000000000000000`).                          |
 | `gasLimit` | Block gas limit. Total gas limit for all transactions in a block.                                                                                                |
 | `nonce` | Used in block computation. Can be any value in the genesis block (commonly set to `0x0`).                                                                        |
 | `timestamp` | Creation date and time of the block. Must be before the next block so we recommend specifying `0x0` in the genesis file.                                         |
@@ -132,7 +127,14 @@ Using `fixeddifficulty` is not recommended for use with Ethash outside of test e
 
 ## Discovery configuration items
 
-Use the `discovery` configuration items to specify the [`bootnodes`](cli/options.md#bootnodes) and [`discovery-dns-url`](cli/options.md#discovery-dns-url) in the genesis file, in place of using CLI options or listing them in the configuration file. If either CLI option is used, it takes precedence over the genesis file. Anything listed in the configuration file also takes precedence.
+Use the `discovery` configuration items to specify the [`bootnodes`](cli/options.md#bootnodes) and [`discovery-dns-url`](cli/options.md#discovery-dns-url) in the genesis file, in place of using CLI options or listing them in the configuration file.
+The genesis file can take discovery v4 bootnodes (specified as [enode URLs](../concepts/node-keys.md#enode-url) using the `bootnodes` option) and discovery v5 bootnodes (specified as [ENR URLs](../concepts/node-keys.md#enr-url) using the `v5Bootnodes` option).
+
+:::tip Early access feature
+To use discovery v5 bootnodes, set the early access option `--Xv5-discovery-enabled` to `true`.
+:::
+
+If any option is specified using the command line or [configuration file](../how-to/configure-besu/index.md), it takes precedence over the genesis file.
 
 ```json
 {
@@ -141,6 +143,10 @@ Use the `discovery` configuration items to specify the [`bootnodes`](cli/options
       "bootnodes": [
         "enode://c35c3...d615f@1.2.3.4:30303",
         "enode://f42c13...fc456@1.2.3.5:30303"
+      ],
+      "v5Bootnodes": [
+        "enr:-Mq4QL...DdWRwgiMo",
+        "enr:-Ku4QLV...IN1ZHCCIyk"
       ],
       "dns": "enrtree://AM5FCQLWIZX2QFPNJAP7VUERCCRNGRHWZG3YYHIUV7BVDQ5FDPRT2@nodes.example.org"
     }

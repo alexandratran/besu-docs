@@ -2,8 +2,6 @@
 title: Private network options
 sidebar_position: 1
 description: Besu private networks CLI reference
-tags:
-  - private networks
 ---
 
 import Tabs from '@theme/Tabs';
@@ -35,7 +33,7 @@ You can specify Besu options:
   - `_` replaces `-`.
   - Has a `BESU_` prefix.
 
-  For example, set `--miner-coinbase` using the `BESU_MINER_COINBASE` environment variable.
+For example, set `--rpc-http-enabled` using the `BESU_RPC_HTTP_ENABLED` environment variable.
 
 - In a [configuration file](../../../public-networks/how-to/configure-besu/index.md).
 
@@ -141,92 +139,6 @@ permissions-accounts-config-file-enabled=true
 
 Enables or disables file-based account level permissions. The default is `false`.
 
-### `permissions-accounts-contract-address` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---permissions-accounts-contract-address=<ContractAddress>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---permissions-accounts-contract-address=xyz
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PERMISSIONS_ACCOUNTS_CONTRACT_ADDRESS=xyz
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-permissions-accounts-contract-address="xyz"
-```
-
-</TabItem>
-
-</Tabs>
-
-The contract address for [onchain account permissioning](../../concepts/permissioning/onchain.md).
-
-### `permissions-accounts-contract-enabled` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---permissions-accounts-contract-enabled[=<true|false>]
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---permissions-accounts-contract-enabled=true
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PERMISSIONS_ACCOUNTS_CONTRACT_ENABLED=true
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-permissions-accounts-contract-enabled=true
-```
-
-</TabItem>
-
-</Tabs>
-
-Enables or disables contract-based [onchain account permissioning](../../concepts/permissioning/onchain.md). The default is `false`.
-
-:::caution
-
-Onchain permissioning is deprecated in Besu version 24.12.0 and later. Please read this [blog post](https://www.lfdecentralizedtrust.org/blog/sunsetting-tessera-and-simplifying-hyperledger-besu) for more context on the rationale behind this decision as well as alternative options.
-
-:::
-
 ### `permissions-nodes-config-file`
 
 <Tabs>
@@ -313,132 +225,6 @@ permissions-nodes-config-file-enabled=true
 
 Enables or disables file-based node level permissions. The default is `false`.
 
-### `permissions-nodes-contract-address` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---permissions-nodes-contract-address=<ContractAddress>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---permissions-nodes-contract-address=xyz
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PERMISSIONS_NODES_CONTRACT_ADDRESS=xyz
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-permissions-nodes-contract-address="xyz"
-```
-
-</TabItem>
-
-</Tabs>
-
-The contract address for [onchain node permissioning](../../concepts/permissioning/onchain.md).
-
-### `permissions-nodes-contract-enabled` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---permissions-nodes-contract-enabled[=<true|false>]
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---permissions-nodes-contract-enabled=true
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PERMISSIONS_NODES_CONTRACT_ENABLED=true
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-permissions-nodes-contract-enabled=true
-```
-
-</TabItem>
-
-</Tabs>
-
-Enables or disables contract-based [onchain node permissioning](../../concepts/permissioning/onchain.md). The default is `false`.
-
-:::caution
-
-Onchain permissioning is deprecated in Besu version 24.12.0 and later. Please read this [blog post](https://www.lfdecentralizedtrust.org/blog/sunsetting-tessera-and-simplifying-hyperledger-besu) for more context on the rationale behind this decision as well as alternative options.
-
-:::
-
-### `permissions-nodes-contract-version` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---permissions-nodes-contract-version=<ContractVersion>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---permissions-nodes-contract-version=2
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PERMISSIONS_NODES_CONTRACT_VERSION=2
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-permissions-nodes-contract-version=2
-```
-
-</TabItem>
-
-</Tabs>
-
-Version of the EEA [node permissioning interface](../../how-to/use-permissioning/onchain.md#specify-the-permissioning-contract-interface-version). The default is 1.
-
 ### `poa-block-txs-selection-max-time`
 
 <Tabs>
@@ -487,14 +273,14 @@ For proof-of-stake and proof-of-work networks, see
 [`--block-txs-selection-max-time`](../../../public-networks/reference/cli/options.md#block-txs-selection-max-time).
 :::
 
-### `privacy-enabled` (Deprecated)
+### `poa-discovery-retry-bootnodes`
 
 <Tabs>
 
 <TabItem value="Syntax" label="Syntax" default>
 
 ```bash
---privacy-enabled[=<true|false>]
+--poa-discovery-retry-bootnodes=<true|false>
 ```
 
 </TabItem>
@@ -502,7 +288,7 @@ For proof-of-stake and proof-of-work networks, see
 <TabItem value="Example" label="Example">
 
 ```bash
---privacy-enabled=false
+--poa-discovery-retry-bootnodes=true
 ```
 
 </TabItem>
@@ -510,7 +296,7 @@ For proof-of-stake and proof-of-work networks, see
 <TabItem value="Environment variable" label="Environment variable">
 
 ```bash
-BESU_PRIVACY_ENABLED=false
+BESU_POA_DISCOVERY_RETRY_BOOTNODES=true
 ```
 
 </TabItem>
@@ -518,413 +304,21 @@ BESU_PRIVACY_ENABLED=false
 <TabItem value="Configuration file" label="Configuration file">
 
 ```bash
-privacy-enabled=false
+poa-discovery-retry-bootnodes=true
 ```
 
 </TabItem>
 
 </Tabs>
 
-Enables or disables [private transactions](../../concepts/privacy/index.md). The default is `false`.
-
-:::caution
-
-Tessera-based privacy is deprecated in Besu version 24.12.0 and later. Please read this [blog post](https://www.lfdecentralizedtrust.org/blog/sunsetting-tessera-and-simplifying-hyperledger-besu) for more context on the rationale behind this decision as well as alternative options.
-
-:::
-
-:::important
-
-Using private transactions with [pruning](../../../public-networks/concepts/data-storage-formats.md) or [fast sync](../../../public-networks/reference/cli/options.md#sync-mode) is not supported.
-
-:::
-
-### `privacy-marker-transaction-signing-key-file` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-marker-transaction-signing-key-file=<FILE>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-marker-transaction-signing-key-file=/home/me/me_node/myPrivateKey
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_MARKER_TRANSACTION_SIGNING_KEY_FILE=/home/me/me_node/myPrivateKey
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-marker-transaction-signing-key-file="/home/me/me_node/myPrivateKey"
-```
-
-</TabItem>
-
-</Tabs>
-
-`<FILE>` is the name of the private key file used to [sign privacy marker transactions](../../how-to/use-privacy/sign-pmts.md).
+When enabled, Besu always uses [bootnodes](../../how-to/configure/bootnodes.md) during peer table refresh on Proof of Authority (PoA) networks. When disabled, bootnodes are only used on first startup. If bootnodes are unavailable after startup, the node may not discover new peers until it is restarted. The default is `true`.
 
 :::note
-
-This can be the same file used by [`--node-private-key-file`](../../../public-networks/reference/cli/options.md#node-private-key-file), or a different key file to identify who signed the privacy marker transaction.
-
+This option only applies to proof of authority (private) networks.
 :::
-
-You must specify this option if you're using:
-
-- a privacy network where you pay gas. Also, the associated account must contain adequate funds.
-- [account permissioning] and privacy. You must include the corresponding public key in the accounts allowlist.
-
-If you do not specify this option (for example, in a free gas network), Besu signs each transaction with a different randomly generated key.
-
-### `privacy-multi-tenancy-enabled` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-multi-tenancy-enabled[=<true|false>]
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-multi-tenancy-enabled=false
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_MULTI_TENANCY_ENABLED=false
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-multi-tenancy-enabled=false
-```
-
-</TabItem>
-
-</Tabs>
-
-Enables or disables [multi-tenancy](../../concepts/privacy/multi-tenancy.md) for private transactions. The default is `false`.
-
-### `privacy-flexible-groups-enabled` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-flexible-groups-enabled[=<true|false>]
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-flexible-groups-enabled=true
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_FLEXIBLE_GROUPS_ENABLED=true
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-flexible-groups-enabled=true
-```
-
-</TabItem>
-
-</Tabs>
-
-Enables or disables [flexible privacy groups](../../concepts/privacy/flexible-privacy.md). The default is `false`.
-
-Deprecated syntax for this option is `--privacy-onchain-groups-enabled`.
-
-### `privacy-public-key-file` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-public-key-file=<privacyPublicKeyFile>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-public-key-file=Tessera/nodeKey.pub
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_PUBLIC_KEY_FILE=Tessera/nodeKey.pub
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-public-key-file="Tessera/nodeKey.pub"
-```
-
-</TabItem>
-
-</Tabs>
-
-The [public key of the Tessera node](https://docs.tessera.consensys.net/).
-
-:::important
-
-You cannot specify `privacy-public-key-file` when [`--privacy-multi-tenancy-enabled`](#privacy-multi-tenancy-enabled-deprecated) is `true`
-
-:::
-
-### `privacy-tls-enabled` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-tls-enabled[=<true|false>]
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-tls-enabled=false
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_TLS_ENABLED=false
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-tls-enabled=false
-```
-
-</TabItem>
-
-</Tabs>
-
-Enables or disables [TLS on communication with the private transaction manager]. The default is false.
-
-### `privacy-tls-keystore-file` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-tls-keystore-file=<FILE>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy--keystore-file=/home/me/me_node/key
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_TLS_KEYSTORE_FILE=/home/me/me_node/key
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-tls-keystore-file="/home/me/me_node/key"
-```
-
-</TabItem>
-
-</Tabs>
-
-The keystore file (in PKCS #12 format) containing the private key and the certificate presented during authentication.
-
-You must specify `privacy-tls-keystore-file` if [`--privacy-tls-enabled`](#privacy-tls-enabled-deprecated) is `true`.
-
-### `privacy-tls-keystore-password-file` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-tls-keystore-password-file=<FILE>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-tls-keystore-password-file=/home/me/me_node/password
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_TLS_KEYSTORE_PASSWORD_FILE=/home/me/me_node/password
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-tls-keystore-password-file="/home/me/me_node/password"
-```
-
-</TabItem>
-
-</Tabs>
-
-The path to the file containing the password to decrypt the keystore.
-
-### `privacy-tls-known-enclave-file` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-tls-known-enclave-file=<FILE>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-tls-known-enclave-file=/home/me/me_node/knownEnclave
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_TLS_KNOWN_ENCLAVE_FILE=/home/me/me_node/knownEnclave
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-tls-known-enclave-file="/home/me/me_node/knownEnclave"
-```
-
-</TabItem>
-
-</Tabs>
-
-The path to the file containing the hostnames, ports, and SHA256 certificate fingerprints of the [authorized privacy enclave](../../how-to/configure/tls.md#create-the-known-servers-file).
-
-### `privacy-url` (Deprecated)
-
-<Tabs>
-
-<TabItem value="Syntax" label="Syntax" default>
-
-```bash
---privacy-url=<privacyUrl>
-```
-
-</TabItem>
-
-<TabItem value="Example" label="Example">
-
-```bash
---privacy-url=http://127.0.0.1:8888
-```
-
-</TabItem>
-
-<TabItem value="Environment variable" label="Environment variable">
-
-```bash
-BESU_PRIVACY_URL=http://127.0.0.1:8888
-```
-
-</TabItem>
-
-<TabItem value="Configuration file" label="Configuration file">
-
-```bash
-privacy-url="http://127.0.0.1:8888"
-```
-
-</TabItem>
-
-</Tabs>
-
-The URL on which the [Tessera node](../../tutorials/privacy/index.md#3-create-tessera-configuration-files) is running.
 
 <!-- Links -->
 
-[accounts permissions configuration file]: ../../how-to/use-permissioning/local.md#permissions-configuration-file
-[nodes permissions configuration file]: ../../how-to/use-permissioning/local.md#permissions-configuration-file
+[accounts permissions configuration file]: ../../how-to/use-local-permissioning.md#permissions-configuration-file
+[nodes permissions configuration file]: ../../how-to/use-local-permissioning.md#permissions-configuration-file
 [account permissioning]: ../../concepts/permissioning/index.md#account-permissioning
-[TLS on communication with the private transaction manager]: ../../concepts/privacy/index.md#private-transaction-manager

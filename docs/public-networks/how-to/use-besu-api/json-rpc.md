@@ -2,9 +2,6 @@
 title: Use JSON-RPC over HTTP, WS, and IPC
 sidebar_position: 1
 description: How to access the Besu API using JSON-RPC
-tags:
-  - public networks
-  - private networks
 ---
 
 import Postman from '../../../global/postman.md';
@@ -31,6 +28,8 @@ To enable JSON-RPC over an [IPC socket](index.md#socket-path), use the `--Xrpc-i
 
 :::
 
+Subscription methods (`eth_subscribe`, `eth_unsubscribe`) are supported over IPC as well as WebSocket, but not over HTTP. See [RPC Pub/Sub over WebSockets and IPC](rpc-pubsub.md).
+
 <Postman />
 
 ## Geth console
@@ -39,9 +38,11 @@ The geth console is a REPL (Read, Evaluate, & Print Loop) JavaScript console. Us
 
 To use the geth console with Besu:
 
-1. Start Besu with the [`--rpc-http-enabled`](../../reference/cli/options.md#rpc-http-enabled) or `--Xrpc-ipc-enabled` option.
+1. Start Besu with the [`--rpc-http-enabled`](../../reference/cli/options.md#rpc-http-enabled) or `--Xrpc-ipc-enabled` 
+option.
 
-2. Specify which APIs to enable using the [`--rpc-http-api`](../../reference/cli/options.md#rpc-http-api) or `--Xrpc-ipc-api` option.
+2. Specify which APIs to enable using the [`--rpc-http-api`](../../reference/cli/options.md#rpc-http-api) or 
+`--Xrpc-ipc-api` option.
 
 3. Start the geth console specifying the JSON-RPC endpoint:
 
@@ -295,7 +296,7 @@ curl -v 'http://localhost:8545/liveness'
 
 Besu enables the `ETH`, `NET`, and `WEB3` API methods by default.
 
-To enable the `ADMIN`, `CLIQUE`, `DEBUG`, `EEA`, `IBFT`, `MINER`, `PERM`, `PLUGINS`, `PRIV`, `TRACE`, and `TXPOOL` API methods, use the [`--rpc-http-api`](../../reference/cli/options.md#rpc-http-api), [`--rpc-ws-api`](../../reference/cli/options.md#rpc-ws-api), or `--Xrpc-ipc-api` options.
+To enable the `ADMIN`, `DEBUG`, `EEA`, `IBFT`, `MINER`, `PERM`, `PLUGINS`, `PRIV`, `TRACE`, and `TXPOOL` API methods, use the [`--rpc-http-api`](../../reference/cli/options.md#rpc-http-api), [`--rpc-ws-api`](../../reference/cli/options.md#rpc-ws-api), or `--Xrpc-ipc-api` options.
 
 :::caution
 
@@ -312,7 +313,7 @@ have a block parameter.
 
 The block parameter can have one of the following values:
 
-- `blockNumber` : _quantity_ - The block number, specified in hexadecimal or decimal.
+- `blockNumber` : _quantity_ - The block number, specified in hexadecimal.
   `0` represents the genesis block.
 - `blockHash` : _string_ or _object_ - 32-byte block hash or JSON object specifying the block hash.
   If using a JSON object, you can specify `requireCanonical` to indicate whether the block must be a
@@ -333,11 +334,14 @@ The block parameter can have one of the following values:
   :::
 
 - `earliest` : _tag_ - The earliest (genesis) block.
-- `latest` : _tag_ - The last block mined.
-- `pending` : _tag_ - When used with [`eth_getTransactionCount`](../../reference/api/index.md#eth_gettransactioncount),
-  refers to the last block mined plus pending transactions.
-  When used with [`qbft_getValidatorsByBlockNumber`](../../../private-networks/reference/api/index.md#qbft_getvalidatorsbyblocknumber),
-  returns a list of validators that will be used to produce the next block.
+- `latest` : _tag_ - The most recent block.
+- `pending` : _tag_ - The next anticipated block, except in the following cases:
+  - For some methods (specified in their parameter description), `pending` returns the
+    same value as `latest`.
+  - For [`eth_getTransactionCount`](../../reference/api/index.md#eth_gettransactioncount),
+    `pending` refers to the most recent block plus pending transactions.
+  - For [`qbft_getValidatorsByBlockNumber`](../../../private-networks/reference/api.md#qbft_getvalidatorsbyblocknumber),
+    `pending` returns a list of validators that will be used to produce the next block.
 - `finalized` : _tag_ - The most recent crypto-economically secure block.
   It cannot be reorganized outside manual intervention driven by community coordination.
 - `safe` : _tag_ - The most recent block that is safe from reorganization under honest majority and

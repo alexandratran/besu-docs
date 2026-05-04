@@ -7,7 +7,6 @@ const config = {
   url: "https://besu.hyperledger.org",
   baseUrl: "/",
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "throw",
   favicon: "img/favicon.svg",
   trailingSlash: false,
 
@@ -17,7 +16,7 @@ const config = {
   projectName: "besu-docs", // Usually your repo name.
   deploymentBranch: "gh-pages", // Github Pages deploying branch
 
-  // Even if you don't use internalization, you can use this field to set useful
+  // Even if you don't use internationalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
@@ -27,6 +26,9 @@ const config = {
 
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: "throw",
+    },
   },
 
   presets: [
@@ -34,7 +36,7 @@ const config = {
       "classic",
       {
         docs: {
-          breadcrumbs: false,
+          breadcrumbs: true,
           sidebarPath: require.resolve("./sidebars.js"),
           // Set a base path separate from default /docs
           editUrl: "https://github.com/hyperledger/besu-docs/tree/main/",
@@ -113,11 +115,6 @@ const config = {
             docId: "index",
             position: "left",
             label: "Plugins",
-          },
-          {
-            href: "/public-networks/chatbot",
-            className: "header-chatbot-link",
-            position: "right",
           },
           {
             href: "https://github.com/hyperledger/besu/",
@@ -318,8 +315,24 @@ const config = {
             to: "/public-networks/how-to/configure-besu",
           },
           {
-            from: ["/private-networks/tutorials/permissioning/onchain", "/private-networks/tutorials/permissioning/upgrade-contracts"],
-            to: "/private-networks/how-to/use-permissioning/onchain",
+            from: ["/private-networks/tutorials/permissioning/onchain", "/private-networks/tutorials/permissioning/upgrade-contracts", "/private-networks/how-to/use-permissioning/onchain", "/private-networks/concepts/permissioning/onchain"],
+            to: "/private-networks/concepts/permissioning",
+          },
+          {
+            from: "/private-networks/how-to/use-permissioning/local",
+            to: "/private-networks/how-to/use-local-permissioning",
+          },
+          {
+            from: ["/private-networks/how-to/use-privacy/eea-compliant", "/private-networks/how-to/use-privacy/besu-extended", "/private-networks/how-to/use-privacy/tessera", "/private-networks/how-to/use-privacy/privacy-groups", "/private-networks/how-to/use-privacy/flexible", "/private-networks/how-to/use-privacy/access-private-transactions", "/private-networks/how-to/use-privacy/sign-pmts", "/private-networks/how-to/use-privacy/web3js-quorum", "/private-networks/how-to/use-privacy/performance-best-practices", "/private-networks/concepts/privacy", "/private-networks/concepts/privacy/private-transactions", "/private-networks/concepts/privacy/private-transactions/processing", "/private-networks/concepts/privacy/privacy-groups", "/private-networks/concepts/privacy/flexible-privacy", "/private-networks/concepts/privacy/multi-tenancy", "/private-networks/concepts/privacy/plugin"],
+            to: "/private-networks",
+          },
+          {
+            from: "/private-networks/how-to/monitor/quorum-hibernate",
+            to: "/private-networks/how-to/monitor",
+          },
+          {
+            from: ["/private-networks/tutorials/privacy", "/private-networks/tutorials/privacy/multi-tenancy", "/private-networks/tutorials/privacy/web3js-quorum","/private-networks/tutorials/privacy/quickstart"],
+            to: "/private-networks/tutorials",
           },
           {
             from: "/private-networks/tutorials/kubernetes/nat-manager",
@@ -328,49 +341,47 @@ const config = {
           {
             from: ["/private-networks/how-to/configure/tls/client-and-server", "/private-networks/concepts/pki", "/private-networks/how-to/configure/tls/p2p"],
             to: "/private-networks/how-to/configure/tls",
+          },
+          {
+            from: ["/private-networks/how-to/send-transactions/private-transactions", "/private-networks/how-to/send-transactions/concurrent-private-transactions"],
+            to: "/public-networks/how-to/send-transactions",
+          },
+          {
+            from: "/private-networks/concepts/plugins",
+            to: "/public-networks/concepts/plugins",
+          },
+          {
+            from: "/private-networks/reference/plugin-api-interfaces",
+            to: "/public-networks/reference/plugin-api-interfaces",
+          },
+          {
+            from: "/private-networks/reference/api/objects",
+            to: "/public-networks/reference/api",
           }
         ],
-        createRedirects(existingPath) {
-          if (existingPath.includes("/public-networks")) {
-            return [
-              existingPath.replace("/public-networks", "/en/development/public-networks"),
-              existingPath.replace("/public-networks", "/development/public-networks"),
-              existingPath.replace("/public-networks", "/en/latest/public-networks"),
-              existingPath.replace("/public-networks", "/latest/public-networks"),
-              existingPath.replace("/public-networks", "/en/stable/public-networks"),
-              existingPath.replace("/public-networks", "/stable/public-networks"),
-              existingPath.replace("/public-networks", "/24.8.0/public-networks"),
-              existingPath.replace("/public-networks", "/24.7.1/public-networks"),
-              existingPath.replace("/public-networks", "/23.4.0/public-networks"),
-            ];
-          }
-          if (existingPath.includes("/private-networks")) {
-            return [
-              existingPath.replace("/private-networks", "/en/development/private-networks"),
-              existingPath.replace("/private-networks", "/development/private-networks"),
-              existingPath.replace("/private-networks", "/en/latest/private-networks"),
-              existingPath.replace("/private-networks", "/latest/private-networks"),
-              existingPath.replace("/private-networks", "/en/stable/private-networks"),
-              existingPath.replace("/private-networks", "/stable/private-networks"),
-              existingPath.replace("/private-networks", "/24.8.0/private-networks"),
-              existingPath.replace("/private-networks", "/24.7.1/private-networks"),
-              existingPath.replace("/private-networks", "/23.4.0/private-networks"),
-            ];
-          }
-          return undefined; // Return a falsy value: no redirect created
-        },
       },
     ],
   ],
   themes: [
     [
       require.resolve("@easyops-cn/docusaurus-search-local"),
-      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-      ({
-        hashed: true,
+      {
         docsRouteBasePath: "/",
+        hashed: true,
         indexBlog: false,
-      }),
+        askAi: {
+          project: "besu",                 
+          apiUrl: process.env.ASK_AI_API_URL || "http://localhost:5000/api/stream?api_key=....",
+          hotkey: "cmd+k",
+          texts: {
+            welcomeMessage:
+              "Hi! I can answer questions about the documentation, its features or usage instructions. Be sure to check the source documentation links that I provide for full details.\n\n" +
+              "Please do not input any of your own or another's personal information i.e, passwords, private keys, seed phrases, personal data, or other sensitive information. If you need support and do not want to engage with me, please reach out to us via Discord. Any information that you provide is not used for training my AI systems. For details on our data handling practices, see our Privacy Policy.\n\n" +
+              "By proceeding you acknowledge the above.",
+            inputPlaceholder: "Please ask a question",
+          }              
+        },        
+      },
     ],
     "@docusaurus/theme-mermaid",
   ],

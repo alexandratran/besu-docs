@@ -1,45 +1,40 @@
 ---
-title: Use RPC Pub/Sub over WS
+title: Use RPC Pub/Sub over WS and IPC
 sidebar_position: 2
-description: Using RPC Pub/Sub with Besu WebSockets
-tags:
-  - public networks
-  - private networks
+description: Using RPC Pub/Sub with Besu WebSockets and IPC
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Use RPC Pub/Sub over WebSockets
+# Use RPC Pub/Sub over WebSockets and IPC
 
-## Introduction
+Subscribe to events by using either RPC Pub/Sub over WebSockets or IPC, or [filters over HTTP](access-logs.md).
 
-Subscribe to events by using either RPC Pub/Sub over WebSockets or [filters over HTTP](access-logs.md).
-
-Use RPC Pub/Sub over WebSockets to wait for events instead of polling for them. For example, dapps subscribe to logs and receive notifications when a specific event occurs.
+Use RPC Pub/Sub over WebSockets or IPC to wait for events instead of polling for them. For example, dapps subscribe to logs and receive notifications when a specific event occurs.
 
 Methods specific to RPC Pub/Sub are:
 
-- `eth_subscribe` and `eth_unsubscribe` - create or cancel a subscription for specific events.
-- `priv_subscribe` and `priv_unsubscribe` - create or cancel a subscription for [private logs](../../../private-networks/concepts/privacy/index.md).
+- `eth_subscribe` - create a subscription for specific events.
+- `eth_unsubscribe` - cancel a subscription for specific events.
 
 :::info
 
-Unlike other [Besu API methods](../../reference/api/index.md), you cannot call the RPC Pub/Sub methods over HTTP. Use the [`--rpc-ws-enabled`](../../reference/cli/options.md#rpc-ws-enabled) option to enable the WebSockets JSON-RPC service.
+Unlike other [Besu API methods](../../reference/api/index.md), you cannot call the RPC Pub/Sub methods over HTTP. Use the [`--rpc-ws-enabled`](../../reference/cli/options.md#rpc-ws-enabled) option for WebSockets or the `--Xrpc-ipc-enabled` option for IPC (see [JSON-RPC over IPC](json-rpc.md)) to enable subscription methods.
 
 :::
 
 ### Use RPC Pub/Sub
 
-[WebSockets](json-rpc.md#http-and-websocket-requests) supports the RPC Pub/Sub API.
+[WebSockets](json-rpc.md#http-and-websocket-requests) and [IPC](json-rpc.md) support the RPC Pub/Sub API.
 
-To create subscriptions, use `eth_subscribe` or `priv_subscribe`. Once subscribed, the API publishes notifications using `eth_subscription` or `priv_subscription`.
+To create subscriptions, use `eth_subscribe`. Once subscribed, the API publishes notifications using `eth_subscription`.
 
 Subscriptions couple with connections. If a connection is closed, all subscriptions created over the connection are removed.
 
 ### Subscription ID
 
-`eth_subscribe` and `priv_subscribe` return a subscription ID for each subscription created. Notifications include the subscription ID.
+`eth_subscribe` returns a subscription ID for each subscription created. Notifications include the subscription ID.
 
 For example, to create a synchronizing subscription:
 
@@ -83,14 +78,6 @@ Use `eth_subscribe` to create subscriptions for the following event types:
 - [Pending transactions](#pending-transactions)
 - [Dropped transactions](#dropped-transactions)
 - [Synchronizing](#synchronizing)
-
-Use `priv_subscribe` to [create subscriptions for logs on private contracts](#logs).
-
-:::tip
-
-Only logs subscriptions are relevant for private transactions because private transactions are anchored to the public chain rather than having their own private blockchain.
-
-:::
 
 ### New headers
 
@@ -188,7 +175,7 @@ Example notification with the `{"includeTransactions": true}` parameter included
 
 ### Logs
 
-To notify you about [logs](../../concepts/events-and-logs.md) included in new blocks, use the `logs` parameter with `eth_subscribe` or `priv_subscribe`. Specify a filter object to receive notifications only for logs matching your filter.
+To notify you about [logs](../../concepts/events-and-logs.md) included in new blocks, use the `logs` parameter with `eth_subscribe`. Specify a filter object to receive notifications only for logs matching your filter.
 
 Logs subscriptions have a filter object parameter with the following fields:
 
@@ -196,8 +183,6 @@ Logs subscriptions have a filter object parameter with the following fields:
 - `topics` - (optional) Returns only logs that match the [specified topics](../../concepts/events-and-logs.md#topic-filters).
 - `fromBlock` - (optional) The earliest block from which to return logs.
 - `toBlock` - (optional) The last block from which to return logs.
-
-For private contracts, the privacy group ID must be specified. Only members of a privacy group receive logs for a private contract subscription. If you create a subscription for a privacy group you are not a member of, you will not receive any notifications.
 
 If a chain reorganization occurs, the subscription publishes notifications for logs from the old chain with the `removed` property in the [log object](../../reference/api/objects.md#log-object) set to `true`. This means the subscription can publish notifications for multiple logs for the same transaction.
 
@@ -266,80 +251,6 @@ The logs subscription returns [log objects](../../reference/api/objects.md#log-o
       "topics": [
         "0x199cd93e851e4c78c437891155e2112093f8f15394aa89dab09e38d6ca072787",
         "0x0000000000000000000000000000000000000000000000000000000000000005"
-      ]
-    }
-  }
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-<Tabs>
-
-<TabItem value="All logs for privacy group" label="All logs for privacy group" default>
-
-```json
-{
-  "id": 1,
-  "method": "priv_subscribe",
-  "params": ["4sSv8eqB6/0lV9I0tBGUhPjjHtLEf3z0eeMc8Lokkyo=", "logs", {}]
-}
-```
-
-</TabItem>
-
-<TabItem value="Specific parameters">
-
-```json
-{
-  "id": 1,
-  "method": "priv_subscribe",
-  "params": [
-    "4sSv8eqB6/0lV9I0tBGUhPjjHtLEf3z0eeMc8Lokkyo=",
-    "logs",
-    {
-      "address": "0x8320fe7702b96808f7bbc0d4a888ed1468216cfd",
-      "topics": [
-        "0xd78a0cb8bb633d06981248b816e7bd33c2a35a6089241d099fa519e361cab902"
-      ]
-    }
-  ]
-}
-```
-
-</TabItem>
-
-<TabItem value="Result" label="Result">
-
-```json
-{ "jsonrpc": "2.0", "id": 1, "result": "0x1" }
-```
-
-</TabItem>
-
-<TabItem value="Notification" label="Notification">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "priv_subscription",
-  "params": {
-    "subscription": "0x1",
-    "privacyGroupId": "4sSv8eqB6/0lV9I0tBGUhPjjHtLEf3z0eeMc8Lokkyo=",
-    "result": {
-      "logIndex": "0x0",
-      "removed": false,
-      "blockNumber": "0x285",
-      "blockHash": "0x98490766b16de2a4d044c04d92599d71e626bc96e42f0c74274ef4e03fafd579",
-      "transactionHash": "0x40034ef14e3a22946693dd2a11efddf3a8850ddcad46b408198df6c176c53ffb",
-      "transactionIndex": "0x0",
-      "address": "0x61f96a7ed09877197d4fff0c29b8e523913651a9",
-      "data": "0x",
-      "topics": [
-        "0x85bea11d86cefb165374e0f727bacf21dc2f4ea816493981ecf72dcfb212a410",
-        "0x0000000000000000000000000000000000000000000000000000000000000002"
       ]
     }
   }
@@ -511,26 +422,14 @@ Example notification when synchronized with chain head:
 
 ## Unsubscribe
 
-To cancel a subscription, use the [subscription ID](#subscription-id) with `eth_unsubscribe` or `priv_unsubscribe`. Only the connection that created a subscription can unsubscribe from it.
+To cancel a subscription, use the [subscription ID](#subscription-id) with `eth_unsubscribe`. Only the connection that created a subscription can unsubscribe from it.
 
-When cancelling a subscription for private logs, the privacy group ID must be specified.
-
-`eth_unsubscribe` and `priv_unsubscribe` return `true` if subscription successfully unsubscribed; otherwise, returns an error.
+`eth_unsubscribe` returns `true` if subscription successfully unsubscribed; otherwise, returns an error.
 
 To unsubscribe from a subscription with subscription ID of `0x1`:
 
 ```json
 { "id": 1, "method": "eth_unsubscribe", "params": ["0x1"] }
-```
-
-To unsubscribe from private logs subscription:
-
-```json
-{
-  "id": 1,
-  "method": "priv_unsubscribe",
-  "params": ["4sSv8eqB6/0lV9I0tBGUhPjjHtLEf3z0eeMc8Lokkyo=", "0x2"]
-}
 ```
 
 Example result:

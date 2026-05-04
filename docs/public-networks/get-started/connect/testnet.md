@@ -2,8 +2,6 @@
 title: Connect to a testnet
 sidebar_position: 3
 Description: How to connect to a testnet
-tags:
-  - public networks
 ---
 
 import Tabs from '@theme/Tabs';
@@ -11,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 # Connect to a testnet
 
-Run Besu as an [execution client](../../concepts/node-clients.md#execution-clients) with any consensus client on the [Holesky](https://github.com/eth-clients/holesky), [Hoodi](https://github.com/eth-clients/hoodi), [Sepolia](https://github.com/eth-clients/sepolia), and [Ephemery](https://github.com/ephemery-testnet/ephemery-resources) testnets.
+Run Besu as an [execution client](../../concepts/node-clients.md#execution-clients) with any consensus client on the [Hoodi](https://github.com/eth-clients/hoodi), [Sepolia](https://github.com/eth-clients/sepolia), or [Ephemery](https://github.com/ephemery-testnet/ephemery-resources) testnet.
 
 If you're using [Teku](https://docs.teku.consensys.net/en/latest/) as a consensus client, you can follow the [Besu and Teku testnet tutorial](../../tutorials/besu-teku-testnet.md).
 
@@ -63,7 +61,7 @@ If you can't get testnet ETH using the faucet, you can ask for help on the [EthS
 
 :::
 
-Generate validator keys for one or more validators using the [Holesky Staking Launchpad](https://holesky.launchpad.ethereum.org/), [Hoodi Staking Launchpad](https://hoodi.launchpad.ethereum.org/), [Ephemery Staking Launchpad](https://launchpad.ephemery.dev/), or [request to become validator on Sepolia](https://notes.ethereum.org/zvkfSmYnT0-uxwwEegbCqg).
+Generate validator keys for one or more validators using the [Hoodi Staking Launchpad](https://hoodi.launchpad.ethereum.org/), [Ephemery Staking Launchpad](https://launchpad.ephemery.dev/), or [request to become validator on Sepolia](https://notes.ethereum.org/zvkfSmYnT0-uxwwEegbCqg).
 
 :::info
 
@@ -76,24 +74,6 @@ Save the password you use to generate each key pair in a `.txt` file. You should
 Run the following command or specify the options in a [configuration file](../../how-to/configure-besu/index.md):
 
 <Tabs>
-
-<TabItem value="Holesky" label="Holesky">
-
-```bash
-besu \
-  --network=holesky           \
-  --rpc-http-enabled=true     \
-  --rpc-http-host=0.0.0.0     \
-  --rpc-http-cors-origins="*" \
-  --rpc-ws-enabled=true       \
-  --rpc-ws-host=0.0.0.0       \
-  --host-allowlist="*"        \
-  --engine-host-allowlist="*" \
-  --engine-rpc-enabled        \
-  --engine-jwt-secret=<path to jwtsecret.hex>
-```
-
-</TabItem>
 
 <TabItem value="Hoodi" label="Hoodi">
 
@@ -210,4 +190,5 @@ If you're running the consensus client as a beacon node only, you're all set. If
 
 Stake your testnet ETH for one or more validators using the [Holesky Staking Launchpad](https://holesky.launchpad.ethereum.org/), [Hoodi Staking Launchpad](https://hoodi.launchpad.ethereum.org/), or [Ephemery Staking Launchpad](https://launchpad.ephemery.dev/).
 
-You can check your validator status by searching your Ethereum address on the [Holesky explorer](https://holesky.beaconcha.in/), [Hoodi explorer](https://hoodi.cloud.blockscout.com/), or [Ephemery explorer](https://beaconchain.ephemery.dev/). It may take up to multiple days for your validator to be activated and start proposing blocks.
+You can check your validator status by searching your Ethereum address on the [Holesky explorer](https://holesky.beaconcha.in/),
+[Hoodi explorer](https://hoodi.etherscan.io/), or [Ephemery explorer](https://explorer.ephemery.dev/). It may take up to multiple days for your validator to be activated and start proposing blocks.

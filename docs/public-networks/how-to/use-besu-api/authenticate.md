@@ -2,9 +2,6 @@
 title: Authenticate over JSON-RPC requests
 sidebar_position: 4
 description: Besu authentication and authorization for JSON-RPC
-tags:
-  - public networks
-  - private networks
 ---
 
 import Tabs from '@theme/Tabs';
@@ -12,7 +9,8 @@ import TabItem from '@theme/TabItem';
 
 # Authenticate and authorize JSON-RPC
 
-Authentication identifies a user, and authorization verifies user access to requested JSON-RPC methods. Besu verifies users using [JSON Web Tokens (JWT)](https://jwt.io/introduction/). JWT is also used in [multi-tenancy](../../../private-networks/concepts/privacy/multi-tenancy.md) to verify tenant data access.
+Authentication identifies a user, and authorization verifies user access to requested JSON-RPC methods. Besu verifies users using
+[JSON Web Tokens (JWT)](https://jwt.io/introduction/).
 
 Besu supports two mutually exclusive authentication methods:
 
@@ -47,12 +45,10 @@ The `toml` credentials file defines user details and the JSON-RPC methods they c
 [Users.username1]
 password = "$2a$10$l3GA7K8g6rJ/Yv.YFSygCuI9byngpEzxgWS9qEg5emYDZomQW7fGC"
 permissions=["net:*","eth:blockNumber"]
-privacyPublicKey="U7ANiOOd5L9Z/dMxRFjdbhA1Qragw6fLuYgmgCvLoX4="
 
 [Users.username2]
 password = "$2b$10$6sHt1J0MVUGIoNKvJiK33uaZzUwNmMmJlaVLkIwinkPiS1UBnAnF2"
 permissions=["net:version","admin:*"]
-privacyPublicKey="quhb1pQPGN1w8ZSZSyiIfncEAlVY/M/rauSyQ5wVMRE="
 ```
 
 Each user requiring JSON-RPC access the configuration file lists the:
@@ -60,7 +56,6 @@ Each user requiring JSON-RPC access the configuration file lists the:
 - Username. `Users.` is mandatory and followed by the username. That is, replace `<username>` in `[Users.<username>]` with the username.
 - Hash of the user password. Use the [`password hash`](../../reference/cli/subcommands.md#password) subcommand to generate the hash.
 - [JSON-RPC permissions](#json-rpc-permissions).
-- Optional. The tenant's Tessera public key using `privacyPublicKey`. Only used for [multi-tenancy](../../../private-networks/concepts/privacy/multi-tenancy.md).
 
 <Tabs>
 
@@ -214,9 +209,10 @@ option depending on your needs.
 :::danger Private key security
 
 The private key must be kept secret. Never share private keys publicly or on a Web site, even if advertised as secure.
-
-Always keep your private keys safe -- ideally using [hardware](https://connect2id.com/products/nimbus-jose-jwt/examples/pkcs11) or [vault](https://www.vaultproject.io/docs/secrets/identity/identity-token) -- and define a strong security policy and [best practices](https://auth0.com/docs/best-practices/token-best-practices).
-
+<!-- markdown-link-check-disable -->
+Always keep your private keys safe -- ideally using [hardware](https://connect2id.com/products/nimbus-jose-jwt/examples/pkcs11) or [vault](https://www.vaultproject.io/docs/secrets/identity/identity-token) -- and define a strong security policy and
+[best practices](https://auth0.com/docs/secure/tokens/token-best-practices).
+<!-- markdown-link-check-enable -->
 Compromised keys can provide attackers access to your node's RPC-API.
 
 :::
@@ -239,7 +235,6 @@ Each payload for the JWT must contain:
 
 - [JSON-RPC permissions](#json-rpc-permissions)
 - [`exp` (Expiration Time) claim](https://tools.ietf.org/html/rfc7519#section-4.1.4)
-- Optionally, the tenant's Tessera public key using `privacyPublicKey`. Only used for [multi-tenancy](../../../private-networks/concepts/privacy/multi-tenancy.md).
 
 <Tabs>
 
@@ -248,7 +243,6 @@ Each payload for the JWT must contain:
 ```json
 {
   "permissions": ["*:*"],
-  "privacyPublicKey": "2UKH3VJThkOoKskrLFpwoxCnnRARyobV1bEdgseFHTs=",
   "exp": 1600899999002
 }
 ```

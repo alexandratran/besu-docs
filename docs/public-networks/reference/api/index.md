@@ -3,9 +3,6 @@ title: Besu API
 sidebar_position: 2
 description: Besu JSON-RPC API methods reference
 toc_max_heading_level: 3
-tags:
-  - public networks
-  - private networks
 ---
 
 import Postman from '../../../global/postman.md'
@@ -16,7 +13,7 @@ import TabItem from '@theme/TabItem';
 
 :::caution
 
-- This reference contains API methods that apply to both public and private networks. For private-network-specific API methods, see the [private network API reference](../../../private-networks/reference/api/index.md).
+- This reference contains API methods that apply to both public and private networks. For private-network-specific API methods, see the [private network API reference](../../../private-networks/reference/api.md).
 - All JSON-RPC HTTP examples use the default host and port endpoint `http://127.0.0.1:8545`. If using the [--rpc-http-host](../cli/options.md#rpc-http-host) or [--rpc-http-port](../cli/options.md#rpc-http-port) options, update the endpoint.
 - Most example requests are made against private networks. Depending on network configuration and activity, your example results might be different.
 
@@ -175,7 +172,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"admin_changeLogLevel","params":[
 
 ### `admin_generateLogBloomCache`
 
-Generates cached log bloom indexes for blocks. APIs such as [`eth_getLogs`](#eth_getlogs) and [`eth_getFilterLogs`](#eth_getfilterlogs) use the cache for improved performance.
+Generates cached log bloom indexes for blocks. APIs calls such as [`eth_getLogs`](#eth_getlogs) and [`eth_getFilterLogs`](#eth_getfilterlogs) use the cache for improved performance.
 
 :::tip
 
@@ -258,11 +255,11 @@ Removes cache files for the specified range of blocks.
 
 #### Parameters
 
-- `fromBlock`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+- `fromBlock`: _string_ - hexadecimal integer representing a block number, or one of the
   string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
-- `toBlock`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+- `toBlock`: _string_ - hexadecimal integer representing a block number, or one of the
   string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -273,14 +270,12 @@ Removes cache files for the specified range of blocks.
 You can skip a parameter by using an empty string, `""`. If you specify:
 
 - No parameters, the call removes cache files for all blocks.
-
 - Only `fromBlock`, the call removes cache files for the specified block.
-
 - Only `toBlock`, the call removes cache files from the genesis block to the specified block.
 
 #### Returns
 
-`result`: _object_ - `Cache Removed` status or `error`.
+`result`: _object_ - `Cache Removed` status or `error`
 
 <Tabs>
 
@@ -386,6 +381,8 @@ None
 
 - `enode`: _string_ - [enode URL](../../concepts/node-keys.md#enode-url) of the node
 
+- `enr`: _string_ - [ENR URL](../../concepts/node-keys.md#enr-url) of the node
+
 - `listenAddr`: _string_ - host and port for the node
 
 - `name`: _string_ - client name
@@ -428,9 +425,10 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"admin_nodeInfo","params":[],"id"
   "id": 1,
   "result": {
     "enode": "enode://87ec35d558352cc55cd1bf6a472557797f91287b78fe5e86760219124563450ad1bb807e4cc61e86c574189a851733227155551a14b9d0e1f62c5e11332a18a3@[::]:30303",
+    "enr": "enr:-Jq4QOBEJ_aqkcth60IN44olOQ3uNsfqwEahYc6eKRfBg8ZlGbqhHTKqN_Yr67QWUA9v8_l-iaYhpd2uJC_AEQDv3agCg2V0aMrJhPxk7ASDEYwwgmlkgnY0gmlwhH8AAAGJc2VjcDI1NmsxoQK99DIR26ML8QCgAEC5-DnhcWHIjIVzAouFM8it-O0elIN0Y3CCdl-DdWRwgnZf",
     "listenAddr": "[::]:30303",
-    "name": "besu/v1.0.1-dev-0d2294a5/osx-x86_64/oracle-java-1.8",
-    "id": "87ec35d558352cc55cd1bf6a472557797f91287b78fe5e86760219124563450ad1bb807e4cc61e86c574189a851733227155551a14b9d0e1f62c5e11332a18a3",
+    "name": "besu/v26.3-develop-f2ec0fe/osx-aarch_64/oracle_openjdk-java-22",
+    "id": "bdf43211dba30bf100a00040b9f839e17161c88c8573028b8533c8adf8ed1e9466e4b87d716d06292426d154d0df7acde83c3f68df151da5413224b22f049054",
     "ports": {
       "discovery": 30303,
       "listener": 30303
@@ -490,7 +488,7 @@ None
 
 - `id`: _string_ - node public key (excluding the `0x` prefix, the node public key is the ID in the [enode URL](../../concepts/node-keys.md#enode-url) `enode://<id ex 0x>@<host>:<port>`.)
 
-- `protocols`: _object_ - [current state of peer](../../how-to/connect/manage-peers.md#monitor-peer-connections) including `difficulty` and `head` (`head` is the hash of the highest known block for the peer.)
+- `protocols`: _object_ - [current state of peer](../../how-to/connect/manage-peers.md#monitor-peer-connections) including `difficulty`, `head`, and `latestBlock` (`head` is the hash of the highest known block for the peer; `latestBlock` is the corresponding block number.)
 
 - `enode`: _string_ - enode URL of the remote node
 
@@ -533,6 +531,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"admin_peers","params":[],"id":1}
         "eth": {
           "difficulty": "0x1ac",
           "head": "0x964090ae9277aef43f47f1b8c28411f162243d523118605f0b1231dbfdf3611a",
+          "latestBlock": 428,
           "version": 65
         }
       },
@@ -996,7 +995,7 @@ Returns the [RLP encoding](https://ethereum.org/en/developers/docs/data-structur
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of the
 string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
 [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -1046,7 +1045,7 @@ Returns the [RLP encoding](https://ethereum.org/en/developers/docs/data-structur
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of the
 string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
 [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -1102,7 +1101,7 @@ of the transaction receipts of the specified block.
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of the
 string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
 [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -1345,7 +1344,7 @@ Re-imports the block matching the specified block number, by rolling the head of
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of the
 string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
 [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -1435,17 +1434,33 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"debug_resyncWorldState","params"
 
 ### `debug_setHead`
 
-Sets the current head of the local chain to the block matching the specified block number.
+Sets the local chain head to the specified block. Optionally, moves the [bonsai](../../concepts/data-storage-formats.md#bonsai-tries)
+world state to that block when  the `shouldMoveWorldstate` parameter is set to `true`.
+
+Moving the world state allows expensive operations like [`debug_traceBlock`](#debug_traceblock)
+to run on historical blocks without replaying all intermediate states. This is helpful to avoid
+out of memory errors when executing RPC calls on historical states.
+
+:::warning
+Do not use this method when a consensus client is directing Besu, or while the node is
+actively importing or proposing blocks as this will likely corrupt the database.
+
+Additionally, if you move the chain head by a large number of blocks (for example, more than 5,000),
+the RPC call might time out even though Besu continues the operation in the background.
+:::
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
-string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
-[block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of the
+    string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
+    [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
-:::note
-`pending` returns the same value as `latest`.
-:::
+    :::note
+    `pending` returns the same value as `latest`.
+    :::
+
+- `shouldMoveWorldstate`: _boolean_ - (optional) if `true`, moves the [bonsai](../../concepts/data-storage-formats.md#bonsai-tries)
+    world state to the specified block. The default is `false`.
 
 #### Returns
 
@@ -1495,9 +1510,17 @@ Use [`debug_standardTraceBadBlockToFile`](#debug_standardtracebadblocktofile) to
 
 - `blockHash`: _string_ - block hash
 
-- `txHash`: _string_ - (optional) transaction hash; if omitted, a trace file is generated for each transaction in the block.
+- Optional second parameter _object_ (all keys optional):
 
-- `disableMemory`: _boolean_ - (optional) specifies whether to capture EVM memory during the trace; defaults to `true`
+  - `txHash`: _string_ - transaction hash; if omitted, a trace file is generated for each transaction in the block
+
+  - `disableMemory`: _boolean_ - omit EVM memory from the trace; defaults to `false`
+
+  - `disableStack`: _boolean_ - omit stack from the trace; defaults to `false`
+
+  - `disableStorage`: _boolean_ - omit storage from the trace; defaults to `false`
+
+  - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
 #### Returns
 
@@ -1540,7 +1563,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"debug_standardTraceBlockToFile",
   "jsonrpc": "2.0",
   "id": 1,
   "result": [
-    "/Users/me/mynode/holesky/data/traces/block_0x2dc0b6c4-4-0x4ff04c4a-1612820117332"
+    "/Users/me/mynode/sepolia/data/traces/block_0x2dc0b6c4-4-0x4ff04c4a-1612820117332"
   ]
 }
 ```
@@ -1557,7 +1580,19 @@ Use [`debug_standardTraceBlockToFile`](#debug_standardtraceblocktofile) to view 
 
 #### Parameters
 
-`blockHash`: _string_ - block hash
+- `blockHash`: _string_ - block hash
+
+- Optional second parameter _object_ (all keys optional):
+
+  - `txHash`: _string_ - transaction hash; if omitted, a trace file is generated for each transaction in the block
+
+  - `disableMemory`: _boolean_ - omit EVM memory from the trace; defaults to `true`
+
+  - `disableStack`: _boolean_ - omit stack from the trace; defaults to `false`
+
+  - `disableStorage`: _boolean_ - omit storage from the trace; defaults to `true`
+
+  - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
 #### Returns
 
@@ -1595,7 +1630,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"debug_standardTraceBadBlockToFil
   "jsonrpc": "2.0",
   "id": 1,
   "result": [
-    "/Users/me/mynode/holesky/data/traces/block_0x53741e9e-0-0x407ec43d-1600951088172"
+    "/Users/me/mynode/sepolia/data/traces/block_0x53741e9e-0-0x407ec43d-1600951088172"
   ]
 }
 ```
@@ -1685,15 +1720,17 @@ Reruns the transaction with the same state as when the transaction executed.
 
 #### Parameters
 
-- `transactionHash`: _string_ - transaction hash
+- `transactionHash`: _string_ - transaction hash.
 
-- `options`: _object_ - request options object with the following fields (all optional and default to `false`):
+- `options`: _object_ - request options object with the following fields (all optional):
 
-  - `disableStorage`: _boolean_ - `true` disables storage capture.
+  - `disableStorage`: _boolean_ - `true` disables storage capture; defaults to `false`
 
-  - `disableMemory`: _boolean_ - `true` disables memory capture.
+  - `disableMemory`: _boolean_ - `true` disables memory capture; defaults to `true`
 
-  - `disableStack` : _boolean_ - `true` disables stack capture.
+  - `disableStack` : _boolean_ - `true` disables stack capture; defaults to `false`
+
+  - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
 #### Returns
 
@@ -1765,14 +1802,13 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
 
 - `options`: _object_ - (optional) request options object with the following fields:
 
-  - `disableStorage`: _boolean_ - `true` disables storage capture.
-    The default is `false`.
+  - `disableStorage`: _boolean_ - `true` disables storage capture. The default is `false`.
 
-  - `disableMemory`: _boolean_ - `true` disables memory capture.
-    The default is `true`.
+  - `disableMemory`: _boolean_ - `true` disables memory capture. The default is `true`.
 
-  - `disableStack` : _boolean_ - `true` disables stack capture.
-    The default is `false`.
+  - `disableStack` : _boolean_ - `true` disables stack capture. The default is `false`.
+
+  - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
 #### Returns
 
@@ -1841,14 +1877,13 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
 
 - `options`: _object_ - (optional) request options object with the following fields:
 
-  - `disableStorage`: _boolean_ - `true` disables storage capture.
-    The default is `false`.
+  - `disableStorage`: _boolean_ - `true` disables storage capture. The default is `false`.
 
-  - `disableMemory`: _boolean_ - `true` disables memory capture.
-    The default is `true`.
+  - `disableMemory`: _boolean_ - `true` disables memory capture. The default is `true`.
 
-  - `disableStack` : _boolean_ - `true` disables stack capture.
-    The default is `false`.
+  - `disableStack` : _boolean_ - `true` disables stack capture. The default is `false`.
+
+  - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
 #### Returns
 
@@ -1915,7 +1950,7 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
 
 #### Parameters
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of the
   string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -1925,14 +1960,13 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
 
 - `options`: _object_ - (optional) request options object with the following fields:
 
-  - `disableStorage`: _boolean_ - `true` disables storage capture.
-    The default is `false`.
+  - `disableStorage`: _boolean_ - `true` disables storage capture. The default is `false`.
 
-  - `disableMemory`: _boolean_ - `true` disables memory capture.
-    The default is `true`.
+  - `disableMemory`: _boolean_ - `true` disables memory capture. The default is `true`.
 
-  - `disableStack` : _boolean_ - `true` disables stack capture.
-    The default is `false`.
+  - `disableStack` : _boolean_ - `true` disables stack capture. The default is `false`.
+
+  - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
 #### Returns
 
@@ -1994,11 +2028,15 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceBlockByNumber","param
 
 Performs an [`eth_call`](#eth_call) within the execution environment of a given block, using the final state of its parent block as the base, and provides a detailed trace of the executed opcodes.
 
+Each `options` entry specifies a state that will be temporarily overridden before executing the call. 
+This allows you to test, analyze, and debug smart contracts more efficiently by allowing
+temporary state changes without affecting the actual blockchain state.
+
 #### Parameters
 
-- `call`: _object_ - [transaction call object](objects.md#transaction-call-object)
+- `call`: _object_ - [transaction call object](objects.md#transaction-call-object).
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of the
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of the
   string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -2006,13 +2044,17 @@ Performs an [`eth_call`](#eth_call) within the execution environment of a given 
   `pending` returns the same value as `latest`.
   :::
 
-- `options`: _object_ - request options object with the following fields (all optional and default to `false`):
+- `options`: _object_ - request options object with the following fields:
 
-  - `disableStorage`: _boolean_ - `true` disables storage capture.
+  - `disableStorage`: _boolean_ - (optional) `true` disables storage capture; defaults to `false`
 
-  - `disableMemory`: _boolean_ - `true` disables memory capture.
+  - `disableMemory`: _boolean_ - (optional) `true` disables memory capture; defaults to `true`
 
-  - `disableStack` : _boolean_ - `true` disables stack capture.
+  - `disableStack` : _boolean_ - (optional) `true` disables stack capture; defaults to `false`
+
+  - `opcodes`: _array_ of _strings_ - (optional) list of opcode names to trace; if omitted or empty, all opcodes are traced
+
+  - `stateOverrides`: _object_ - (optional) [address-to-state mapping](./objects.md#state-override-object)
 
 #### Returns
 
@@ -2094,7 +2136,7 @@ Returns a list of account addresses a client owns.
 
 This method returns an empty object because Besu [doesn't support key management](../../how-to/send-transactions.md) inside the client.
 
-To provide access to your key store and and then sign transactions, use [Web3Signer](https://docs.web3signer.consensys.net/) with Besu.
+To provide access to your key store and then sign transactions, use [Web3Signer](https://docs.web3signer.consensys.net/) with Besu.
 
 :::
 
@@ -2283,7 +2325,7 @@ By default, the `eth_call` error response includes the [revert reason](../../../
   does not have sufficient funds to cover the gas fees.
   :::
 
-- `blockNumber` or `blockHash`: _string_ - hexadecimal or decimal integer representing a block number,
+- `blockNumber` or `blockHash`: _string_ - hexadecimal integer representing a block number,
   block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as
   described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -2482,15 +2524,15 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":51
 
 </Tabs>
 
-### `eth_coinbase`
+### `eth_config`
 
-Returns the client coinbase address. The coinbase address is the account to pay mining rewards to.
+Returns the client's fork information for the current, next, and last known forks.
 
-To set a coinbase address, start Besu with the `--miner-coinbase` option set to a valid Ethereum account address. You can get the Ethereum account address from a client such as MetaMask or Etherscan. For example:
+:::info
 
-```bash title="Example"
-besu --miner-coinbase="0xfe3b557e8fb62b89f4916b721be55ceb828dbd73" --rpc-http-enabled
-```
+This method is defined in [EIP-7910](https://eips.ethereum.org/EIPS/eip-7910) and enables node operators to verify client readiness for upcoming forks and debug configuration mismatches.
+
+:::
 
 #### Parameters
 
@@ -2498,14 +2540,28 @@ None
 
 #### Returns
 
-`result`: _string_ - coinbase address
+`result`: _object_ - configuration information containing:
+
+- `current`: _object_ - current fork configuration:
+  - `activationTime`: _number_ - fork activation timestamp (Unix epoch seconds)
+  - `blobSchedule`: _object_ - blob configuration parameters:
+    - `baseFeeUpdateFraction`: _number_ - base fee update fraction
+    - `max`: _number_ - maximum number of blobs per block
+    - `target`: _number_ - target number of blobs per block
+  - `chainId`: _string_ - chain ID in hexadecimal
+  - `forkId`: _string_ - fork hash as defined in [EIP-6122](https://eips.ethereum.org/EIPS/eip-6122)
+  - `precompiles`: _object_ - active precompiled contracts with names and addresses
+  - `systemContracts`: _object_ - system contract addresses
+- `next`: _object_ - next fork configuration, or `null` if no future fork is scheduled.
+- `last`: _object_ - the furthest configured future fork configuration (the future fork with
+    the largest `activationTime` among the client's configured forks). If only one future fork is configured, `next` and `last` are the same object. `null` if no future fork is scheduled.
 
 <Tabs>
 
 <TabItem value="curl HTTP request" label="curl HTTP request" default>
 
 ```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_coinbase","params":[],"id":53}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+curl -X POST --data '{"jsonrpc":"2.0","method":"eth_config","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
 ```
 
 </TabItem>
@@ -2513,7 +2569,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_coinbase","params":[],"id":5
 <TabItem value="wscat WS request" label="wscat WS request">
 
 ```json
-{ "jsonrpc": "2.0", "method": "eth_coinbase", "params": [], "id": 53 }
+{ "jsonrpc": "2.0", "method": "eth_config", "params": [], "id": 1 }
 ```
 
 </TabItem>
@@ -2523,8 +2579,47 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_coinbase","params":[],"id":5
 ```json
 {
   "jsonrpc": "2.0",
-  "id": 53,
-  "result": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73"
+  "id": 1,
+  "result": {
+    "current": {
+      "activationTime": 1746612311,
+      "blobSchedule": {
+        "baseFeeUpdateFraction": 5007716,
+        "max": 9,
+        "target": 6
+      },
+      "chainId": "0x1",
+      "forkId": "0xc376cf8b",
+      "precompiles": {
+        "BLAKE2F": "0x0000000000000000000000000000000000000009",
+        "BLS12_G1ADD": "0x000000000000000000000000000000000000000b",
+        "BLS12_G1MSM": "0x000000000000000000000000000000000000000c",
+        "BLS12_G2ADD": "0x000000000000000000000000000000000000000d",
+        "BLS12_G2MSM": "0x000000000000000000000000000000000000000e",
+        "BLS12_MAP_FP2_TO_G2": "0x0000000000000000000000000000000000000011",
+        "BLS12_MAP_FP_TO_G1": "0x0000000000000000000000000000000000000010",
+        "BLS12_PAIRING_CHECK": "0x000000000000000000000000000000000000000f",
+        "BN254_ADD": "0x0000000000000000000000000000000000000006",
+        "BN254_MUL": "0x0000000000000000000000000000000000000007",
+        "BN254_PAIRING": "0x0000000000000000000000000000000000000008",
+        "ECREC": "0x0000000000000000000000000000000000000001",
+        "ID": "0x0000000000000000000000000000000000000004",
+        "KZG_POINT_EVALUATION": "0x000000000000000000000000000000000000000a",
+        "MODEXP": "0x0000000000000000000000000000000000000005",
+        "RIPEMD160": "0x0000000000000000000000000000000000000003",
+        "SHA256": "0x0000000000000000000000000000000000000002"
+      },
+      "systemContracts": {
+        "BEACON_ROOTS_ADDRESS": "0x000f3df6d732807ef1319fb7b8bb8522d0beac02",
+        "CONSOLIDATION_REQUEST_PREDEPLOY_ADDRESS": "0x0000bbddc7ce488642fb579f8b00f3a590007251",
+        "DEPOSIT_CONTRACT_ADDRESS": "0x00000000219ab540356cbb839cbe05303d7705fa",
+        "HISTORY_STORAGE_ADDRESS": "0x0000f90827f1c53a10cb7a02335b175320002935",
+        "WITHDRAWAL_REQUEST_PREDEPLOY_ADDRESS": "0x00000961ef480eb55e80d19ad83579a64c007002"
+      }
+    },
+    "next": null,
+    "last": null
+  }
 }
 ```
 
@@ -2534,15 +2629,15 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_coinbase","params":[],"id":5
 
 ### `eth_createAccessList`
 
-Creates an [EIP-2930](https://eips.ethereum.org/EIPS/eip-2930) access list that you can [include in a transaction](../../concepts/transactions/types.md#access_list-transactions).
+Creates an [EIP-2930](https://eips.ethereum.org/EIPS/eip-2930) access list that you can [include in a transaction](../../concepts/transactions/types.md#access_list-transactions). The method returns a success response (access list and gas used) even if the simulated transaction would revert.
 
 #### Parameters
 
 - `transaction`: _object_ - [transaction call object](objects.md#transaction-call-object)
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
-  [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter).
+  [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
 #### Returns
 
@@ -2602,6 +2697,13 @@ curl -X POST --data '{"method":"eth_createAccessList","params":[{"from": "0xaeA8
 
 </Tabs>
 
+:::tip
+
+This method doesn't indicate whether a transaction would succeed or revert; to see simulation outcomes
+use [`eth_call`](#eth_call) or [`eth_estimateGas`](#eth_estimategas).
+
+:::
+
 ### `eth_estimateGas`
 
 Returns an estimate of the gas required for a transaction to complete. The estimation process does not use gas and the transaction is not added to the blockchain. The resulting estimate can be greater than the amount of gas the transaction ends up using, for reasons including EVM mechanics and node performance.
@@ -2612,14 +2714,18 @@ By default, the `eth_estimateGas` error response includes the [revert reason](..
 
 #### Parameters
 
-For `eth_estimateGas`, all fields are optional because setting a gas limit is irrelevant to the
-estimation process (unlike transactions, in which gas limits apply).
-
 - `call`: _object_ - [transaction call object](objects.md#transaction-call-object)
 
-- `blockNumber`: _string_ - (optional) hexadecimal or decimal integer representing a block number, or one of
+      :::note
+      If you don't want the sender account balance checked, set the gas to zero or specify
+      [`strict:false`](objects.md#transaction-call-object). Otherwise the call may fail if the sender account
+      does not have sufficient funds to cover the gas fees.
+      :::
+
+- `blockNumber`: _string_ - (optional) hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
-  [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter).
+  [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
+  The default is `pending`.
 
 - `stateOverride`: _object_ - The [address-to-state mapping](./objects.md#state-override-object).
     Each entry specifies a state that will be temporarily overridden before executing the call.
@@ -2773,9 +2879,9 @@ As of [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844), this method tracks tr
 
 - `blockCount`: _integer_ or _string_ - Number of blocks in the requested range. Between 1 and 1024 blocks can be requested in a single query. If blocks in the specified block range are not available, then only the fee history for available blocks is returned. Accepts hexadecimal or integer values.
 
-- `newestBlock`: _string_ - hexadecimal or decimal integer representing the highest number block of
+- `newestBlock`: _string_ - hexadecimal integer representing the highest number block of
   the requested range, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or
-  `safe`, as described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter).
+  `safe`, as described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
   :::note
   `pending` returns the same value as `latest`.
@@ -2964,7 +3070,7 @@ Returns the account balance of the specified address.
 
 - `address`: _string_ - 20-byte account address from which to retrieve the balance
 
-- `blockNumber` or `blockHash`: _string_ - hexadecimal or decimal integer representing a block
+- `blockNumber` or `blockHash`: _string_ - hexadecimal integer representing a block
   number, block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or
   `safe`, as described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -3203,9 +3309,9 @@ Returns information about the block matching the specified block number.
 
 #### Parameters
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
-  [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter).
+  [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
   :::note
   `pending` returns the same value as `latest`.
@@ -3378,9 +3484,9 @@ gas used and any event logs that might have been produced by a smart contract du
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
 the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
-[block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter).
+[block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
 :::note
 `pending` returns the same value as `latest`.
@@ -3659,9 +3765,9 @@ Returns the number of transactions in a block matching the specified block numbe
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
 the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
-[block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter).
+[block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
 :::note
 `pending` returns the same value as `latest`.
@@ -3750,7 +3856,7 @@ Returns the code of the smart contract at the specified address. Besu stores com
 
 - `address`: _string_ - 20-byte contract address
 
-- `blockNumber` or `blockHash`: _string_ - hexadecimal or decimal integer representing a block number,
+- `blockNumber` or `blockHash`: _string_ - hexadecimal integer representing a block number,
   block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as
   described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -3909,6 +4015,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getFilterChanges","params":[
       "removed": false,
       "blockNumber": "0x233",
       "blockHash": "0xfc139f5e2edee9e9c888d8df9a2d2226133a9bd87c88ccbd9c930d3d4c9f9ef5",
+      "blockTimestamp": "0x55ba4769",
       "transactionHash": "0x66e7a140c8fa27fe98fde923defea7562c3ca2d6bb89798aabec65782c08f63d",
       "transactionIndex": "0x0",
       "address": "0x42699a7612a82f1d9c36148af9c77354759b210b",
@@ -3922,6 +4029,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getFilterChanges","params":[
       "removed": false,
       "blockNumber": "0x238",
       "blockHash": "0x98b0ec0f9fea0018a644959accbe69cd046a8582e89402e1ab0ada91cad644ed",
+      "blockTimestamp": "0x55ba4773",
       "transactionHash": "0xdb17aa1c2ce609132f599155d384c0bc5334c988a6c368056d7e167e23eee058",
       "transactionIndex": "0x0",
       "address": "0x42699a7612a82f1d9c36148af9c77354759b210b",
@@ -3993,6 +4101,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getFilterLogs","params":["0x
       "removed": false,
       "blockNumber": "0xb3",
       "blockHash": "0xe7cd776bfee2fad031d9cc1c463ef947654a031750b56fed3d5732bee9c61998",
+      "blockTimestamp": "0x55ba4486",
       "transactionHash": "0xff36c03c0fba8ac4204e4b975a6632c862a3f08aa01b004f570cc59679ed4689",
       "transactionIndex": "0x0",
       "address": "0x2e1f232a9439c3d459fceca0beef13acc8259dd8",
@@ -4006,6 +4115,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getFilterLogs","params":["0x
       "removed": false,
       "blockNumber": "0xb6",
       "blockHash": "0x3f4cf35e7ed2667b0ef458cf9e0acd00269a4bc394bb78ee07733d7d7dc87afc",
+      "blockTimestamp": "0x55ba448c",
       "transactionHash": "0x117a31d0dbcd3e2b9180c40aca476586a648bc400aa2f6039afdd0feab474399",
       "transactionIndex": "0x0",
       "address": "0x2e1f232a9439c3d459fceca0beef13acc8259dd8",
@@ -4047,7 +4157,7 @@ Using `eth_getLogs` to get logs from a large range of blocks, especially an enti
 <TabItem value="curl HTTP" label="curl HTTP" default>
 
 ```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"fromBlock":"earliest", "toBlock":"latest", "address": "0x2e1f232a9439c3d459fceca0beef13acc8259dd8", "topics":[]}], "id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"fromBlock":"0x16e2a9a","toBlock":"0x16e2a9a","address":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", "topics":[]}], "id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
 ```
 
 </TabItem>
@@ -4060,9 +4170,9 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"fromBlo
   "method": "eth_getLogs",
   "params": [
     {
-      "fromBlock": "earliest",
-      "toBlock": "latest",
-      "address": "0x2e1f232a9439c3d459fceca0beef13acc8259dd8",
+      "fromBlock": "0x16e2a9a",
+      "toBlock": "0x16e2a9a",
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       "topics": []
     }
   ],
@@ -4080,29 +4190,31 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"fromBlo
   "id": 1,
   "result": [
     {
-      "logIndex": "0x0",
       "removed": false,
-      "blockNumber": "0xb3",
-      "blockHash": "0xe7cd776bfee2fad031d9cc1c463ef947654a031750b56fed3d5732bee9c61998",
-      "transactionHash": "0xff36c03c0fba8ac4204e4b975a6632c862a3f08aa01b004f570cc59679ed4689",
+      "logIndex": "0x2",
       "transactionIndex": "0x0",
-      "address": "0x2e1f232a9439c3d459fceca0beef13acc8259dd8",
-      "data": "0x0000000000000000000000000000000000000000000000000000000000000003",
+      "transactionHash": "0xf9bde920aba1c0eb632138ae21d3f019977de264a4714a54f1ae2e337cce4e3d",
+      "blockHash": "0xa02851f445eea915ef51c54f1352a773c3821a1860d49c6d3e94a16659291c19",
+      "blockNumber": "0x16e2a9a",
+      "blockTimestamp": "0x693c23db",
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "data": "0x00000000000000000000000000000000000000000000000001112ea12c39c032",
       "topics": [
-        "0x04474795f5b996ff80cb47c148d4c5ccdbe09ef27551820caa9c2f8ed149cce3"
+        "0xddf252ad1be2c89b69c2b068fc378da...9d4b2b7fad"
       ]
     },
     {
-      "logIndex": "0x0",
       "removed": false,
-      "blockNumber": "0xb6",
-      "blockHash": "0x3f4cf35e7ed2667b0ef458cf9e0acd00269a4bc394bb78ee07733d7d7dc87afc",
-      "transactionHash": "0x117a31d0dbcd3e2b9180c40aca476586a648bc400aa2f6039afdd0feab474399",
+      "logIndex": "0x6",
       "transactionIndex": "0x0",
-      "address": "0x2e1f232a9439c3d459fceca0beef13acc8259dd8",
-      "data": "0x0000000000000000000000000000000000000000000000000000000000000005",
+      "transactionHash": "0xf9bde920aba1c0eb632138ae21d3f019977de264a4714a54f1ae2e337cce4e3d",
+      "blockHash": "0xa02851f445eea915ef51c54f1352a773c3821a1860d49c6d3e94a16659291c19",
+      "blockNumber": "0x16e2a9a",
+      "blockTimestamp": "0x693c23db",
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "data": "0x00000000000000000000000000000000000000000000000001112ea12c39c032",
       "topics": [
-        "0x04474795f5b996ff80cb47c148d4c5ccdbe09ef27551820caa9c2f8ed149cce3"
+        "0xddf252ad1be2c89b69c2b068fc378d...629ba9375161"
       ]
     }
   ]
@@ -4114,7 +4226,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"fromBlo
 <TabItem value="curl GraphQL" label="curl GraphQL">
 
 ```bash
-curl -X POST -H "Content-Type: application/json" --data '{"query": "{logs(filter:{fromBlock: 1486000, toBlock: 1486010, addresses: [\"0x7ef66b77759e12caf3ddb3e4aff524e577c59d8d\"], topics: [[\"0x8a22ee899102a366ac8ad0495127319cb1ff2403cfae855f83a89cda1266674d\"]]}) {index topics data account{address} transaction{hash} }}"}' http://localhost:8547/graphql
+curl -X POST -H "Content-Type: application/json" --data '{"query": "{logs(filter:{fromBlock: 24000026, toBlock: 24000026, addresses: [\"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2\"]}) {index topics data account{address} transaction{hash} }}"}' http://localhost:8547/graphql
 ```
 
 </TabItem>
@@ -4123,7 +4235,7 @@ curl -X POST -H "Content-Type: application/json" --data '{"query": "{logs(filter
 
 ```text
 {
-  logs(filter: {fromBlock: 1486000, toBlock: 1486010, addresses: ["0x7ef66b77759e12caf3ddb3e4aff524e577c59d8d"], topics: [["0x8a22ee899102a366ac8ad0495127319cb1ff2403cfae855f83a89cda1266674d"]]}) {
+  logs(filter: {fromBlock: 24000026, toBlock: 24000026, addresses: ["0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"]}) {
     index
     topics
     data
@@ -4146,33 +4258,29 @@ curl -X POST -H "Content-Type: application/json" --data '{"query": "{logs(filter
   "data": {
     "logs": [
       {
-        "index": 0,
+        "index": 2,
         "topics": [
-          "0x8a22ee899102a366ac8ad0495127319cb1ff2403cfae855f83a89cda1266674d",
-          "0x0000000000000000000000000000000000000000000000000000000000000004",
-          "0x0000000000000000000000000000000000000000000000000000000000508918"
+          "0xddf252ad1be2c89b69c2b068fc378...d4b2b7fad"
         ],
-        "data": "0xa5a04999ec29a8bd19ce32b859280ef9dbb464d846be06f64a1b1012ec08ab03",
+        "data": "0x00000000000000000000000000000000000000000000000001112ea12c39c032",
         "account": {
-          "address": "0x7ef66b77759e12caf3ddb3e4aff524e577c59d8d"
+          "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
         },
         "transaction": {
-          "hash": "0x36a2186344c6a32760e7700fdf3685936220876c51ff39d071eb48c17f7e802f"
+          "hash": "0xf9bde920aba1c0eb632138ae21d3f019977de264a4714a54f1ae2e337cce4e3d"
         }
       },
       {
-        "index": 0,
+        "index": 6,
         "topics": [
-          "0x8a22ee899102a366ac8ad0495127319cb1ff2403cfae855f83a89cda1266674d",
-          "0x0000000000000000000000000000000000000000000000000000000000000003",
-          "0x0000000000000000000000000000000000000000000000000000000000648c72"
+          "0xddf252ad1be2c89b69c2b068fc378...9ba9375161"
         ],
-        "data": "0x0ee96b660ad82c8010c90760a03edfbb40b4af5e3634a8c214e4ac7fa1f61492",
+        "data": "0x00000000000000000000000000000000000000000000000001112ea12c39c032",
         "account": {
-          "address": "0x7ef66b77759e12caf3ddb3e4aff524e577c59d8d"
+          "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
         },
         "transaction": {
-          "hash": "0x9e2cc9e84a9e78839d6f4b591dfd98cc7a454a8ee3cd6ccd0a18e662e22d3818"
+          "hash": "0xf9bde920aba1c0eb632138ae21d3f019977de264a4714a54f1ae2e337cce4e3d"
         }
       }
     ]
@@ -4183,143 +4291,7 @@ curl -X POST -H "Content-Type: application/json" --data '{"query": "{logs(filter
 </TabItem>
 
 </Tabs>
-
-### `eth_getMinerDataByBlockHash` (Deprecated)
-
-Returns miner data for the specified block.
-
-#### Parameters
-
-`hash`: _string_ - 32-byte block hash
-
-#### Returns
-
-`result`: _object_ - [miner data object](objects.md#miner-data-object)
-
-<Tabs>
-
-<TabItem value="curl HTTP" label="curl HTTP" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0","method": "eth_getMinerDataByBlockHash","params": ["0xbf137c3a7a1ebdfac21252765e5d7f40d115c2757e4a4abee929be88c624fdb7"],"id": 1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS" label="wscat WS">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "eth_getMinerDataByBlockHash",
-  "params": [
-    "0xbf137c3a7a1ebdfac21252765e5d7f40d115c2757e4a4abee929be88c624fdb7"
-  ],
-  "id": 1
-}
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "netBlockReward": "0x47c6f3739f3da800",
-    "staticBlockReward": "0x4563918244f40000",
-    "transactionFee": "0x38456548220800",
-    "uncleInclusionReward": "0x22b1c8c1227a000",
-    "uncleRewards": [
-      {
-        "hash": "0x2422d43b4f72e19faf4368949a804494f67559405046b39c6d45b1bd53044974",
-        "coinbase": "0x0c062b329265c965deef1eede55183b3acb8f611"
-      }
-    ],
-    "coinbase": "0xb42b6c4a95406c78ff892d270ad20b22642e102d",
-    "extraData": "0xd583010502846765746885676f312e37856c696e7578",
-    "difficulty": "0x7348c20",
-    "totalDifficulty": "0xa57bcfdd96"
-  }
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-### `eth_getMinerDataByBlockNumber`
-
-Returns miner data for the specified block.
-
-#### Parameters
-
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
-the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
-[block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter).
-
-:::note
-`pending` returns the same value as `latest`.
-:::
-
-#### Returns
-
-`result`: _object_ - [miner data object](objects.md#miner-data-object)
-
-<Tabs>
-
-<TabItem value="curl HTTP" label="curl HTTP" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0","method": "eth_getMinerDataByBlockNumber","params": ["0x7689D2"],"id": 1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS" label="wscat WS">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "eth_getMinerDataByBlockNumber",
-  "params": ["0x7689D2"],
-  "id": 1
-}
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "netBlockReward": "0x47c6f3739f3da800",
-    "staticBlockReward": "0x4563918244f40000",
-    "transactionFee": "0x38456548220800",
-    "uncleInclusionReward": "0x22b1c8c1227a000",
-    "uncleRewards": [
-      {
-        "hash": "0x2422d43b4f72e19faf4368949a804494f67559405046b39c6d45b1bd53044974",
-        "coinbase": "0x0c062b329265c965deef1eede55183b3acb8f611"
-      }
-    ],
-    "coinbase": "0xb42b6c4a95406c78ff892d270ad20b22642e102d",
-    "extraData": "0xd583010502846765746885676f312e37856c696e7578",
-    "difficulty": "0x7348c20",
-    "totalDifficulty": "0xa57bcfdd96"
-  }
-}
-```
-
-</TabItem>
-
-</Tabs>
-
+ 
 ### `eth_getProof`
 
 Returns the account and storage values of the specified account, including the Merkle proof.
@@ -4332,7 +4304,7 @@ The API allows IoT devices or mobile apps which are unable to run light clients 
 
 - `keys`: _array_ of _strings_ - list of 32-byte storage keys to generate proofs for
 
-- `blockNumber` or `blockHash`: _string_ - hexadecimal or decimal integer representing a block
+- `blockNumber` or `blockHash`: _string_ - hexadecimal integer representing a block
   number, block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or
   `safe`, as described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -4437,7 +4409,7 @@ Returns the value of a storage position at a specified address.
 
 - `index`: _string_ - integer index of the storage position
 
-- `blockNumber` or `blockHash`: _string_ - hexadecimal or decimal integer representing a block
+- `blockNumber` or `blockHash`: _string_ - hexadecimal integer representing a block
   number, block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or
   `safe`, as described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -4642,7 +4614,7 @@ Returns transaction information for the specified block number and transaction i
 
 #### Parameters
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -4655,8 +4627,6 @@ Returns transaction information for the specified block number and transaction i
 #### Returns
 
 `result`: _object_ - [transaction object](objects.md#transaction-object), or `null` when there is no transaction
-
-This request returns the third transaction in the 82990 block on the Ropsten testnet. You can also view this [block](https://ropsten.etherscan.io/txs?block=82990) and [transaction] on Etherscan.
 
 <Tabs>
 
@@ -4892,7 +4862,7 @@ Returns the number of transactions sent from a specified address. Use the `pendi
 
 - `address`: _string_ - 20-byte account address
 
-- `blockNumber` or `blockHash`: _string_ - hexadecimal or decimal integer representing a block number, block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
+- `blockNumber` or `blockHash`: _string_ - hexadecimal integer representing a block number, block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
 #### Returns
 
@@ -5017,6 +4987,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","para
   "result": {
     "blockHash": "0xe7212a92cfb9b06addc80dec2a0dfae9ea94fd344efeb157c41e12994fcad60a",
     "blockNumber": "0x50",
+    "blockTimestamp": "0x55ba43bb",
     "contractAddress": null,
     "cumulativeGasUsed": "0x5208",
     "from": "0x627306090abab3a6e1400e9345bc60c78a8bef57",
@@ -5255,7 +5226,7 @@ Returns uncle specified by block number and index.
 
 #### Parameters
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -5472,7 +5443,7 @@ Returns the number of uncles in a block matching the specified block number.
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
 the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
 [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -5548,109 +5519,6 @@ curl -X POST -H "Content-Type: application/json" --data '{ "query": "{block(numb
       "ommerCount": 0
     }
   }
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-### `eth_getWork` (Deprecated)
-
-Returns the hash of the current block, the seed hash, and the required target boundary condition.
-
-#### Parameters
-
-None
-
-#### Returns
-
-`result`: _array_ of _strings_ - array with the following items:
-
-- `header`: _string_ - 32-byte hash of the current block header (PoW-hash)
-
-- `seed`: _string_ - 32-byte seed hash used for the DAG
-
-- `target`: _string_ - 32-byte required target boundary condition: 2^256 / difficulty
-
-- `blockNumber`: _string_ - hexadecimal integer representing the current block number
-
-<Tabs>
-
-<TabItem value="curl HTTP request" label="curl HTTP request" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getWork","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS request" label="wscat WS request">
-
-```json
-{ "jsonrpc": "2.0", "method": "eth_getWork", "params": [], "id": 1 }
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": [
-    "0xce5e32ca59cb86799a1879e90150b2c3b882852173e59865e9e79abb67a9d636",
-    "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "0x00a3d70a3d70a3d70a3d70a3d70a3d70a3d70a3d70a3d70a3d70a3d70a3d70a3",
-    "0x42"
-  ]
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-### `eth_hashrate` (Deprecated)
-
-Returns the number of hashes per second with which the node is mining.
-
-When the stratum server is enabled, this method returns the cumulative hashrate of all sealers reporting their hashrate.
-
-#### Parameters
-
-None
-
-#### Returns
-
-`result`: _string_ - number of hashes per second
-
-<Tabs>
-
-<TabItem value="curl HTTP request" label="curl HTTP request" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_hashrate","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS request" label="wscat WS request">
-
-```bash
-{"jsonrpc":"2.0","method":"eth_hashrate","params":[],"id":1}
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": "0x12b"
 }
 ```
 
@@ -6067,26 +5935,51 @@ mutation {
 
 </Tabs>
 
-### `eth_submitHashrate` (Deprecated)
+### `eth_simulateV1`
 
-Submits the mining hashrate. This is used by mining software such as [Ethminer](https://github.com/ethereum-mining/ethminer).
+Simulates transactions across multiple blocks. Allows you to test transactions with custom state and
+block parameters without submitting them to the network.
 
 #### Parameters
 
-- `hashrate`: _string_ - 32-byte hexadecimal string representation of the hashrate
+- `payload`: _object_ - transaction simulation payload object containing the following fields:
 
-- `id`: _string_ - 32-byte random hexadecimal ID identifying the client
+  - `blockStateCalls`: _array_ of _objects_ - list of block state call objects, each containing the following fields:
+
+    - `blockOverrides`: _array_ of _objects_ - list of [block override objects](objects.md#block-override-object)
+    
+    - `stateOverrides`: _array_ of _objects_ - list of [state override objects](objects.md#state-override-object)
+    
+    - `calls`: _array_ of _objects_ - list of [transaction call objects](objects.md#transaction-call-object)
+  
+  - `traceTransfers`:  _boolean_ - (optional) if `true`, ETH transfers are added as ERC-20 transfer
+      events to the logs, allowing you to trace value transfers. The default is `false`.
+  
+  - `validation`: _boolean_ - (optional) If `true`, `eth_simulateV1` does all the validation that a
+    normal EVM would do, except contract sender and signature checks. If `false`, `eth_simulateV1` behaves like `eth_call`.
+    The default is `false`.
+  
+  - `returnFullTransactionObjects`: _boolean_ - (optional) If `true`, returns full transaction
+    objects. If `false`, returns only hashes. The default is `false`.
+
+- `blockNumber` or `blockHash`: _string_ - hexadecimal integer representing a block number,
+  block hash, or one of the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as
+  described in [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
 #### Returns
 
-`result`: _boolean_ - indicates if submission is successful
+`result`: _array_ of _objects_ - list of simulation result objects, each containing the following fields:
+
+- all the fields of a [block object](objects.md#block-object)
+
+- `calls`: _array_ of _objects_ - list of [call result objects](objects.md#call-result-object)
 
 <Tabs>
 
 <TabItem value="curl HTTP request" label="curl HTTP request" default>
 
 ```bash
-curl -X POST --data '{"jsonrpc":"2.0", "method":"eth_submitHashrate", "params":["0x0000000000000000000000000000000000000000000000000000000000500000", "0x59daa26581d0acd1fce254fb7e85952f4c09d0915afd33d3886cd914bc7d283c"],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+curl -X POST --data '{"jsonrpc":"2.0", "method":"eth_simulateV1", "params":[{"blockStateCalls":[{"blockOverrides":{"baseFeePerGas":"0x9"},"stateOverrides":{"0xc000000000000000000000000000000000000000":{"balance":"0x4a817c800"}},"calls":[{"from":"0xc000000000000000000000000000000000000000","to":"0xc000000000000000000000000000000000000001","maxFeePerGas":"0xf","value":"0x1"},{"from":"0xc000000000000000000000000000000000000000","to":"0xc000000000000000000000000000000000000002","maxFeePerGas":"0xf","value":"0x1"}]}],"validation":true,"traceTransfers":true},"latest"],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
 ```
 
 </TabItem>
@@ -6096,10 +5989,39 @@ curl -X POST --data '{"jsonrpc":"2.0", "method":"eth_submitHashrate", "params":[
 ```json
 {
   "jsonrpc": "2.0",
-  "method": "eth_submitHashrate",
+  "method": "eth_simultateV1",
   "params": [
-    "0x0000000000000000000000000000000000000000000000000000000000500000",
-    "0x59daa26581d0acd1fce254fb7e85952f4c09d0915afd33d3886cd914bc7d283c"
+    {
+      "blockStateCalls": [
+        {
+          "blockOverrides": {
+            "baseFeePerGas": "0x9"
+          },
+          "stateOverrides": {
+            "0xc000000000000000000000000000000000000000": {
+              "balance": "0x4a817c800"
+            }
+          },
+          "calls": [
+            {
+              "from": "0xc000000000000000000000000000000000000000",
+              "to": "0xc000000000000000000000000000000000000001",
+              "maxFeePerGas": "0xf",
+              "value": "0x1"
+            },
+            {
+              "from": "0xc000000000000000000000000000000000000000",
+              "to": "0xc000000000000000000000000000000000000002",
+              "maxFeePerGas": "0xf",
+              "value": "0x1"
+            }
+          ]
+        }
+      ],
+      "validation": true,
+      "traceTransfers": true
+    },
+    "latest"
   ],
   "id": 1
 }
@@ -6113,55 +6035,86 @@ curl -X POST --data '{"jsonrpc":"2.0", "method":"eth_submitHashrate", "params":[
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "result": true
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-### `eth_submitWork` (Deprecated)
-
-Submits a proof of work (Ethash) solution. This is used by mining software such as [Ethminer](https://github.com/ethereum-mining/ethminer).
-
-#### Parameters
-
-- `nonce`: _string_ - retrieved 8-byte nonce
-
-- `header`: _string_ - 32-byte hash of the block header (PoW-hash)
-
-- `digest`: _string_ - 32-bytes mix digest
-
-#### Returns
-
-`result`: _boolean_ - indicates if the provided solution is valid
-
-<Tabs>
-
-<TabItem value="curl HTTP request" label="curl HTTP request" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0", "method":"eth_submitWork", "params":["0x0000000000000001", "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", "0xD1GE5700000000000000000000000000D1GE5700000000000000000000000000"],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS request" label="wscat WS request">
-
-```bash
-{"jsonrpc":"2.0", "method":"eth_submitWork", "params":["0x0000000000000001", "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", "0xD1GE5700000000000000000000000000D1GE5700000000000000000000000000"],"id":73}
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "result": true
+  "result": [
+    {
+      "baseFeePerGas": "0x9",
+      "blobGasUsed": "0x0",
+      "calls": [
+        {
+          "gasUsed": "0x5208",
+          "maxUsedGas": "0x7530",
+          "logs": [
+            {
+              "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "blockHash": "0xc98388385b0dbfc15ad5c6a0f4b19f7abd94efb4618ced05e3eb320ee30b1e7f",
+              "blockNumber": "0x1496e50",
+              "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+              "logIndex": "0x0",
+              "removed": false,
+              "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x000000000000000000000000c000000000000000000000000000000000000000",
+                "0x000000000000000000000000c000000000000000000000000000000000000001"
+              ],
+              "transactionHash": "0xe7217784e0c3f7b35d39303b1165046e9b7e8af9b9cf80d5d5f96c3163de8f51",
+              "transactionIndex": "0x0"
+            }
+          ],
+          "returnData": "0x",
+          "status": "0x1"
+        },
+        {
+          "gasUsed": "0x5208",
+          "maxUsedGas": "0x7530",
+          "logs": [
+            {
+              "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "blockHash": "0xc98388385b0dbfc15ad5c6a0f4b19f7abd94efb4618ced05e3eb320ee30b1e7f",
+              "blockNumber": "0x1496e50",
+              "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+              "logIndex": "0x1",
+              "removed": false,
+              "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x000000000000000000000000c000000000000000000000000000000000000000",
+                "0x000000000000000000000000c000000000000000000000000000000000000002"
+              ],
+              "transactionHash": "0xf0182201606ec03701ba3a07d965fabdb4b7d06b424f226ea7ec3581802fc6fa",
+              "transactionIndex": "0x1"
+            }
+          ],
+          "returnData": "0x",
+          "status": "0x1"
+        }
+      ],
+      "difficulty": "0x0",
+      "excessBlobGas": "0x4920000",
+      "extraData": "0x",
+      "gasLimit": "0x1c9c380",
+      "gasUsed": "0xa410",
+      "hash": "0xc98388385b0dbfc15ad5c6a0f4b19f7abd94efb4618ced05e3eb320ee30b1e7f",
+      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "miner": "0x7e2a2fa2a064f693f0a55c5639476d913ff12d05",
+      "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "nonce": "0x0000000000000000",
+      "number": "0x1496e50",
+      "parentBeaconBlockRoot": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "parentHash": "0xddd47e7383c8ced495e85e053f898d7a333feb0432fa9098306f6f563cde4984",
+      "receiptsRoot": "0x75308898d571eafb5cd8cde8278bf5b3d13c5f6ec074926de3bb895b519264e1",
+      "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+      "size": "0x29c",
+      "stateRoot": "0xd6da11fae4ab94ddba2c4c71206962f7c6eaec6e5fabf00f3f7540c4ed7ad8f1",
+      "timestamp": "0x67803e64",
+      "transactions": [
+        "0xe7217784e0c3f7b35d39303b1165046e9b7e8af9b9cf80d5d5f96c3163de8f51",
+        "0xf0182201606ec03701ba3a07d965fabdb4b7d06b424f226ea7ec3581802fc6fa"
+      ],
+      "transactionsRoot": "0x9bdb74f3ce41f5893a02a631e904ae0d21ae8c4e416786d8dbd9cb5c54f1dc0f",
+      "uncles": [],
+      "withdrawals": [],
+      "withdrawalsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+    }
+  ]  
 }
 ```
 
@@ -6537,60 +6490,6 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"miner_getMinPriorityFee","params
 
 </Tabs>
 
-### `miner_setCoinbase`
-
-Sets the coinbase, the address for the mining rewards.
-
-:::note
-
-You can also use `miner_setEtherbase` as an alternative method. They both work the same way. Etherbase is a historic name for coinbase.
-
-:::
-
-#### Parameters
-
-`coinbase`: _string_ - Account address you pay mining rewards to
-
-#### Returns
-
-`result`: _boolean_ - `true` when address is set
-
-<Tabs>
-
-<TabItem value="curl HTTP request" label="curl HTTP request" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"miner_setCoinbase","params":["0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73"],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS request" label="wscat WS request">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "miner_setCoinbase",
-  "params": ["0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73"],
-  "id": 1
-}
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": true
-}
-```
-
-</TabItem>
-
-</Tabs>
 
 ### `miner_setExtraData`
 
@@ -6727,95 +6626,6 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"miner_setMinPriorityFee","params
   "params": ["0x0a"],
   "id": 1
 }
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": true
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-### `miner_start` (Deprecated)
-
-Starts the mining process. 
-To start mining, you must first specify a miner coinbase using the [`--miner-coinbase`](../cli/options.md#miner-coinbase) command line option or using [`miner_setCoinbase`](#miner_setcoinbase).
-
-#### Parameters
-
-None
-
-#### Returns
-
-`result`: _boolean_ - `true` if mining starts, or if the node is already mining
-
-<Tabs>
-
-<TabItem value="curl HTTP request" label="curl HTTP request" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"miner_start","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS request" label="wscat WS request">
-
-```json
-{ "jsonrpc": "2.0", "method": "miner_start", "params": [], "id": 1 }
-```
-
-</TabItem>
-
-<TabItem value="JSON result" label="JSON result">
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": true
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-### `miner_stop` (Deprecated)
-
-Stops the mining process on the client.
-
-#### Parameters
-
-None
-
-#### Returns
-
-`result`: _boolean_ - `true` if mining stops, or if the node is not mining
-
-<Tabs>
-
-<TabItem value="curl HTTP request" label="curl HTTP request" default>
-
-```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"miner_stop","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
-```
-
-</TabItem>
-
-<TabItem value="wscat WS request" label="wscat WS request">
-
-```json
-{ "jsonrpc": "2.0", "method": "miner_stop", "params": [], "id": 1 }
 ```
 
 </TabItem>
@@ -7044,21 +6854,20 @@ None
 #### Returns
 
 `result`: _string_ - current network ID
-
-| Network ID | Chain | Network | Description                   |
-| ---------- | ----- | ------- | ----------------------------- |
-| `1`        | ETH   | Mainnet | Main Ethereum network         |
-| `17000`    | ETH   | Holesky | PoS test network              |
-| `11155111` | ETH   | Sepolia | PoS test network              |
-| `2018`     | ETH   | Dev     | PoW development network       |
-| `1`        | ETC   | Classic | Main Ethereum Classic network |
-| `7`        | ETC   | Mordor  | PoW test network              |
+ 
+| Network ID | Chain  | Network | Description                   |
+| ---------- | -------| ------- | ----------------------------- |
+| `1`        | ETH    | Mainnet | Main Ethereum network         |
+| `560048`   | ETH    | Hoodi   | Ethereum PoS test network     |
+| `11155111` | ETH    | Sepolia | Ethereum PoS test network     |
+| `2018`     | ETH    | Dev     | Ethereum PoW development network|
+| `59144`    | Linea  | Mainnet | Main Linea network            |
+| `59141`    | Linea  | Testnet | Linea Sepolia testnet         |
+| `4201`     | Lukso  | Mainnet | Main Lukso network            |
 
 :::note
 
-For almost all networks, network ID and chain ID are the same.
-
-The only networks in the table above with different network and chain IDs are Classic with a chain ID of `61` and Mordor with a chain ID of `63`.
+For almost all networks, network ID and chain ID are the same. For Ephemery, the network ID is dynamic.
 
 :::
 
@@ -7092,18 +6901,6 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"net_version","params":[],"id":53
 
 </TabItem>
 
-<TabItem value="JSON result for Holesky" label="JSON result for Holesky"> 
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 53,
-  "result": "5"
-}
-```
-
-</TabItem>
-
 </Tabs>
 
 ## `PLUGINS` methods
@@ -7112,17 +6909,20 @@ The `PLUGINS` API methods provide plugin-related functionality.
 
 :::note
 
-The `PLUGINS` API methods are not enabled by default for JSON-RPC. To enable the `PLUGINS` API methods, use the [`--rpc-http-api`](../cli/options.md#rpc-http-api) or [`--rpc-ws-api`](../cli/options.md#rpc-ws-api) options.
+The `PLUGINS` API methods are not enabled by default for JSON-RPC. To enable the `PLUGINS` API methods, 
+use the [`--rpc-http-api`](../cli/options.md#rpc-http-api) or 
+[`--rpc-ws-api`](../cli/options.md#rpc-ws-api) options.
 
 :::
 
 ### `plugins_reloadPluginConfig`
 
-Reloads specified plugin configuration.
+When you call this method without parameters, all plugins are reloaded. If you specify names, only 
+those plugins are reloaded. This method awaits all reloads before returning its result. 
 
 #### Parameters
 
-`plugin`: _string_ - plugin
+- `plugin`: _string_ - (optional) plugin name
 
 #### Returns
 
@@ -7161,6 +6961,13 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"plugins_reloadPluginConfig","par
 }
 ```
 
+:::note
+
+If one or more plugins fail, the error response provides a comma-separated list of `pluginName`:success or 
+`pluginName`:failure (reason).
+
+:::
+
 </TabItem>
 
 </Tabs>
@@ -7188,7 +6995,7 @@ the requested block must be within the number of
 
 #### Parameters
 
-`blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+`blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
 the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
 [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -7298,7 +7105,7 @@ default, 512 from the head of the chain).
 
 - `call`: _object_ - [transaction call object](objects.md#transaction-call-object)
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -7396,7 +7203,7 @@ default, 512 from the head of the chain).
 
 - `options`: _array_ of _strings_ - list of tracing options; tracing options are [`trace`, `vmTrace`, and `stateDiff`](../trace-types.md). Specify any combination of the three options including none of them.
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -7754,7 +7561,7 @@ default, 512 from the head of the chain).
 
 #### Parameters
 
-- `blockNumber`: _string_ - hexadecimal or decimal integer representing a block number, or one of
+- `blockNumber`: _string_ - hexadecimal integer representing a block number, or one of
   the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as described in
   [block parameter](../../how-to/use-besu-api/json-rpc.md#block-parameter)
 
@@ -8211,6 +8018,303 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"txpool_besuTransactions","params
 </TabItem>
 </Tabs>
 
+### `txpool_content`
+
+Returns all pending and queued transactions in the pool, grouped by
+sender address and sorted by nonce.
+
+#### Parameters
+
+None
+
+#### Returns
+
+`result`: _object_ - transaction pool content object with the following fields:
+
+- `pending`: _object_ - map of sender addresses to maps of nonces to [transaction objects](objects.md#transaction-object),
+  for transactions pending inclusion in the next block
+
+- `queued`: _object_ - map of sender addresses to maps of nonces to [transaction objects](objects.md#transaction-object),
+  for transactions scheduled for future execution
+
+<Tabs>
+
+<TabItem value="curl HTTP request" label="curl HTTP request" default>
+
+```bash
+curl -X POST --data '{"jsonrpc":"2.0","method":"txpool_content","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+```
+
+</TabItem>
+<TabItem value="wscat WS request" label="wscat WS request">
+
+```json
+{ "jsonrpc": "2.0", "method": "txpool_content", "params": [], "id": 1 }
+```
+
+</TabItem>
+<TabItem value="JSON result" label="JSON result">
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "pending": {
+      "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73": {
+        "6": {
+          "blockHash": null,
+          "blockNumber": null,
+          "from": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+          "gas": "0x5208",
+          "gasPrice": "0xab5d04c00",
+          "hash": "0xb7b2f4306c1c228ec94043da73b582594007091a7dfe024b1f8d6d772284e54b",
+          "input": "0x",
+          "nonce": "0x6",
+          "to": "0xf8be4ebda7f62d79a665294ec1263bfdb59aabf2",
+          "transactionIndex": null,
+          "value": "0xde0b6b3a7640000",
+          "v": "0xfe8",
+          "r": "0x5beb711e652c6cf0a589d3cea904eefc4f45ce4372652288701d08cc4412086d",
+          "s": "0x3af14a56e63aa5fb7dcb444a89708363a9d2c1eba1f777c67690288415080ded"
+        }
+      }
+    },
+    "queued": {
+      "0x1932c48b2bf8102ba33b4a6b545c32236e342f34": {
+        "12": {
+          "blockHash": null,
+          "blockNumber": null,
+          "from": "0x1932c48b2bf8102ba33b4a6b545c32236e342f34",
+          "gas": "0x15f90",
+          "gasPrice": "0x2cb417800",
+          "hash": "0x7b959f5d8d906b74f646b9e6c43d808c3a13f72ae39ee2ca5531f6a83e38e0cf",
+          "input": "0x",
+          "nonce": "0xc",
+          "to": "0x27f1e53f9861ab84aa62a2c8b9f5f0617edddfeb",
+          "transactionIndex": null,
+          "value": "0x0",
+          "v": "0xfe7",
+          "r": "0x78c32e3f5bba7cf08b2700c3ca37a2c80d2f073ff9b47f54e31d64e05e0a5b3d",
+          "s": "0x517a04dbc67f9de1f76d5e3d3a1b0fda61869b8fad04bef40f07e24e10cbfdee"
+        }
+      }
+    }
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+### `txpool_contentFrom`
+
+Returns the pending and queued transactions for a given sender address.
+
+#### Parameters
+
+`address`: _string_ - sender address
+
+#### Returns
+
+`result`: _object_ - transaction pool content for the given address:
+
+  - `pending`: _object_ - map of nonces to [transaction objects](objects.md#transaction-object), for pending transactions from the given address
+
+  - `queued`: _object_ - map of nonces to [transaction objects](objects.md#transaction-object) for queued transactions from the given address
+
+<Tabs>
+
+<TabItem value="curl HTTP request" label="curl HTTP request" default>
+
+```bash
+curl -X POST --data '{"jsonrpc":"2.0","method":"txpool_contentFrom","params":["0xfe3b557e8fb62b89f4916b721be55ceb828dbd73"],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+```
+
+</TabItem>
+<TabItem value="wscat WS request" label="wscat WS request">
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "txpool_contentFrom",
+  "params": ["0xfe3b557e8fb62b89f4916b721be55ceb828dbd73"],
+  "id": 1
+}
+```
+
+</TabItem>
+<TabItem value="JSON result" label="JSON result">
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "pending": {
+      "0": {
+        "from": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+        "gas": "0x5208",
+        "gasPrice": "0xab5d04c00",
+        "hash": "0xb7b2f4306c1c228ec94043da73b582594007091a7dfe024b1f8d6d772284e54b",
+        "input": "0x",
+        "nonce": "0x0",
+        "to": "0xf8be4ebda7f62d79a665294ec1263bfdb59aabf2",
+        "value": "0x0",
+        "v": "0xfe8",
+        "r": "0x5beb711e652c6cf0a589d3cea904eefc4f45ce4372652288701d08cc4412086d",
+        "s": "0x3af14a56e63aa5fb7dcb444a89708363a9d2c1eba1f777c67690288415080ded"
+      },
+      "1": {
+        "from": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+        "gas": "0x5208",
+        "gasPrice": "0xab5d04c00",
+        "hash": "0x1234abcd5678ef901234abcd5678ef901234abcd5678ef901234abcd5678ef90",
+        "input": "0x",
+        "nonce": "0x1",
+        "to": "0xf8be4ebda7f62d79a665294ec1263bfdb59aabf2",
+        "value": "0x0",
+        "v": "0xfe8",
+        "r": "0x1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "s": "0x2bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    "queued": {
+      "3": {
+        "from": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+        "gas": "0x5208",
+        "gasPrice": "0xab5d04c00",
+        "hash": "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        "input": "0x",
+        "nonce": "0x3",
+        "to": "0xf8be4ebda7f62d79a665294ec1263bfdb59aabf2",
+        "value": "0x0",
+        "v": "0xfe8",
+        "r": "0x3ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "s": "0x4ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    }
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+### `txpool_inspect`
+
+Returns a textual summary of all pending and queued transactions in the pool, grouped by sender
+address and sorted by nonce.
+
+The summary is free form, implementation-dependent, and meant to be consumed by humans.
+For programmatic access to the transaction pool, use [`txpool_content`](#txpool_content).
+
+#### Parameters
+
+None
+
+#### Returns
+
+`result`: _object_ - transaction pool inspect object with the following fields:
+
+- `pending`: _object_ - map of sender addresses to maps of nonces to human-readable transaction
+  summary strings, for transactions pending inclusion in the next block
+
+- `queued`: _object_ - map of sender addresses to maps of nonces to human-readable transaction
+  summary strings, for transactions scheduled for future execution
+
+<Tabs>
+
+<TabItem value="curl HTTP request" label="curl HTTP request" default>
+
+```bash
+curl -X POST --data '{"jsonrpc":"2.0","method":"txpool_inspect","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+```
+
+</TabItem>
+<TabItem value="wscat WS request" label="wscat WS request">
+
+```json
+{ "jsonrpc": "2.0", "method": "txpool_inspect", "params": [], "id": 1 }
+```
+
+</TabItem>
+<TabItem value="JSON result" label="JSON result">
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "pending": {
+      "0x67ee9a8c19f7873125a875f61add461b4a505d8c": {
+        "5": "{sequence: 68178, addedAt: 1775837774160, isLocal=false, hasPriority=false, score=127, 0xfbee0231c6140f9db3bbcef774b3626556f6f5528a6a49dcd38e1f7f86c79368={MessageCall, 5, 0x67ee9a8c19f7873125a875f61add461b4a505d8c, EIP1559, mf: 300.00 kwei, pf: 300.00 kwei, gl: 70926, v: 0 wei, to: 0xe9f8133e47d42bc9962e469721faaf75e385af31}}",
+        "6": "{sequence: 68179, addedAt: 1775837774160, isLocal=false, hasPriority=false, score=127, 0x3474c0582722ed751dba809363f58c8d1acea415831b81bc0b0b9f29afb19c19={MessageCall, 6, 0x67ee9a8c19f7873125a875f61add461b4a505d8c, EIP1559, mf: 2.00 mwei, pf: 2.00 mwei, gl: 90617, v: 0 wei, to: 0x1eb4a2620b909a8838e0e24a8e912bd32f4a47a3}}"
+      }
+    },
+    "queued": {
+      "0x5fa84846743cc07ab16106ceabad8e4e0ec1c1b6": {
+        "29": "{sequence: 2208499, addedAt: 1775952461706, isLocal=false, hasPriority=false, score=127, 0x2bb5f69f2b9737a99a3674018cd2aac5035b907a753a0c797051bc9df0b2a152={MessageCall, 29, 0x5fa84846743cc07ab16106ceabad8e4e0ec1c1b6, EIP1559, mf: 1.40 gwei, pf: 417.90 mwei, gl: 63209, v: 0 wei, to: 0xdac17f958d2ee523a2206206994597c13d831ec7}}",
+        "31": "{sequence: 1766002, addedAt: 1775931135467, isLocal=false, hasPriority=false, score=127, 0xdd250f166c086412fae187ef52dfbe1c4ff9405818781ac50f89d67a77a2d432={MessageCall, 31, 0x5fa84846743cc07ab16106ceabad8e4e0ec1c1b6, EIP1559, mf: 47.74 gwei, pf: 9.28 gwei, gl: 21000, v: 0 wei, to: 0x5fa84846743cc07ab16106ceabad8e4e0ec1c1b6}}"
+      }
+    }
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+### `txpool_status`
+
+Returns the number of pending and queued transactions in the pool.
+
+#### Parameters
+
+None
+
+#### Returns
+
+`result`: _object_ - transaction count details:
+
+  - `pending`: _string_ - count of the transactions currently pending for inclusion in the next
+    block or blocks
+
+  - `queued`: _string_ - count of the transactions that are scheduled for future execution
+    (transactions with nonce gaps)
+
+<Tabs>
+
+<TabItem value="curl HTTP request" label="curl HTTP request" default>
+
+```bash
+curl -X POST --data '{"jsonrpc":"2.0","method":"txpool_status","params":[],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+```
+
+</TabItem>
+<TabItem value="wscat WS request" label="wscat WS request">
+
+```json
+{ "jsonrpc": "2.0", "method": "txpool_status", "params": [], "id": 1 }
+```
+
+</TabItem>
+<TabItem value="JSON result" label="JSON result">
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "pending": "0xa",
+    "queued": "0x7"
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
 ## `WEB3` methods
 
 The `WEB3` API methods provide functionality for the Ethereum ecosystem.
@@ -8353,4 +8457,3 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"rpc_modules","params":[],"id":1}
 
 [schema]: https://github.com/hyperledger/besu/blob/750580dcca349d22d024cc14a8171b2fa74b505a/ethereum/api/src/main/resources/schema.graphqls
 [eth_sendRawTransaction or eth_call]: ../../how-to/send-transactions.md#eth_call-or-eth_sendrawtransaction
-[transaction]: https://ropsten.etherscan.io/tx/0xfc766a71c406950d4a4955a340a092626c35083c64c7be907060368a5e6811d6

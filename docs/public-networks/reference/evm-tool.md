@@ -3,9 +3,6 @@ title: EVM tool options
 sidebar_position: 5
 toc_max_heading_level: 3
 description: Besu EVM tool options reference
-tags:
-  - public networks
-  - private networks
 ---
 
 import Tabs from '@theme/Tabs';
@@ -329,7 +326,7 @@ The [Besu genesis file](genesis-items.md) to use when evaluating the EVM. Most u
 <TabItem value="Syntax" label="Syntax" default>
 
 ```bash
---chain=<mainnet|sepolia|dev|classic|mordor|kotti|astor>
+--chain=<mainnet|sepolia|dev|hoodi|linea_mainnet|linea_sepolia>
 ```
 
 </TabItem>
@@ -337,7 +334,7 @@ The [Besu genesis file](genesis-items.md) to use when evaluating the EVM. Most u
   <TabItem value="Example" label="Example">
 
 ```bash
---chain=holesky
+--chain=sepolia
 ```
 
 </TabItem>
@@ -571,7 +568,7 @@ Comment lines and blanks are ignored.
 
 ### `state-test`
 
-Allows the [Ethereum state tests](https://github.com/ethereum/tests/tree/develop/GeneralStateTests)
+Allows the [Ethereum state tests](https://github.com/ethereum/execution-spec-tests/tree/main/tests/static/state_tests)
 to be evaluated.
 Run `evmtool state-test --help` for the full list of supported options.
 Notable options are [`--json`](#json-trace) and [`--nomemory`](#nomemory-tracenomemory).

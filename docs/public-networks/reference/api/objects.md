@@ -1,9 +1,6 @@
 ---
 title: Objects
 description: Besu API objects reference
-tags:
-  - public networks
-  - private networks
 ---
 
 # Besu API objects
@@ -12,13 +9,13 @@ The following objects are parameters for or returned by Besu API methods.
 
 :::info
 
-This reference contains API objects that apply to both public and private networks. For private-network-specific API objects, see the [private network API object reference](../../../private-networks/reference/api/objects.md).
+This reference contains API objects that apply to both public and private networks.
 
 :::
 
 ## Block object
 
-Returned by [`eth_getBlockByHash`](index.md#eth_getblockbyhash) and [`eth_getBlockByNumber`](index.md#eth_getblockbynumber).
+Returned by [`eth_getBlockByHash`](index.md#eth_getblockbyhash), [`eth_getBlockByNumber`](index.md#eth_getblockbynumber), and [`eth_simulateV1`](index.md#eth_simulatev1).
 
 | Key | Type | Value |
 | --- | :-: | --- |
@@ -34,7 +31,7 @@ Returned by [`eth_getBlockByHash`](index.md#eth_getblockbyhash) and [`eth_getBlo
 | `miner` | Data, 20&nbsp;bytes | Address to pay mining rewards to. |
 | `difficulty` | Quantity, Integer | Difficulty for this block. |
 | `totalDifficulty` | Quantity, Integer | Total difficulty of the chain until this block. This value will always be `0` for an uncle block. |
-| `extraData` | Data | Extra data field for this block. The first 32 bytes is vanity data you can set using the [`--miner-extra-data`](../cli/options.md#miner-extra-data) command line option. Stores extra data when used with [Clique](../../../private-networks/how-to/configure/consensus/clique.md#genesis-file) and [IBFT](../../../private-networks/how-to/configure/consensus/ibft.md#genesis-file). |
+| `extraData` | Data | Extra data field for this block. The first 32 bytes is vanity data you can set using the [`--miner-extra-data`](../cli/options.md#miner-extra-data) command line option. Stores extra data when used with [IBFT](../../../private-networks/how-to/configure/consensus/ibft.md#genesis-file). |
 | `size` | Quantity, Integer | Size of block in bytes. |
 | `gasLimit` | Quantity | Maximum gas allowed in this block. |
 | `gasUsed` | Quantity | Total gas used by all transactions in this block. |
@@ -42,6 +39,36 @@ Returned by [`eth_getBlockByHash`](index.md#eth_getblockbyhash) and [`eth_getBlo
 | `transactions` | Array | Array of [transaction objects](#transaction-object), or 32 byte transaction hashes depending on the specified boolean parameter. |
 | `uncles` | Array | Array of uncle hashes. |
 | `baseFeePerGas` | Quantity | The block's [base fee per gas](../../concepts/transactions/types.md#eip1559-transactions). This field is empty for blocks created before [EIP-1559](https://github.com/ethereum/EIPs/blob/2d8a95e14e56de27c5465d93747b0006bd8ac47f/EIPS/eip-1559.md). |
+
+## Block override object
+
+Parameter for [`eth_simulateV1`](index.md#eth_simulatev1).
+Override the following block parameters temporarily before making the call.
+This allows you to make ephemeral block changes, for the purposes of transaction simulation, without affecting the actual blockchain.
+
+| Key             |        Type         | Value                                                                                                                                                    |
+|-----------------|:-------------------:|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `baseFeePerGas` |      Quantity       | Base fee per gas for the block.                                                                                                                          |
+| `blobBaseFee`   |      Quantity       | Base fee per unit of blob gas.                                                                                                                           |
+| `feeRecipient`  | Data, 20&nbsp;bytes | Address of the fee recipient for the block proposal.                                                                                                     |
+| `gasLimit`      |      Quantity       | Maximum gas allowed in this block.                                                                                                                       |
+| `number`        |      Quantity       | Block number. When overriding block numbers across multiple blocks, block number must be increasing. By default, it's incremented by one for each block. |
+| `prevRandao`    | Data, 32&nbsp;bytes | Previous value of randomness.                                                                                                                            |
+| `time`          |      Quantity       | Unix epoch time in seconds. Time must increase or remain constant relative to the previous block. By default, it's incremented by one for each block.    |
+| `withdrawals`   |        Array        | Array of withdrawals made by validators. This array can have a maximum length of 16.                                                                     |
+
+## Call result object
+
+Returned by [`eth_simulateV1`](index.md#eth_simulatev1).
+All fields are required.
+
+| Key          |   Type   | Value                                                                                         |
+|--------------|:--------:|-----------------------------------------------------------------------------------------------|
+| `returnData` |   Data   | Data returned for the call.                                                                   |
+| `logs`       |  Array   | Array of [log objects](#log-object) generated during the call.                                |
+| `gasUsed`    | Quantity | Amount of gas used by the call.                                                               |
+| `maxUsedGas` | Quantity | Maximum gas used during the call before any refunds.                                          |
+| `status`     | Quantity | Status indicating whether the call succeeded (`0x1`). `0x0` indicates that a call has failed. |
 
 ## Fee history results object
 
@@ -58,7 +85,7 @@ Returned by [`eth_feeHistory`](index.md#eth_feehistory) for the requested block 
 
 ## Filter options object
 
-Parameter for [`eth_newFilter`](index.md#eth_newfilter), [`eth_getLogs`](index.md#eth_getlogs), and [`priv_getLogs`](../../../private-networks/reference/api/index.md#priv_getlogs). Used to [`filter logs`](../../how-to/use-besu-api/access-logs.md).
+Parameter for [`eth_newFilter`](index.md#eth_newfilter), and [`eth_getLogs`](index.md#eth_getlogs).
 
 | Key | Type | Required/Optional | Value |
 | --- | :-: | :-: | --- |
@@ -67,7 +94,7 @@ Parameter for [`eth_newFilter`](index.md#eth_newfilter), [`eth_getLogs`](index.m
 | `address` | Data &#124; Array | Optional | Contract address or array of addresses from which [logs](../../concepts/events-and-logs.md) originate. |
 | `topics` | Array of Data, 32&nbsp;bytes each | Optional | Array of topics by which to [filter logs](../../concepts/events-and-logs.md#topic-filters). |
 
-[`eth_getLogs`](index.md#eth_getlogs) and [`priv_getLogs`](../../../private-networks/reference/api/index.md#priv_getlogs) have an extra key.
+[`eth_getLogs`](index.md#eth_getlogs) has an extra key.
 
 | Key | Type | Required/Optional | Value |
 | --- | :-: | :-: | --- |
@@ -75,7 +102,9 @@ Parameter for [`eth_newFilter`](index.md#eth_newfilter), [`eth_getLogs`](index.m
 
 ## Log object
 
-Returned by [`eth_getFilterChanges`](index.md#eth_getfilterchanges) and [`priv_getLogs`](../../../private-networks/reference/api/index.md#priv_getlogs). [`Transaction receipt objects`](#transaction-receipt-object) can contain an array of log objects.
+Returned by [`eth_getFilterChanges`](index.md#eth_getfilterchanges), [`eth_getFilterLogs`](index.md#eth_getfilterlogs), [`eth_getLogs`](index.md#eth_getlogs).
+
+[Transaction receipt objects](#transaction-receipt-object) and [call result objects](#call-result-object) can contain an array of log objects.
 
 | Key | Type | Value |
 | --- | :-: | --- |
@@ -85,25 +114,10 @@ Returned by [`eth_getFilterChanges`](index.md#eth_getfilterchanges) and [`priv_g
 | `transactionHash` | Data, 32&nbsp;bytes | Hash of the starting transaction for the log. `null` when log is pending. |
 | `blockHash` | Data, 32&nbsp;bytes | Hash of the block that includes the log. `null` when log is pending. |
 | `blockNumber` | Quantity | Number of block that includes the log. `null` when log is pending. |
+| `blockTimestamp` | Quantity | Hex-encoded unix timestamp (in seconds) of the block that includes the log. |
 | `address` | Data, 20&nbsp;bytes | Address the log originated from. |
 | `data` | Data | Non-indexed arguments of the log. |
 | `topics` | Array of Data, 32&nbsp;bytes each | [Event signature hash](../../concepts/events-and-logs.md#event-signature-hash) and 0 to 3 [indexed log arguments](../../concepts/events-and-logs.md#event-parameters). |
-
-## Miner data object
-
-Returned by [`eth_getMinerDataByBlockHash`](index.md#eth_getminerdatabyblockhash-deprecated) and [`eth_getMinerDataByBlockNumber`](index.md#eth_getminerdatabyblocknumber).
-
-| Key | Type | Value |
-| --- | :-: | --- |
-| `netBlockReward` | Quantity, Integer | The net block reward, in Wei, is `staticBlockReward + transactionFee + uncleInclusionReward`. |
-| `staticBlockReward` | Quantity, Integer | The static block reward, in Wei, is preset on a hard fork. |
-| `transactionFee` | Quantity, Integer | The transaction fee, in Wei, is `sum of upfront cost - refund amount for all transactions`. |
-| `uncleInclusionReward` | Quantity, Integer | The uncle inclusion reward, in Wei, is `static block reward * number of ommers/32`. |
-| `uncleRewards` | Map | Map of uncle block hashes and uncle miner coinbase addresses. |
-| `coinbase` | Data, 20&nbsp;bytes | Coinbase address. |
-| `extraData` | Data | Extra data field for this block. The first 32 bytes is vanity data you can set using the [`--miner-extra-data`](../cli/options.md#miner-extra-data) command line option. |
-| `difficulty` | Quantity, Integer | Difficulty of this block. |
-| `totalDifficulty` | Quantity, Integer | Total difficulty of the chain until this block. |
 
 ## Pending transaction object
 
@@ -138,11 +152,10 @@ Returned by [`debug_storageRangeAt`](index.md#debug_storagerangeat).
 
 ## State override object
 
-Optional parameter for [`eth_call`](./index.md#eth_call) and [`eth_estimateGas`](./index.md#eth_estimategas).
+Parameter for [`eth_call`](./index.md#eth_call), [`eth_estimateGas`](./index.md#eth_estimategas), [`eth_simulateV1`](index.md#eth_simulatev1), and [`debug_traceCall`](./index.md#debug_tracecall).
 Override an account with the following state values temporarily before making the call. This allows you
 to make ephemeral state changes, for the purposes of transaction simulation, without affecting the actual
 blockchain state.
-
 
 | Key                       |        Type         | Value                                                                                                                                      |
 |---------------------------|:-------------------:|--------------------------------------------------------------------------------------------------------------------------------------------|
@@ -209,7 +222,7 @@ Returned by [`eth_getTransactionByHash`](index.md#eth_gettransactionbyhash), [`e
 | `maxPriorityFeePerGas` | Quantity, Integer | (Optional) Maximum fee, in Wei, the sender is willing to pay per gas above the base fee. Used only in [`EIP1559` transactions](../../concepts/transactions/types.md#eip1559-transactions). |
 | `maxFeePerGas` | Quantity, Integer | (Optional) Maximum total fee (base fee + priority fee), in Wei, the sender is willing to pay per gas. Used only in [`EIP1559` transactions](../../concepts/transactions/types.md#eip1559-transactions). |
 | `hash` | Data, 32&nbsp;bytes | Hash of the transaction. |
-| `input` | Data | Data sent with the transaction to create or invoke a contract. For [private transactions](../../../private-networks/concepts/privacy/index.md), it's a pointer to the transaction location in [Tessera](https://docs.tessera.consensys.net/). |
+| `input` | Data | Data sent with the transaction to create or invoke a contract. |
 | `nonce` | Quantity | Number of transactions made by the sender before this one. |
 | `to` | Data, 20&nbsp;bytes | Address of the receiver. `null` if a contract creation transaction. |
 | `transactionIndex` | Quantity, Integer | Index position of the transaction in the block. `null` when transaction is pending. |
@@ -221,7 +234,8 @@ Returned by [`eth_getTransactionByHash`](index.md#eth_gettransactionbyhash), [`e
 
 ## Transaction call object
 
-Parameter for [`eth_call`](index.md#eth_call), [`eth_createAccessList`](index.md#eth_createaccesslist), and [`eth_estimateGas`](index.md#eth_estimategas).
+Parameter for [`eth_call`](index.md#eth_call), [`eth_createAccessList`](index.md#eth_createaccesslist), [`eth_estimateGas`](index.md#eth_estimategas),
+and [`eth_simulateV1`](index.md#eth_simulatev1).
 
 All transaction call object parameters are optional.
 
@@ -239,7 +253,7 @@ All transaction call object parameters are optional.
 | `data`                 |        Data         | Hash of the method signature and encoded parameters. For details, see [Ethereum Contract ABI](https://solidity.readthedocs.io/en/develop/abi-spec.html). Must be equal to `input` if both parameters are provided.                                |
 | `input`                |        Data         | Hash of the method signature and encoded parameters. For details, see [Ethereum Contract ABI](https://solidity.readthedocs.io/en/develop/abi-spec.html). Must be equal to `data` if both parameters are provided.                                 |
 | `accessList`           |        Array        | List of addresses and storage keys that the transaction plans to access. Used only in non-[`FRONTIER`](../../concepts/transactions/types.md#frontier-transactions) transactions.                                                                  |
-| `strict`               |         Tag         | Determines if the sender account balance is checked. If `true`, the balance is checked. If `false`, the balance is not checked. If not specified, the balance is checked against the gas parameters if supplied.                                  |
+| `strict`               |         Tag         | Determines if the sender account balance is considered during gas estimation. If `true`, the sender's balance is checked against the transaction's gas parameters. This ensures the estimated gas reflects what the sender can actually afford. If `false`, the balance checks are skipped. The default is `true`.                 |
 | `blobVersionedHashes`  |        Array        | List of references to blobs introduced in [EIP-4844]( https://eips.ethereum.org/EIPS/eip-4844).                                                                                                                                                   |
 
 ## Transaction receipt object
@@ -250,6 +264,7 @@ Returned by [`eth_getTransactionReceipt`](index.md#eth_gettransactionreceipt).
 | --- | :-: | --- |
 | `blockHash` | Data, 32&nbsp;bytes | Hash of block containing this transaction. |
 | `blockNumber` | Quantity | Block number of block containing this transaction. |
+| `blockTimestamp` | Quantity | Hex-encoded unix timestamp (in seconds) of the block that includes this transaction. |
 | `contractAddress` | Data, 20&nbsp;bytes | Contract address created, if contract creation transaction, otherwise, `null`. A failed contract creation transaction still produces a contract address value. |
 | `cumulativeGasUsed` | Quantity | Total amount of gas used by previous transactions in the block and this transaction. |
 | `effectiveGasPrice` | Quantity | The [actual value per gas deducted](../../concepts/transactions/types.md#eip1559-transactions) from the sender's account. |

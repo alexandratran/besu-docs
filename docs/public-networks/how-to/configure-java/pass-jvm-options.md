@@ -2,9 +2,6 @@
 title: Pass JVM options
 sidebar_position: 2
 description: Passing Java virtual machine JVM options to Besu at runtime
-tags:
-  - public networks
-  - private networks
 ---
 
 # Pass JVM options
@@ -17,5 +14,5 @@ For Bash-based executions, you can set the variable for only the scope of the pr
 
 ```bash
 BESU_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 \
-besu --network=holesky
+besu --network=sepolia
 ```

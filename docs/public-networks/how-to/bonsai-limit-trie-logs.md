@@ -2,8 +2,6 @@
 title: Reduce storage for Bonsai Tries
 sidebar_position: 9
 description: Reduce the size of your database when using Bonsai Tries
-tags:
-  - public networks
 ---
 
 import Tabs from '@theme/Tabs';
@@ -216,5 +214,5 @@ Check if you are running the command for a network other than Mainnet.
 To specify a network, run a command that looks similar to the following:
 
 ```bash
-sudo /usr/local/bin/besu/bin/besu --network=holesky --sync-mode=SNAP --data-storage-format=BONSAI --data-path=/var/lib/besu storage trie-log prune
+sudo /usr/local/bin/besu/bin/besu --network=sepolia --sync-mode=SNAP --data-storage-format=BONSAI --data-path=/var/lib/besu storage trie-log prune
 ```
