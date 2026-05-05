@@ -18,7 +18,7 @@ For example, create a plugin to add more monitoring functionality or stream even
 - Logs
 - Syncing state.
 
-![Besu plugin API](../../assets/images/Hyperledger-Besu-Plugin-API.png)
+![Besu plugin API](../../assets/images/besu-plugin-api.png)
 
 The plugin API provides access to [interfaces](../reference/plugin-api-interfaces.md) allowing you to build the plugin.
 
