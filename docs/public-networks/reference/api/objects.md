@@ -40,6 +40,7 @@ The `block` field in [`debug_getBadBlocks`](index.md#debug_getbadblocks) results
 | `transactions` | Array | Array of [transaction objects](#transaction-object), or 32 byte transaction hashes depending on the specified boolean parameter. |
 | `uncles` | Array | Array of uncle hashes. |
 | `baseFeePerGas` | Quantity | The block's [base fee per gas](../../concepts/transactions/types.md#eip1559-transactions). This field is empty for blocks created before [EIP-1559](https://github.com/ethereum/EIPs/blob/2d8a95e14e56de27c5465d93747b0006bd8ac47f/EIPS/eip-1559.md). |
+| `blockAccessListHash` | _Data_, 32&nbsp;bytes | Hash of the [EIP-7928](https://eips.ethereum.org/EIPS/eip-7928) block access list. Only present on Amsterdam and later blocks. |
 
 ## Block override object
 
