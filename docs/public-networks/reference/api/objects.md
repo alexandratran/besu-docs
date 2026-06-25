@@ -15,7 +15,8 @@ This reference contains API objects that apply to both public and private networ
 
 ## Block object
 
-Returned by [`eth_getBlockByHash`](index.md#eth_getblockbyhash), [`eth_getBlockByNumber`](index.md#eth_getblockbynumber), and [`eth_simulateV1`](index.md#eth_simulatev1).
+Returned by [`eth_getBlockByHash`](index.md#eth_getblockbyhash), [`eth_getBlockByNumber`](index.md#eth_getblockbynumber), [`eth_getUncleByBlockHashAndIndex`](index.md#eth_getunclebyblockhashandindex), [`eth_getUncleByBlockNumberAndIndex`](index.md#eth_getunclebyblocknumberandindex), and [`eth_simulateV1`](index.md#eth_simulatev1).
+The `block` field in [`debug_getBadBlocks`](index.md#debug_getbadblocks) results is also a block object.
 
 | Key | Type | Value |
 | --- | :-: | --- |
@@ -30,12 +31,12 @@ Returned by [`eth_getBlockByHash`](index.md#eth_getblockbyhash), [`eth_getBlockB
 | `receiptsRoot` | Data, 32&nbsp;bytes | Root of the receipts trie for the block. |
 | `miner` | Data, 20&nbsp;bytes | Address to pay mining rewards to. |
 | `difficulty` | Quantity, Integer | Difficulty for this block. |
-| `totalDifficulty` | Quantity, Integer | Total difficulty of the chain until this block. This value will always be `0` for an uncle block. |
+| `totalDifficulty` | Quantity, Integer | Total difficulty of the chain until this block. This field is only returned for pre-merge (Proof of Work) blocks. This value will always be `0` for an uncle block. |
 | `extraData` | Data | Extra data field for this block. The first 32 bytes is vanity data you can set using the [`--miner-extra-data`](../cli/options.md#miner-extra-data) command line option. Stores extra data when used with [IBFT](../../../private-networks/how-to/configure/consensus/ibft.md#genesis-file). |
 | `size` | Quantity, Integer | Size of block in bytes. |
 | `gasLimit` | Quantity | Maximum gas allowed in this block. |
 | `gasUsed` | Quantity | Total gas used by all transactions in this block. |
-| `timestamp` | Quantity | Unix timestamp (milliseconds) for block assembly. |
+| `timestamp` | Quantity | Hex-encoded Unix timestamp (in seconds) for block assembly. |
 | `transactions` | Array | Array of [transaction objects](#transaction-object), or 32 byte transaction hashes depending on the specified boolean parameter. |
 | `uncles` | Array | Array of uncle hashes. |
 | `baseFeePerGas` | Quantity | The block's [base fee per gas](../../concepts/transactions/types.md#eip1559-transactions). This field is empty for blocks created before [EIP-1559](https://github.com/ethereum/EIPs/blob/2d8a95e14e56de27c5465d93747b0006bd8ac47f/EIPS/eip-1559.md). |
@@ -181,6 +182,7 @@ Log information returned as part of the [Trace object](#trace-object).
 | `stack` | Array of 32&nbsp;byte arrays | EVM execution stack before executing current operation. |
 | `memory` | Array of 32&nbsp;byte arrays | Memory space of the contract before executing current operation. |
 | `storage` | Object | Storage entries changed by the current transaction. |
+| `returnData` | Data | EVM return data produced by the current opcode, as a hex string. |
 
 ## Trace object
 
@@ -215,6 +217,7 @@ Returned by [`eth_getTransactionByHash`](index.md#eth_gettransactionbyhash), [`e
 | `accessList` | Array | (Optional) List of addresses and storage keys the transaction plans to access. Used in [`ACCESS_LIST` transactions](../../concepts/transactions/types.md#access_list-transactions) and may be used in [`EIP1559` transactions](../../concepts/transactions/types.md#eip1559-transactions). |
 | `blockHash` | Data, 32&nbsp;bytes | Hash of the block containing this transaction. `null` when transaction is pending. |
 | `blockNumber` | Quantity | Block number of the block containing this transaction. `null` when transaction is pending. |
+| `blockTimestamp` | Quantity | Hex-encoded Unix timestamp (in seconds) of the block containing this transaction. `null` when transaction is pending. |
 | `chainId` | Quantity | [Chain ID](../../concepts/network-and-chain-id.md). |
 | `from` | Data, 20&nbsp;bytes | Address of the sender. |
 | `gas` | Quantity | Gas provided by the sender. |
@@ -258,7 +261,7 @@ All transaction call object parameters are optional.
 
 ## Transaction receipt object
 
-Returned by [`eth_getTransactionReceipt`](index.md#eth_gettransactionreceipt).
+Returned by [`eth_getTransactionReceipt`](index.md#eth_gettransactionreceipt) and [`eth_getBlockReceipts`](index.md#eth_getblockreceipts).
 
 | Key | Type | Value |
 | --- | :-: | --- |

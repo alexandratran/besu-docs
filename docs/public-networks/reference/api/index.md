@@ -282,7 +282,7 @@ You can skip a parameter by using an empty string, `""`. If you specify:
 <TabItem value="curl HTTP request" label="curl HTTP request" default>
 
 ```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"admin_logsRemoveCache","params":["1", "100"], "id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+curl -X POST --data '{"jsonrpc":"2.0","method":"admin_logsRemoveCache","params":["0x1", "0x64"], "id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
 ```
 
 </TabItem>
@@ -293,7 +293,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"admin_logsRemoveCache","params":
 {
   "jsonrpc": "2.0",
   "method": "admin_logsRemoveCache",
-  "params": ["1", "100"],
+  "params": ["0x1", "0x64"],
   "id": 1
 }
 ```
@@ -1548,6 +1548,8 @@ Use [`debug_standardTraceBadBlockToFile`](#debug_standardtracebadblocktofile) to
 
   - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
+  - `enableReturnData`: _boolean_ - `true` enables return data capture. The default is `false`.
+
 #### Returns
 
 `result`: _string_ - location of the generated trace files
@@ -1619,6 +1621,8 @@ Use [`debug_standardTraceBlockToFile`](#debug_standardtraceblocktofile) to view 
   - `disableStorage`: _boolean_ - omit storage from the trace; defaults to `true`
 
   - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
+
+  - `enableReturnData`: _boolean_ - `true` enables return data capture. The default is `false`.
 
 #### Returns
 
@@ -1761,6 +1765,8 @@ Reruns the transaction with the same state as when the transaction executed.
 
   - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
 
+  - `enableReturnData`: _boolean_ - `true` enables return data capture. The default is `false`.
+
 #### Returns
 
 `result`: _object_ - [trace object](objects.md#trace-object)
@@ -1770,7 +1776,7 @@ Reruns the transaction with the same state as when the transaction executed.
 <TabItem value="curl HTTP request" label="curl HTTP request" default>
 
 ```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceTransaction","params":["0x2cc6c94c21685b7e0f8ddabf277a5ccf98db157c62619cde8baea696a74ed18e",{"disableStorage":true}],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceTransaction","params":["0x2cc6c94c21685b7e0f8ddabf277a5ccf98db157c62619cde8baea696a74ed18e",{"disableStorage":true,"enableReturnData":true}],"id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
 ```
 
 </TabItem>
@@ -1783,7 +1789,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceTransaction","params"
   "method": "debug_traceTransaction",
   "params": [
     "0x2cc6c94c21685b7e0f8ddabf277a5ccf98db157c62619cde8baea696a74ed18e",
-    { "disableStorage": true }
+    { "disableStorage": true, "enableReturnData": true }
   ],
   "id": 1
 }
@@ -1803,12 +1809,13 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"debug_traceTransaction","params"
     "returnValue": "",
     "structLogs": [
       {
-        "pc": 0,
-        "op": "STOP",
-        "gas": 0,
-        "gasCost": 0,
+        "pc": 100,
+        "op": "STATICCALL",
+        "gas": 78000,
+        "gasCost": 500,
         "depth": 1,
-        "stack": []
+        "stack": [],
+        "returnData": "0x0000000000000000000000000000000000000000000000000000000000000001"
       }
     ]
   }
@@ -1839,6 +1846,8 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
   - `disableStack` : _boolean_ - `true` disables stack capture. The default is `false`.
 
   - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
+
+  - `enableReturnData`: _boolean_ - `true` enables return data capture. The default is `false`.
 
 #### Returns
 
@@ -1917,6 +1926,8 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
   - `disableStack` : _boolean_ - `true` disables stack capture. The default is `false`.
 
   - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
+
+  - `enableReturnData`: _boolean_ - `true` enables return data capture. The default is `false`.
 
 #### Returns
 
@@ -2003,6 +2014,8 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
   - `disableStack` : _boolean_ - `true` disables stack capture. The default is `false`.
 
   - `opcodes`: _array_ of _strings_ - list of opcode names to trace; if omitted or empty, all opcodes are traced
+
+  - `enableReturnData`: _boolean_ - `true` enables return data capture. The default is `false`.
 
 #### Returns
 
@@ -2096,6 +2109,8 @@ temporary state changes without affecting the actual blockchain state.
     The default is `false`.
 
   - `opcodes`: _array_ of _strings_ - (optional) list of opcode names to trace; if omitted or empty, all opcodes are traced
+
+  - `enableReturnData`: _boolean_ - (optional) `true` enables return data capture. The default is `false`.
 
   - `stateOverrides`: _object_ - (optional) [address-to-state mapping](./objects.md#state-override-object)
 
@@ -3673,7 +3688,7 @@ the string tags `latest`, `earliest`, `pending`, `finalized`, or `safe`, as desc
 
 #### Returns
 
-`result`: _object_ - [block object](objects.md#block-object), or `null` when there is no block.
+`result`: _array_ of _objects_ - list of [transaction receipt objects](objects.md#transaction-receipt-object), or `null` when there is no block.
 
 <Tabs>
 
@@ -3724,6 +3739,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getBlockReceipts","params":[
           "transactionHash": "0x4a481e4649da999d92db0585c36cba94c18a33747e95dc235330e6c737c6f975",
           "transactionIndex": "0x0",
           "blockHash": "0x19514ce955c65e4dd2cd41f435a75a46a08535b8fc16bc660f8092b32590b182",
+          "blockTimestamp": "0x561bc2e0",
           "logIndex": "0x0",
           "removed": false
         }
@@ -4799,6 +4815,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionByBlockHashAnd
   "result": {
     "blockHash": "0xbf137c3a7a1ebdfac21252765e5d7f40d115c2757e4a4abee929be88c624fdb7",
     "blockNumber": "0x1442e",
+    "blockTimestamp": "0x561bc2e0",
     "chainId": 2018,
     "from": "0x70c9217d814985faef62b124420f8dfbddd96433",
     "gas": "0x3d090",
@@ -4889,7 +4906,7 @@ Returns transaction information for the specified block number and transaction i
 <TabItem value="curl HTTP" label="curl HTTP" default>
 
 ```bash
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionByBlockNumberAndIndex","params":["82990", "0x2"], "id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionByBlockNumberAndIndex","params":["0x1442e", "0x2"], "id":1}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
 ```
 
 </TabItem>
@@ -4900,7 +4917,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionByBlockNumberA
 {
   "jsonrpc": "2.0",
   "method": "eth_getTransactionByBlockNumberAndIndex",
-  "params": ["82990", "0x2"],
+  "params": ["0x1442e", "0x2"],
   "id": 1
 }
 ```
@@ -4916,6 +4933,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionByBlockNumberA
   "result": {
     "blockHash": "0xbf137c3a7a1ebdfac21252765e5d7f40d115c2757e4a4abee929be88c624fdb7",
     "blockNumber": "0x1442e",
+    "blockTimestamp": "0x561bc2e0",
     "chainId": 2018,
     "from": "0x70c9217d814985faef62b124420f8dfbddd96433",
     "gas": "0x3d090",
@@ -5027,6 +5045,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionByHash","param
   "result": {
     "blockHash": "0x510efccf44a192e6e34bcb439a1947e24b86244280762cbb006858c237093fda",
     "blockNumber": "0x422",
+    "blockTimestamp": "0x561bc2e0",
     "chainId": 2018,
     "from": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
     "gas": "0x5208",
@@ -5102,6 +5121,84 @@ curl -X POST -H "Content-Type: application/json" --data '{"query": "{transaction
       },
       "status": 1
     }
+  }
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+### `eth_getTransactionBySenderAndNonce`
+
+Returns transaction information for the specified sender address and nonce.
+
+:::note
+To return transactions included in blocks, this method requires the sender and nonce index.
+The index is enabled by default; you can disable it using
+[`--tx-sender-nonce-index-enabled`](../cli/options.md#tx-sender-nonce-index-enabled).
+If the index is disabled, this method only returns information for pending transactions.
+:::
+
+#### Parameters
+
+- `address`: _string_ - 20-byte sender address
+
+- `nonce`: _string_ - hexadecimal integer representing the transaction nonce
+
+#### Returns
+
+`result`: _object_ - [transaction object](objects.md#transaction-object), or `null` when there is no transaction
+
+<Tabs>
+
+<TabItem value="curl HTTP" label="curl HTTP" default>
+
+```bash
+curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionBySenderAndNonce","params":["0xfe3b557e8fb62b89f4916b721be55ceb828dbd73","0x1"],"id":53}' http://127.0.0.1:8545/ -H "Content-Type: application/json"
+```
+
+</TabItem>
+
+<TabItem value="wscat WS" label="wscat WS">
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "eth_getTransactionBySenderAndNonce",
+  "params": [
+    "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+    "0x1"
+  ],
+  "id": 53
+}
+```
+
+</TabItem>
+
+<TabItem value="JSON result" label="JSON result">
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 53,
+  "result": {
+    "blockHash": "0x510efccf44a192e6e34bcb439a1947e24b86244280762cbb006858c237093fda",
+    "blockNumber": "0x422",
+    "blockTimestamp": "0x561bc2e0",
+    "chainId": 2018,
+    "from": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+    "gas": "0x5208",
+    "gasPrice": "0x3b9aca00",
+    "hash": "0xa52be92809541220ee0aaaede6047d9a6c5d0cd96a517c854d944ee70a0ebb44",
+    "input": "0x",
+    "nonce": "0x1",
+    "to": "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+    "transactionIndex": "0x0",
+    "value": "0x4e1003b28d9280000",
+    "v": "0xfe7",
+    "r": "0x84caf09aefbd5e539295acc67217563438a4efb224879b6855f56857fa2037d3",
+    "s": "0x5e863be3829812c81439f0ae9d8ecb832b531d651fb234c848d1bf45e62be8b9"
   }
 }
 ```
