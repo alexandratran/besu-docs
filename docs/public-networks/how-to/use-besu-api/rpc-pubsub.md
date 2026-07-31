@@ -32,6 +32,12 @@ To create subscriptions, use `eth_subscribe`. Once subscribed, the API publishes
 
 Subscriptions couple with connections. If a connection is closed, all subscriptions created over the connection are removed.
 
+:::note
+
+Besu limits how many subscriptions can be active at once across all WebSocket connections. Once the limit is reached, `eth_subscribe` returns an error until existing subscriptions end. Use the [`--rpc-ws-max-active-subscriptions`](../../reference/options.md#rpc-ws-max-active-subscriptions) option to change the limit, which is `100000` by default.
+
+:::
+
 ### Subscription ID
 
 `eth_subscribe` returns a subscription ID for each subscription created. Notifications include the subscription ID.
