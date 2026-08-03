@@ -3697,6 +3697,42 @@ Enabling revert reason may use a significant amount of memory. We don't recommen
 
 ---
 
+## `rpc-filter-timeout-seconds`
+
+<Tabs>
+
+<TabItem value="Command line example">
+
+```bash
+--rpc-filter-timeout-seconds=60
+```
+
+</TabItem>
+
+<TabItem value="Environment variable example">
+
+```bash
+BESU_RPC_FILTER_TIMEOUT_SECONDS=60
+```
+
+</TabItem>
+
+<TabItem value="Config file example">
+
+```bash
+rpc-filter-timeout-seconds=60
+```
+
+</TabItem>
+
+</Tabs>
+
+The number of seconds a [filter](api/eth/filter.md) can remain active without being polled before Besu removes it. Polling the filter with [`eth_getFilterChanges`](api/eth/filter.md#eth_getfilterchanges) or [`eth_getFilterLogs`](api/eth/filter.md#eth_getfilterlogs) resets the timer. The value must be greater than `0`. The default is `120` (two minutes).
+
+Once a filter is removed, requests that use its filter ID fail. The client must create a new filter.
+
+---
+
 ## `rpc-gas-cap`
 
 <Tabs>
@@ -4616,6 +4652,42 @@ when enabling TLS for the JSON-RPC HTTP service.
 
 ---
 
+## `rpc-max-active-filters`
+
+<Tabs>
+
+<TabItem value="Command line example">
+
+```bash
+--rpc-max-active-filters=1000
+```
+
+</TabItem>
+
+<TabItem value="Environment variable example">
+
+```bash
+BESU_RPC_MAX_ACTIVE_FILTERS=1000
+```
+
+</TabItem>
+
+<TabItem value="Config file example">
+
+```bash
+rpc-max-active-filters=1000
+```
+
+</TabItem>
+
+</Tabs>
+
+The maximum number of concurrently active [filters](api/eth/filter.md) created using [`eth_newFilter`](api/eth/filter.md#eth_newfilter), [`eth_newBlockFilter`](api/eth/filter.md#eth_newblockfilter), and [`eth_newPendingTransactionFilter`](api/eth/filter.md#eth_newpendingtransactionfilter). The value must be equal to or greater than `0`. Setting this option to `0` indicates there is no limit. The default is `1000`.
+
+Once this limit is reached, requests to create a filter return an error until an existing filter is uninstalled using [`eth_uninstallFilter`](api/eth/filter.md#eth_uninstallfilter) or removed after the period specified by [`--rpc-filter-timeout-seconds`](#rpc-filter-timeout-seconds).
+
+---
+
 ## `rpc-max-logs-range`
 
 <Tabs>
@@ -5060,6 +5132,42 @@ rpc-ws-max-active-connections=100
 </Tabs>
 
 The maximum number of WebSocket connections allowed for JSON-RPC. Once this limit is reached, incoming connections are rejected. The default is 80.
+
+---
+
+## `rpc-ws-max-active-subscriptions`
+
+<Tabs>
+
+<TabItem value="Command line example">
+
+```bash
+--rpc-ws-max-active-subscriptions=1000
+```
+
+</TabItem>
+
+<TabItem value="Environment variable example">
+
+```bash
+BESU_RPC_WS_MAX_ACTIVE_SUBSCRIPTIONS=1000
+```
+
+</TabItem>
+
+<TabItem value="Config file example">
+
+```toml
+rpc-ws-max-active-subscriptions=1000
+```
+
+</TabItem>
+
+</Tabs>
+
+The maximum number of active [RPC Pub/Sub subscriptions](../how-to/use-besu-api/rpc-pubsub.md) allowed for JSON-RPC, counted across all WebSocket connections. The value must be equal to or greater than `0`. Setting this option to `0` indicates there is no limit. The default is `100000`.
+
+Once this limit is reached, [`eth_subscribe`](../how-to/use-besu-api/rpc-pubsub.md#subscribe) requests return an error until clients [unsubscribe](../how-to/use-besu-api/rpc-pubsub.md#unsubscribe) or their connections close.
 
 ---
 
