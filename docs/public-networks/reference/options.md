@@ -5879,12 +5879,17 @@ snapsync-synchronizer-pre-checkpoint-headers-only-enabled=false
 
 </Tabs>
 
-If set to `false`, [snap sync](../concepts/node-sync.md#snap-synchronization) downloads full pre-merge Proof of Work (PoW) historical blocks
-instead of headers only, allowing full historical data to be retained. 
+:::warning Deprecated
 
-The default is `true`.
+The `--snapsync-synchronizer-pre-checkpoint-headers-only-enabled` option is deprecated and will be
+removed in a future release.
+Besu recognizes this option, but it has no effect.
+[Snap sync](../concepts/node-sync.md#snap-synchronization) always prunes pre-merge Proof of Work
+(PoW) historical blocks, retaining only headers and the genesis block.
+To retain full pre-merge block history, use
+[full sync](../concepts/node-sync.md#full-synchronization) instead.
 
-Setting this option to `false` increases sync time and disk space usage.
+:::
 
 ---
 

@@ -7,7 +7,7 @@ description: Reduce the size of your database by removing pre-merge blocks from 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Node operators using [Snap sync](../concepts/node-sync.md#snap-synchronization) can significantly reduce
+Node operators using [snap sync](../concepts/node-sync.md#snap-synchronization) can significantly reduce
 disk usage by removing [pre-merge](https://ethereum.org/en/roadmap/merge/) Proof of Work (PoW)
 block data from the local database.
 
@@ -17,16 +17,16 @@ the genesis block.
 :::warning
 
 Besu does not currently provide a way to import pre-merge block data after pruning.
-If you need to restore the full pre-merge history, you can revert to the former Snap sync behaviour and download
-all blocks from peers by setting
-[`--snapsync-synchronizer-pre-checkpoint-headers-only-enabled=false`](../reference/options.md#snapsync-synchronizer-pre-checkpoint-headers-only-enabled).
+If you need to restore the full pre-merge history, delete your database and use
+[full sync](../concepts/node-sync.md#full-synchronization) instead, which downloads and retains
+all blocks from peers.
 
 :::
 
 Besu provides multiple options to prune the historical blockchain data:
 - [Offline pruning](#offline-pruning) to prune data on a stopped Besu instance.
 - [Online pruning](#online-pruning) to prune data on a running Besu instance.
-- [Sync Besu](#sync-without-pre-merge-blocks) using Snap sync, which by default prunes the historical
+- [Sync Besu](#sync-without-pre-merge-blocks) using snap sync, which prunes the historical
     blockchain data.
 
 ## Offline pruning
@@ -81,8 +81,8 @@ when complete.
 ## Sync without pre-merge blocks
 
 This option has the most downtime but reclaims the most disk space.
-Delete your database and by default, syncing a Besu node using [`SNAP` sync (`--sync-mode=SNAP`)](../reference/options.md#sync-mode)
-will prune pre-merge blocks and only retain their headers.
+Delete your database and sync a Besu node using [`SNAP` sync (`--sync-mode=SNAP`)](../reference/options.md#sync-mode),
+which prunes pre-merge blocks and only retains their headers.
 
 If you're a solo staker, consider using [RocketPool's rescue node](https://rescuenode.com/docs/about)
 to minimize downtime.

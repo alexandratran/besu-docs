@@ -68,8 +68,6 @@ Use the following estimates as a reference point, not fixed minimum requirements
 
 The Bonsai snap sync estimate is based on May 2026 burn-in results for the Besu 26.5.0
 release cycle on AWS `m8g.2xlarge` instances.
-By default, snap sync prunes historical block data for PoW blocks, retaining only the headers and the genesis block.
-Downloading full PoW blocks (by setting [`--snapsync-synchronizer-pre-checkpoint-headers-only-enabled=false`](../reference/options.md#snapsync-synchronizer-pre-checkpoint-headers-only-enabled)) increases disk usage.
 
 Forest mode uses significantly more memory than Bonsai, and we do not recommend using it on Mainnet.
 
