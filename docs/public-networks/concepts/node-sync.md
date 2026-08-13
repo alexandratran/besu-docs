@@ -76,15 +76,11 @@ Snap sync is the default sync mode for all named [networks](../reference/options
 except `dev`.
 You can enable snap sync using [`--sync-mode=SNAP`](../reference/options.md#sync-mode).
 You need Besu version 22.4.0 or later to use snap sync.
-By default, [Snap sync prunes historical block data](../how-to/pre-merge-history-expiry.md) for
-[pre-merge](https://ethereum.org/en/roadmap/merge/) PoW blocks, retaining only the
-headers and the genesis block.
-
-:::note
-To download the full PoW block history, set
-[`--snapsync-synchronizer-pre-checkpoint-headers-only-enabled`](../reference/options.md#snapsync-synchronizer-pre-checkpoint-headers-only-enabled)
-to `false`. However, this will increase the sync time and disk space usage.
-:::
+When a [checkpoint](../reference/genesis-items.md#checkpoint-configuration) is defined, which the
+default Mainnet genesis file specifies, snap sync
+[doesn't download historical block data](../how-to/pre-merge-history-expiry.md) for
+[pre-merge](https://ethereum.org/en/roadmap/merge/) PoW blocks, downloading only the headers and
+the genesis block.
 
 Instead of downloading the [state trie](data-storage-formats.md) node by node, snap
 sync downloads as many leaves of the trie as possible, and reconstructs the trie locally.
