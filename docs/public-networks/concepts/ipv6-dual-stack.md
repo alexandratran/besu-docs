@@ -21,10 +21,14 @@ Discovery v5 advertises each peer using an [Ethereum Node Record (ENR)](node-key
 carry an IPv4 address and an IPv6 address at the same time (see
 [EIP-778](https://eips.ethereum.org/EIPS/eip-778)).
 
-Dual-stack works in both discovery modes.
-Set [`--discovery-mode`](../reference/options.md#discovery-mode) to `V5` or `BOTH` if you need ENR
-[bootnodes](../../private-networks/how-to/configure/bootnodes.md) or IPv6 address auto-discovery from
-peer consensus.
+Dual-stack works in both discovery modes; discovery v5 is not required to bind IPv6 sockets or advertise 
+an IPv6 enode.
+Set [`--discovery-mode`](../reference/options.md#discovery-mode) to `V5` or `BOTH` to do any of the following:
+
+- Advertise both addresses during discovery
+- Specify [bootnodes](../../private-networks/how-to/configure/bootnodes.md) using ENRs
+- Auto-discover the advertised IPv6 address from peer consensus
+- Find peers that only use discovery v5
 
 ## P2P options
 
