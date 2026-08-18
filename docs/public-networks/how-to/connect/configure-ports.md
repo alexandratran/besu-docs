@@ -49,10 +49,10 @@ If the device Besu is running on must bind to a specific network interface, spec
 
 To enable access to the [JSON-RPC API](../use-besu-api/json-rpc.md), open the HTTP JSON-RPC and WebSockets JSON-RPC ports to the intended users of the JSON-RPC API on TCP.
 
-Specify the HTTP and WebSockets JSON-RPC ports using the [`--rpc-http-port`](../../reference/cli/options.md#rpc-http-port) and [`--rpc-ws-port`](../../reference/cli/options.md#rpc-ws-port) options. The defaults are `8545` and `8546`.
+Specify the HTTP and WebSockets JSON-RPC ports using the [`--rpc-http-port`](../../reference/options.md#rpc-http-port) and [`--rpc-ws-port`](../../reference/options.md#rpc-ws-port) options. The defaults are `8545` and `8546`.
 
 ## Metrics
 
 To enable [Prometheus to access Besu](../monitor/metrics.md), open the metrics port or metrics push port to Prometheus or the Prometheus push gateway on TCP.
 
-Specify the ports for Prometheus and Prometheus push gateway using the [`--metrics-port`](../../reference/cli/options.md#metrics-port) and [`--metrics-push-port`](../../reference/cli/options.md#metrics-push-port) options. The defaults are `9545` and `9001`.
+Specify the ports for Prometheus and Prometheus push gateway using the [`--metrics-port`](../../reference/options.md#metrics-port) and [`--metrics-push-port`](../../reference/options.md#metrics-push-port) options. The defaults are `9545` and `9001`.
