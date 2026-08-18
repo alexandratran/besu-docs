@@ -3215,7 +3215,7 @@ The P2P listening ports (UDP and TCP). The default is `30303`. You must [expose 
 
 :::tip
 This option sets the listening port for the primary P2P socket.
-For dual-stack, see [IPv6 and dual-stack networking](../../concepts/ipv6-dual-stack.md).
+For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
 :::
 
 ---

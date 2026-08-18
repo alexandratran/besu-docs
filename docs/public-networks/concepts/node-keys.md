@@ -65,12 +65,12 @@ besu --node-private-key-file="/Users/username/privatekeyfile"
 ## Enode URL
 
 The enode URL identifies a node for discovery v4.
-For example, you can specify nodes by the enode URL using the [`--bootnodes`](../reference/cli/options.md#bootnodes) option and the [`admin_addPeer`](../reference/api/index.md#admin_addpeer) method.
+For example, you can specify nodes by the enode URL using the [`--bootnodes`](../reference/options.md#bootnodes) option and the [`admin_addPeer`](../reference/api/index.md#admin_addpeer) method.
 An enode URL carries a single IP address, which can be either IPv4 or IPv6.
 
 :::tip
 Besu supports [ENR URLs](#enr-url) for discovery v5 when the early access option 
-[`--Xv5-discovery-enabled`](../reference/cli/options.md#xhelp) is set to `true`.
+[`--Xv5-discovery-enabled`](../reference/options.md#xhelp) is set to `true`.
 An ENR can carry both an IPv4 and IPv6 address, enabling [dual-stack discovery](ipv6-dual-stack.md).
 :::
 
@@ -130,7 +130,7 @@ If nodes are not connecting as expected, set the [log level to TRACE](../referen
 ## ENR URL
 
 The Ethereum Node Record (ENR) URL identifies a node for [discovery v5](https://github.com/ethereum/devp2p/tree/master/discv5).
-For example, you can specify nodes by the ENR URL using the [`--bootnodes`](../reference/cli/options.md#bootnodes) option
+For example, you can specify nodes by the ENR URL using the [`--bootnodes`](../reference/options.md#bootnodes) option
 or in the [`v5Bootnodes`](../reference/genesis-items.md#discovery-configuration-items) discovery setting in the genesis file.
 
 An ENR is a signed, extensible record that carries a node's network information as key-value pairs, 
