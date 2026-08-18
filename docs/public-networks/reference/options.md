@@ -3003,7 +3003,7 @@ The default is `127.0.0.1`.
 
 :::tip
 This option can take an IPv4 or IPv6 host.
-For dual-stack, see [IPv6 and dual-stack networking](../../concepts/ipv6-dual-stack.md).
+For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
 :::
 
 :::info
@@ -3045,14 +3045,14 @@ p2p-host-ipv6="2001:db8:85a3::8a2e:370:7334"
 </Tabs>
 
 The advertised IPv6 host that can be used to access the node from outside the network in [P2P communication](../../how-to/connect/configure-ports.md#p2p-networking).
-Set this option for a [dual-stack](../../concepts/ipv6-dual-stack.md) node, in which case 
+Set this option for a [dual-stack](../concepts/ipv6-dual-stack.md) node, in which case 
 [`--p2p-host`](#p2p-host) must be an IPv4 address.
 
 If you set `--p2p-host-ipv6` without [`--p2p-interface-ipv6`](#p2p-interface-ipv6), Besu automatically
 sets `--p2p-interface-ipv6` to `::` (all IPv6 interfaces).
 
 :::tip Early access feature
-This option enables [dual-stack networking](../../concepts/ipv6-dual-stack.md) and requires discovery v5, an early access feature.
+This option enables [dual-stack networking](../concepts/ipv6-dual-stack.md) and requires discovery v5, an early access feature.
 Set `--Xv5-discovery-enabled` to `true` to use this option.
 :::
 
@@ -3092,7 +3092,7 @@ The network interface on which the node listens for [P2P communication](../how-t
 
 :::tip
 This option can take an IPv4 or IPv6 interface.
-For dual-stack, see [IPv6 and dual-stack networking](../../concepts/ipv6-dual-stack.md).
+For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
 :::
 
 ---
@@ -3129,14 +3129,14 @@ p2p-interface-ipv6="2001:db8:85a3::1/64"
 
 The IPv6 network interface on which the node listens for [P2P communication](../how-to/connect/configure-ports.md#p2p-networking).
 Use the option to specify the required network interface when the device that Besu is running on has multiple network interfaces.
-Set this option for a [dual-stack](../../concepts/ipv6-dual-stack.md) node, in which case 
+Set this option for a [dual-stack](../concepts/ipv6-dual-stack.md) node, in which case 
 [`--p2p-interface`](#p2p-interface) must be an IPv4 address or `0.0.0.0`.
 
 If you set `--p2p-interface-ipv6` without [`--p2p-host-ipv6`](#p2p-host-ipv6), Besu can auto-discover the
 advertised IPv6 address from discovery v5 peer consensus.
 
 :::tip Early access feature
-This option enables [dual-stack networking](../../concepts/ipv6-dual-stack.md) and requires discovery v5, an early access feature.
+This option enables [dual-stack networking](../concepts/ipv6-dual-stack.md) and requires discovery v5, an early access feature.
 Set `--Xv5-discovery-enabled` to `true` to use this option.
 :::
 
@@ -3173,7 +3173,7 @@ p2p-ipv6-outbound-enabled=true
 </Tabs>
 
 Enables or disables preferring IPv6 addresses for outbound P2P connections when peers advertise both 
-IPv4 and IPv6 ([dual-stack](../../concepts/ipv6-dual-stack.md)).
+IPv4 and IPv6 ([dual-stack](../concepts/ipv6-dual-stack.md)).
 
 When set to `true`, IPv6 is preferred.
 When omitted or set to `false`, IPv4 is preferred.
@@ -3257,7 +3257,7 @@ The default is `30404`.
 You must [expose ports appropriately](../how-to/connect/configure-ports.md).
 
 :::tip Early access feature
-This option sets the port for the IPv6 socket in [dual-stack](../../concepts/ipv6-dual-stack.md) mode.
+This option sets the port for the IPv6 socket in [dual-stack](../concepts/ipv6-dual-stack.md) mode.
 Dual-stack requires discovery v5, an early access feature.
 Set `--Xv5-discovery-enabled` to `true` to use this option.
 :::

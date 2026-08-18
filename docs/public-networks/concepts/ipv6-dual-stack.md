@@ -20,7 +20,7 @@ This is what allows a dual-stack node to tell peers about both of its addresses 
 :::tip Early access feature
 
 Discovery v5 is an early access feature.
-Enable it by setting [`--Xv5-discovery-enabled`](../reference/cli/options.md#xhelp) to `true`.
+Enable it by setting [`--Xv5-discovery-enabled`](../reference/options.md#xhelp) to `true`.
 
 :::
 
@@ -30,9 +30,9 @@ Besu has a primary set of P2P options and a parallel set of `ipv6` options:
 
 | Purpose | Primary option | IPv6 option |
 |---------|----------------|-------------|
-| Advertised host | [`--p2p-host`](../reference/cli/options.md#p2p-host) (`127.0.0.1`) | [`--p2p-host-ipv6`](../reference/cli/options.md#p2p-host-ipv6) |
-| Listening interface | [`--p2p-interface`](../reference/cli/options.md#p2p-interface) (`0.0.0.0`) | [`--p2p-interface-ipv6`](../reference/cli/options.md#p2p-interface-ipv6) |
-| Listening port (UDP and TCP) | [`--p2p-port`](../reference/cli/options.md#p2p-port) (`30303`) | [`--p2p-port-ipv6`](../reference/cli/options.md#p2p-port-ipv6) (`30304`) |
+| Advertised host | [`--p2p-host`](../reference/options.md#p2p-host) (`127.0.0.1`) | [`--p2p-host-ipv6`](../reference/options.md#p2p-host-ipv6) |
+| Listening interface | [`--p2p-interface`](../reference/options.md#p2p-interface) (`0.0.0.0`) | [`--p2p-interface-ipv6`](../reference/options.md#p2p-interface-ipv6) |
+| Listening port (UDP and TCP) | [`--p2p-port`](../reference/options.md#p2p-port) (`30303`) | [`--p2p-port-ipv6`](../reference/options.md#p2p-port-ipv6) (`30304`) |
 
 The primary options configure the node's main address family, IPv4 or IPv6.
 The `ipv6` options are IPv6-specific and add a second address family for dual-stack operation.
@@ -63,7 +63,7 @@ In IPv6-only mode, there is only one socket, but it is bound to the IPv6 address
 
 When a discovered peer advertises both an IPv4 and an IPv6 address, Besu prefers IPv4 for outbound
 connections, or IPv6 if
-[`--p2p-ipv6-outbound-enabled`](../reference/cli/options.md#p2p-ipv6-outbound-enabled) is `true`.
+[`--p2p-ipv6-outbound-enabled`](../reference/options.md#p2p-ipv6-outbound-enabled) is `true`.
 If a peer advertises only one address family, Besu always uses that address.
 
 If the second IPv6 TCP socket fails to bind at startup (for example, due to a missing IPv6 address
@@ -92,8 +92,8 @@ The following table outlines which fields are returned based on the values you s
     </tr>
     <tr>
       <th><code>Xv5-discovery-enabled</code></th>
-      <th><a href="/public-networks/reference/cli/options/#p2p-host"><code>p2p-host</code></a></th>
-      <th><a href="/public-networks/reference/cli/options/#p2p-host-ipv6"><code>p2p-host-ipv6</code></a></th>
+      <th><a href="/public-networks/reference/options/#p2p-host"><code>p2p-host</code></a></th>
+      <th><a href="/public-networks/reference/options/#p2p-host-ipv6"><code>p2p-host-ipv6</code></a></th>
       <th><code>ip</code></th>
       <th><code>ipv6</code></th>
       <th><code>listenAddr</code></th>
