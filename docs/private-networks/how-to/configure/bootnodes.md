@@ -45,18 +45,13 @@ The `--bootnodes` option also accepts files or URLs:
 - A file URI: `file:///path/to/bootnodes.txt`
 - An HTTP(S) URL: `https://example.com/bootnodes.txt`
 
-You can mix sources, comma-separated, together with direct enode or ENR URLs.
-The list of sources must specify all enode URLs or all ENR URLs.
+You can mix sources, enode URLs, and ENR URLs.
+Enode URLs bootstrap discovery v4, and ENR URLs bootstrap discovery v5 when
+[`--discovery-mode`](../../../public-networks/reference/options.md#discovery-mode) is `V5` or `BOTH`.
 
 ```bash
 besu --bootnodes=/etc/besu/enodes.txt,https://example.com/enodes.txt,enode://c35c3...d615f@1.2.3.4:30303
 ```
-
-:::tip Early access feature
-Use ENR URLs for [dual-stack networking](../../../public-networks/concepts/ipv6-dual-stack.md).
-Dual-stack requires discovery v5, an early access feature.
-Set `--Xv5-discovery-enabled` to `true` to specify bootnodes by ENR URL.
-:::
 
 By default, the advertised address is `127.0.0.1:30303`, and peer discovery listens on all IPv4 interfaces (`0.0.0.0`).
 To add a specific configuration, or to configure dual-stack networking, see the

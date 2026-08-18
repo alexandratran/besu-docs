@@ -482,11 +482,9 @@ where each source can be one of the following:
 
 Each file or URL must contain one enode or ENR URL per line. Blank lines and lines starting with `#` are ignored.
 
-The `--bootnodes` list can mix sources, but must specify all enode URLs (for discovery v4) or all ENR URLs (for discovery v5).
-
-:::tip Early access feature
-To use discovery v5 bootnodes, set the early access option `--Xv5-discovery-enabled` to `true`.
-:::
+The list can mix sources, enode URLs, and ENR URLs.
+Enode URLs bootstrap discovery v4, and ENR URLs bootstrap discovery v5 when
+[`--discovery-mode`](#discovery-mode) is `V5` or `BOTH`.
 
 When connecting to Mainnet or public testnets, the default is a predefined list of bootnodes.
 In private networks defined using [`--genesis-file`](#genesis-file) or when using
@@ -851,6 +849,48 @@ The default is `true`.
 You can override the default DNS server if it's unreliable or doesn't serve TCP DNS requests, using the [early access option](#xhelp) `--Xp2p-dns-discovery-server=<HOST>`.
 
 :::
+
+---
+
+## `discovery-mode`
+
+<Tabs>
+
+<TabItem value="Command line example">
+
+```bash
+--discovery-mode=BOTH
+```
+
+</TabItem>
+
+<TabItem value="Environment variable example">
+
+```bash
+BESU_DISCOVERY_MODE=BOTH
+```
+
+</TabItem>
+
+<TabItem value="Config file example">
+
+```bash
+discovery-mode="BOTH"
+```
+
+</TabItem>
+
+</Tabs>
+
+The discovery protocol or protocols to run:
+
+- `V4` (the default) runs only discovery v4.
+- `V5` runs only discovery v5.
+  This requires a secp256k1 node key; Besu falls back to discovery v4 if the key curve is unsupported.
+- `BOTH` runs discovery v4 and v5 concurrently on a shared UDP socket.
+
+See how the discovery mode supports
+[IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md#discovery-protocols).
 
 ---
 
@@ -2930,6 +2970,87 @@ This option is ignored if [`--security-module`](#security-module) is set to a no
 
 ---
 
+## `p2p-discovery-port`
+
+<Tabs>
+
+<TabItem value="Command line example">
+
+```bash
+--p2p-discovery-port=30301
+```
+
+</TabItem>
+
+<TabItem value="Environment variable example">
+
+```bash
+BESU_P2P_DISCOVERY_PORT=30301
+```
+
+</TabItem>
+
+<TabItem value="Config file example">
+
+```bash
+p2p-discovery-port="30301"
+```
+
+</TabItem>
+
+</Tabs>
+
+The UDP port for [P2P discovery](../how-to/connect/configure-ports.md#p2p-networking).
+If unset, this option uses the [`--p2p-port`](#p2p-port) value.
+Set to `0` to request an ephemeral port from the operating system.
+
+:::tip
+This option sets the UDP discovery port for the primary P2P socket.
+For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
+:::
+
+---
+
+## `p2p-discovery-port-ipv6`
+
+<Tabs>
+
+<TabItem value="Command line example">
+
+```bash
+--p2p-discovery-port-ipv6=30401
+```
+
+</TabItem>
+
+<TabItem value="Environment variable example">
+
+```bash
+BESU_P2P_DISCOVERY_PORT_IPV6=30401
+```
+
+</TabItem>
+
+<TabItem value="Config file example">
+
+```bash
+p2p-discovery-port-ipv6="30401"
+```
+
+</TabItem>
+
+</Tabs>
+
+The IPv6 UDP port for [P2P discovery](../how-to/connect/configure-ports.md#p2p-networking).
+If unset, this option uses the [`--p2p-port-ipv6`](#p2p-port-ipv6) value.
+Set to `0` to request an ephemeral port from the operating system.
+
+:::tip
+This option sets the UDP port for the IPv6 socket in [dual-stack](../concepts/ipv6-dual-stack.md) mode.
+:::
+
+---
+
 ## `p2p-enabled`
 
 <Tabs>
@@ -2973,7 +3094,6 @@ The default is `true`.
 <TabItem value="Command line example">
 
 ```bash
-# to listen on all interfaces
 --p2p-host=0.0.0.0
 ```
 
@@ -2982,7 +3102,6 @@ The default is `true`.
 <TabItem value="Environment variable example">
 
 ```bash
-# to listen on all interfaces
 BESU_P2P_HOST=0.0.0.0
 ```
 
@@ -3003,7 +3122,7 @@ The default is `127.0.0.1`.
 
 :::tip
 This option can take an IPv4 or IPv6 host.
-For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
+See [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
 :::
 
 :::info
@@ -3044,17 +3163,12 @@ p2p-host-ipv6="2001:db8:85a3::8a2e:370:7334"
 
 </Tabs>
 
-The advertised IPv6 host that can be used to access the node from outside the network in [P2P communication](../../how-to/connect/configure-ports.md#p2p-networking).
-Set this option for a [dual-stack](../concepts/ipv6-dual-stack.md) node, in which case 
+The advertised IPv6 host that can be used to access the node from outside the network in [P2P communication](../how-to/connect/configure-ports.md#p2p-networking).
+Set this option for a [dual-stack](../concepts/ipv6-dual-stack.md) node, in which case
 [`--p2p-host`](#p2p-host) must be an IPv4 address.
 
 If you set `--p2p-host-ipv6` without [`--p2p-interface-ipv6`](#p2p-interface-ipv6), Besu automatically
 sets `--p2p-interface-ipv6` to `::` (all IPv6 interfaces).
-
-:::tip Early access feature
-This option enables [dual-stack networking](../concepts/ipv6-dual-stack.md) and requires discovery v5, an early access feature.
-Set `--Xv5-discovery-enabled` to `true` to use this option.
-:::
 
 ---
 
@@ -3088,11 +3202,11 @@ p2p-interface="192.168.1.132"
 
 </Tabs>
 
-The network interface on which the node listens for [P2P communication](../how-to/connect/configure-ports.md#p2p-networking). Use the option to specify the required network interface when the device that Besu is running on has multiple network interfaces. The default is 0.0.0.0 (all interfaces).
+The network interface on which the node listens for [P2P communication](../how-to/connect/configure-ports.md#p2p-networking). Use the option to specify the required network interface when the device that Besu is running on has multiple network interfaces. The default is `0.0.0.0` (all interfaces).
 
 :::tip
 This option can take an IPv4 or IPv6 interface.
-For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
+See [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack.md).
 :::
 
 ---
@@ -3104,7 +3218,7 @@ For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack
 <TabItem value="Command line example">
 
 ```bash
---p2p-interface-ipv6=2001:db8:85a3::1/64
+--p2p-interface-ipv6=2001:db8:85a3::1
 ```
 
 </TabItem>
@@ -3112,7 +3226,7 @@ For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack
 <TabItem value="Environment variable example">
 
 ```bash
-BESU_P2P_INTERFACE_IPV6=2001:db8:85a3::1/64
+BESU_P2P_INTERFACE_IPV6=2001:db8:85a3::1
 ```
 
 </TabItem>
@@ -3120,7 +3234,7 @@ BESU_P2P_INTERFACE_IPV6=2001:db8:85a3::1/64
 <TabItem value="Config file example">
 
 ```bash
-p2p-interface-ipv6="2001:db8:85a3::1/64"
+p2p-interface-ipv6="2001:db8:85a3::1"
 ```
 
 </TabItem>
@@ -3134,11 +3248,7 @@ Set this option for a [dual-stack](../concepts/ipv6-dual-stack.md) node, in whic
 
 If you set `--p2p-interface-ipv6` without [`--p2p-host-ipv6`](#p2p-host-ipv6), Besu can auto-discover the
 advertised IPv6 address from discovery v5 peer consensus.
-
-:::tip Early access feature
-This option enables [dual-stack networking](../concepts/ipv6-dual-stack.md) and requires discovery v5, an early access feature.
-Set `--Xv5-discovery-enabled` to `true` to use this option.
-:::
+This requires [`--discovery-mode`](#discovery-mode) to be `V5` or `BOTH`.
 
 ---
 
@@ -3179,14 +3289,15 @@ When set to `true`, IPv6 is preferred.
 When omitted or set to `false`, IPv4 is preferred.
 If a peer only advertises one address family, it is always used.
 
-### `p2p-port`
+---
+
+## `p2p-port`
 
 <Tabs>
 
 <TabItem value="Command line example">
 
 ```bash
-# to listen on port 1789
 --p2p-port=1789
 ```
 
@@ -3195,7 +3306,6 @@ If a peer only advertises one address family, it is always used.
 <TabItem value="Environment variable example">
 
 ```bash
-# to listen on port 1789
 BESU_P2P_PORT=1789
 ```
 
@@ -3211,7 +3321,9 @@ p2p-port="1789"
 
 </Tabs>
 
-The P2P listening ports (UDP and TCP). The default is `30303`. You must [expose ports appropriately](../how-to/connect/configure-ports.md).
+The TCP port for P2P (RLPx) connections.
+The default is `30303`.
+You must [expose ports appropriately](../how-to/connect/configure-ports.md).
 
 :::tip
 This option sets the listening port for the primary P2P socket.
@@ -3227,7 +3339,6 @@ For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack
 <TabItem value="Command line example">
 
 ```bash
-# to listen on port 1789
 --p2p-port-ipv6=1789
 ```
 
@@ -3236,7 +3347,6 @@ For dual-stack, see [IPv6 and dual-stack networking](../concepts/ipv6-dual-stack
 <TabItem value="Environment variable example">
 
 ```bash
-# to listen on port 1789
 BESU_P2P_PORT_IPV6=1789
 ```
 
@@ -3252,14 +3362,12 @@ p2p-port-ipv6="1789"
 
 </Tabs>
 
-The IPv6 P2P listening ports (UDP and TCP).
+The IPv6 TCP port for P2P (RLPx) connections.
 The default is `30404`.
 You must [expose ports appropriately](../how-to/connect/configure-ports.md).
 
-:::tip Early access feature
+:::tip
 This option sets the port for the IPv6 socket in [dual-stack](../concepts/ipv6-dual-stack.md) mode.
-Dual-stack requires discovery v5, an early access feature.
-Set `--Xv5-discovery-enabled` to `true` to use this option.
 :::
 
 ---

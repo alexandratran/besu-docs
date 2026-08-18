@@ -64,19 +64,13 @@ besu --node-private-key-file="/Users/username/privatekeyfile"
 
 ## Enode URL
 
-The enode URL identifies a node for discovery v4.
-For example, you can specify nodes by the enode URL using the [`--bootnodes`](../reference/options.md#bootnodes) option and the [`admin_addPeer`](../reference/api/index.md#admin_addpeer) method.
+The enode URL identifies a node for [discovery v4](https://github.com/ethereum/devp2p/blob/master/discv4.md).
+For example, you can specify nodes by the enode URL using the [`--bootnodes`](../reference/options.md#bootnodes) option and the [`admin_addPeer`](../reference/api/admin.md#admin_addpeer) method.
 An enode URL carries a single IP address, which can be either IPv4 or IPv6.
-
-:::tip
-Besu supports [ENR URLs](#enr-url) for discovery v5 when the early access option 
-[`--Xv5-discovery-enabled`](../reference/options.md#xhelp) is set to `true`.
-An ENR can carry both an IPv4 and IPv6 address, enabling [dual-stack discovery](ipv6-dual-stack.md).
-:::
 
 The enode URL format is `enode://<id>@<host:port>[?discport=<port>]` where:
 
-- `<id>` is the node public key, excluding the initial 0x.
+- `<id>` is the node public key, excluding the initial `0x`.
 - `<host:port>` is the host and TCP port the bootnode is listening on for P2P discovery. Specify the host and TCP port using the [`--p2p-host`](../reference/options.md#p2p-host) and [`--p2p-port`](../reference/options.md#p2p-port) options. The default host is `127.0.0.1` and the default port is `30303`.
 
   :::note Notes
@@ -87,6 +81,10 @@ The enode URL format is `enode://<id>@<host:port>[?discport=<port>]` where:
   :::
 
 - If the TCP listening and UDP discovery ports differ, the UDP port is specified as query parameter `discport`.
+  Set [`--p2p-discovery-port`](../reference/options.md#p2p-discovery-port) to bind discovery on a
+  different UDP port.
+
+In [dual-stack mode](ipv6-dual-stack.md), Besu also advertises an IPv6 enode (`enodeV6`).
 
 :::info
 
@@ -130,23 +128,25 @@ If nodes are not connecting as expected, set the [log level to TRACE](../referen
 ## ENR URL
 
 The Ethereum Node Record (ENR) URL identifies a node for [discovery v5](https://github.com/ethereum/devp2p/tree/master/discv5).
-For example, you can specify nodes by the ENR URL using the [`--bootnodes`](../reference/options.md#bootnodes) option
-or in the [`v5Bootnodes`](../reference/genesis-items.md#discovery-configuration-items) discovery setting in the genesis file.
+For example, you can specify nodes by the ENR URL using the [`--bootnodes`](../reference/options.md#bootnodes)
+option or in the [`bootnodes`](../reference/genesis-items.md#discovery-configuration-items) discovery
+setting in the genesis file.
 
 An ENR is a signed, extensible record that carries a node's network information as key-value pairs, 
 including its public key, IP addresses, ports, and fork ID.
 See [EIP-778](https://eips.ethereum.org/EIPS/eip-778) for the full specification.
 The text encoding of an ENR begins with `enr:` and is referred to as an ENR URL.
 
-Unlike [enode URLs](#enode-url), which carry a single IP address, an ENR can carry both an IPv4 and 
-IPv6 address, enabling [dual-stack peer discovery](ipv6-dual-stack.md).
+Unlike [enode URLs](#enode-url), which carry a single IP address, an ENR can carry both an IPv4 and an
+IPv6 address.
+See [IPv6 and dual-stack networking](ipv6-dual-stack.md).
 
-:::tip Early access feature
-To specify nodes by ENR URL, set the early access option `--Xv5-discovery-enabled` to `true`.
+:::tip
+To use ENR bootnodes, set [`--discovery-mode`](../reference/options.md#discovery-mode) to `V5` or `BOTH`.
 :::
 
 :::note
 Besu always maintains a local ENR regardless of which discovery protocol is active.
-[`admin_nodeInfo`](../reference/api/index.md#admin_nodeinfo) always returns the node's current ENR in 
-the `enr` field.
+[`admin_nodeInfo`](../reference/api/admin.md#admin_nodeinfo) always returns the node's current ENR in the
+`enr` field.
 :::
