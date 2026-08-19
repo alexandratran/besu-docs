@@ -240,9 +240,13 @@ Reruns the transaction with the same state as when the transaction executed.
 
   - `failed`: _boolean_ - True if transaction failed, otherwise, false.
 
-  - `returnValue`: _string_ - Bytes returned from transaction execution (without a `0x` prefix).
+  - `returnValue`: _string_ - Bytes returned from transaction execution, as a hex
+    string with a `0x` prefix.
+    Empty output is `"0x"`.
 
   - `structLogs`: _array_ - Array of structured log objects.
+    Empty when the executed code is empty (for example, a plain value transfer
+    between two externally owned accounts (EOAs)).
 
     <Fields>
 
@@ -323,7 +327,7 @@ curl -X POST http://127.0.0.1:8545/ \
   "result": {
     "gas": 21000,
     "failed": false,
-    "returnValue": "",
+    "returnValue": "0x",
     "structLogs": [
       {
         "pc": 100,
@@ -382,9 +386,13 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
 
   - `failed`: _boolean_ - True if transaction failed, otherwise, false.
 
-  - `returnValue`: _string_ - Bytes returned from transaction execution (without a `0x` prefix).
+  - `returnValue`: _string_ - Bytes returned from transaction execution, as a hex
+    string with a `0x` prefix.
+    Empty output is `"0x"`.
 
   - `structLogs`: _array_ - Array of structured log objects.
+    Empty when the executed code is empty (for example, a plain value transfer
+    between two externally owned accounts (EOAs)).
 
     <Fields>
 
@@ -457,17 +465,8 @@ curl -X POST http://127.0.0.1:8545/ \
   "result": {
     "gas": 21000,
     "failed": false,
-    "returnValue": "",
-    "structLogs": [
-      {
-        "pc": 0,
-        "op": "STOP",
-        "gas": 0,
-        "gasCost": 0,
-        "depth": 1,
-        "stack": []
-      }
-    ]
+    "returnValue": "0x",
+    "structLogs": []
   }
 }
 ```
@@ -515,9 +514,13 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
 
   - `failed`: _boolean_ - True if transaction failed, otherwise, false.
 
-  - `returnValue`: _string_ - Bytes returned from transaction execution (without a `0x` prefix).
+  - `returnValue`: _string_ - Bytes returned from transaction execution, as a hex
+    string with a `0x` prefix.
+    Empty output is `"0x"`.
 
   - `structLogs`: _array_ - Array of structured log objects.
+    Empty when the executed code is empty (for example, a plain value transfer
+    between two externally owned accounts (EOAs)).
 
     <Fields>
 
@@ -591,17 +594,8 @@ curl -X POST http://127.0.0.1:8545/ \
     {
       "gas": 21000,
       "failed": false,
-      "returnValue": "",
-      "structLogs": [
-        {
-          "pc": 0,
-          "op": "STOP",
-          "gas": 0,
-          "gasCost": 0,
-          "depth": 1,
-          "stack": []
-        }
-      ]
+      "returnValue": "0x",
+      "structLogs": []
     }
   ]
 }
@@ -656,9 +650,13 @@ Returns full trace of all invoked opcodes of all transactions included in the bl
 
   - `failed`: _boolean_ - True if transaction failed, otherwise, false.
 
-  - `returnValue`: _string_ - Bytes returned from transaction execution (without a `0x` prefix).
+  - `returnValue`: _string_ - Bytes returned from transaction execution, as a hex
+    string with a `0x` prefix.
+    Empty output is `"0x"`.
 
   - `structLogs`: _array_ - Array of structured log objects.
+    Empty when the executed code is empty (for example, a plain value transfer
+    between two externally owned accounts (EOAs)).
 
     <Fields>
 
@@ -738,17 +736,8 @@ curl -X POST http://127.0.0.1:8545/ \
     {
       "gas": 21000,
       "failed": false,
-      "returnValue": "",
-      "structLogs": [
-        {
-          "pc": 0,
-          "op": "STOP",
-          "gas": 0,
-          "gasCost": 0,
-          "depth": 1,
-          "stack": []
-        }
-      ]
+      "returnValue": "0x",
+      "structLogs": []
     }
   ]
 }
@@ -862,9 +851,13 @@ temporary state changes without affecting the actual blockchain state.
 
   - `failed`: _boolean_ - True if transaction failed, otherwise, false.
 
-  - `returnValue`: _string_ - Bytes returned from transaction execution (without a `0x` prefix).
+  - `returnValue`: _string_ - Bytes returned from transaction execution, as a hex
+    string with a `0x` prefix.
+    Empty output is `"0x"`.
 
   - `structLogs`: _array_ - Array of structured log objects.
+    Empty when the executed code is empty (for example, a plain value transfer
+    between two externally owned accounts (EOAs)).
 
     <Fields>
 
@@ -950,16 +943,8 @@ curl -X POST http://127.0.0.1:8545/ \
     {
       "gas": 21000,
       "failed": false,
-      "returnValue": "",
-      "structLogs": [
-        {
-          "pc": 0,
-          "op": "STOP",
-          "gas": 0,
-          "gasCost": 0,
-          "depth": 1
-        }
-      ]
+      "returnValue": "0x",
+      "structLogs": []
     }
   ]
 }
