@@ -296,7 +296,7 @@ curl -X POST http://127.0.0.1:8545/ \
 ## `eth_createAccessList`
 
 Creates an [EIP-2930](https://eips.ethereum.org/EIPS/eip-2930) access list that you can [include in a transaction](../../../concepts/transactions/types.md#access_list-transactions). The method returns a success response with the access list and gas used.
-If the simulated transaction reverts, the result also includes `error` set to `"execution reverted"`.
+If the simulated transaction reverts, the result also includes an error message.
 
 ### Parameters
 
@@ -718,8 +718,6 @@ block parameters without submitting them to the network.
     <Fields>
 
     - `blockOverrides`: _object_ - Block fields to override for this simulated block.
-      Besu accepts one override object per block state call, not a list.
-
 
       <Fields>
 
@@ -735,13 +733,15 @@ block parameters without submitting them to the network.
 
       - `prevRandao`: _data, 32 bytes_ - Previous value of randomness.
 
-      - `time`: _quantity_ - Unix epoch time in seconds. Each overridden timestamp must be greater than the previous block's timestamp. By default, it's incremented by one for each block.
+      - `time`: _quantity_ - Unix epoch timestamp, in seconds, of this simulated block.
+        It must be greater than the timestamp of the block before it in the simulation.
+        By default, Besu sets `time` to the previous timestamp plus 12 seconds.
 
       - `withdrawals`: _array_ - Array of withdrawals made by validators. This array can have a maximum length of 16.
 
       </Fields>
 
-    - `stateOverrides`: _object_ - Map of account address to state override.
+    - `stateOverrides`: _object_ - Map of account addresses to state overrides.
       Each key is a 20-byte address.
 
       <Fields>
@@ -754,9 +754,9 @@ block parameters without submitting them to the network.
 
       - `movePrecompileToAddress`: _data, 20 bytes_ - Address to which the precompile address should be moved.
 
-      - `state`: _object_ - Map of storage slot to value. Replaces the account storage. You cannot set both the `state` and `stateDiff` options simultaneously.
+      - `state`: _object_ - Map of storage slots to values. Overrides the account storage. You cannot set both the `state` and `stateDiff` options simultaneously.
 
-      - `stateDiff`: _object_ - Map of storage slot to value. Overrides individual slots. You cannot set both the `state` and `stateDiff` options simultaneously.
+      - `stateDiff`: _object_ - Map of storage slots to values. Overrides individual slots. You cannot set both the `state` and `stateDiff` options simultaneously.
 
       </Fields>
 
