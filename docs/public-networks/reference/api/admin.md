@@ -338,11 +338,15 @@ Removes cache files for the specified range of blocks.
 `pending` returns the same value as `latest`.
 :::
 
-Omit a parameter to skip it. An empty string is not a skipped parameter; Besu rejects `""` as an invalid block parameter. If you specify:
+The parameters are positional. The first `params` entry is `fromBlock` and the second is `toBlock`.
 
-- No parameters, the call removes cache files for all blocks.
-- Only `fromBlock`, the call removes cache files for the specified block.
-- Only `toBlock`, the call removes cache files from the genesis block to the specified block.
+- No parameters removes cache files from the genesis block through the chain head.
+- One parameter is `fromBlock`. Besu sets `toBlock` to that same block and removes cache files for that block only.
+- Two parameters remove cache files from `fromBlock` through `toBlock`, inclusive.
+
+To remove cache files from genesis through a block, set `fromBlock` to `earliest` or `0x0` and set `toBlock` to the end block.
+A single value cannot select `toBlock`.
+Besu rejects an empty string (`""`) as an invalid block parameter.
 
 ### Returns
 
