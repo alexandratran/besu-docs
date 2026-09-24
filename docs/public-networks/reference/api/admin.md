@@ -103,7 +103,9 @@ You can specify only one log level per RPC call.
 
 ### Returns
 
-- `Success` if the log level has changed, otherwise `error`.
+- `"Success"` when the log level is valid.
+  Besu applies the level and returns success even if the level was already set, and even if the filter list is empty.
+  An invalid log level returns an error.
 
 ### Example
 
@@ -242,7 +244,7 @@ Each index file contains 100000 blocks. The last fragment of blocks less than 10
 
 ### Returns
 
-- Log bloom index details.
+- Log bloom index details, or `null` when the node has no log bloom cacher configured.
 
   <Fields>
 
@@ -252,7 +254,7 @@ Each index file contains 100000 blocks. The last fragment of blocks less than 10
 
   - `currentBlock`: _string_ - Most recent block added to the cache.
 
-  - `indexing`: _boolean_ - Indicates if indexing is in progress.
+  - `caching`: _boolean_ - Indicates if cache generation is in progress.
 
   - `requestAccepted`: _boolean_ - Indicates acceptance of the request from this call to generate the cache.
 
@@ -306,7 +308,7 @@ curl -X POST http://127.0.0.1:8545/ \
     "startBlock": "0x0",
     "endBlock": "0x10000",
     "currentBlock": "0x0",
-    "indexing": true,
+    "caching": true,
     "requestAccepted": true
   }
 }
@@ -336,7 +338,7 @@ Removes cache files for the specified range of blocks.
 `pending` returns the same value as `latest`.
 :::
 
-You can skip a parameter by using an empty string, `""`. If you specify:
+Omit a parameter to skip it. An empty string is not a skipped parameter; Besu rejects `""` as an invalid block parameter. If you specify:
 
 - No parameters, the call removes cache files for all blocks.
 - Only `fromBlock`, the call removes cache files for the specified block.
