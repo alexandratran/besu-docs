@@ -658,7 +658,11 @@ the requested transaction must be contained in a block within the number of
 
 - `transaction`: _string_ - Transaction hash.
 
-- `indexPositions`: _array_ - Index positions of the traces.
+- `indexPositions`: _array_ of _strings_ - Trace address of the one trace to return.
+  Each entry is a hex quantity and the next step down the call tree.
+  `[]` selects the top-level trace.
+  `["0x0"]` selects its first child.
+  `["0x0", "0x1"]` selects the second child of that first child.
 
 <h3>Returns</h3>
 
