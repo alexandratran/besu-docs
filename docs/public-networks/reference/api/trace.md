@@ -662,7 +662,8 @@ the requested transaction must be contained in a block within the number of
 
 <h3>Returns</h3>
 
-- List of [trace objects](#trace) at the requested positions, in the order specified.
+- One [trace object](#trace) at the requested position, or `null` when no trace matches.
+  `indexPositions` selects a single trace address. Besu does not wrap the result in an array.
 
 <h3>Example</h3>
 
