@@ -255,7 +255,9 @@ Returns information about the block matching the specified block hash.
 
     - `gas`: _quantity_ - Gas provided by the sender.
 
-    - `gasPrice`: _quantity_ - Gas price, in Wei. Present for every transaction. For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of an included transaction, or `maxFeePerGas` when the transaction is not yet included. Use `type`, not the presence of `gasPrice`, to identify the transaction type.
+    - `gasPrice`: _quantity_ - Gas price, in Wei.
+      For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of 
+      an included transaction, or `maxFeePerGas` when the transaction is not yet included.
 
     - `maxPriorityFeePerGas`: _quantity, integer_ - (Optional) Maximum fee, in Wei, the sender is willing to pay per gas above the base fee. Used only in [`EIP1559` transactions](../../../concepts/transactions/types.md#eip1559-transactions).
 
@@ -271,7 +273,8 @@ Returns information about the block matching the specified block hash.
 
     - `transactionIndex`: _quantity, integer_ - Index position of the transaction in the block. `null` when transaction is pending.
 
-    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md). `0x0` for legacy, `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
+    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md): `0x0` for legacy, 
+      `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
 
     - `value`: _quantity_ - Value transferred, in Wei.
 
@@ -478,8 +481,7 @@ Returns information about the block matching the specified block number.
   [block parameter](../../../how-to/use-besu-api/json-rpc.md#block-parameter).
 
   :::note
-  `pending` returns the latest imported block, with the same populated fields as `latest`.
-  Besu does not return a placeholder pending block.
+  `pending` returns the same value as `latest`.
   :::
 
 - `verbose`: _boolean_ - If `true`, returns the full transaction objects; if `false`, returns only the hashes of the transactions.
@@ -544,7 +546,9 @@ Returns information about the block matching the specified block number.
 
     - `gas`: _quantity_ - Gas provided by the sender.
 
-    - `gasPrice`: _quantity_ - Gas price, in Wei. Present for every transaction. For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of an included transaction, or `maxFeePerGas` when the transaction is not yet included. Use `type`, not the presence of `gasPrice`, to identify the transaction type.
+    - `gasPrice`: _quantity_ - Gas price, in Wei.
+      For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of 
+      an included transaction, or `maxFeePerGas` when the transaction is not yet included.
 
     - `maxPriorityFeePerGas`: _quantity, integer_ - (Optional) Maximum fee, in Wei, the sender is willing to pay per gas above the base fee. Used only in [`EIP1559` transactions](../../../concepts/transactions/types.md#eip1559-transactions).
 
@@ -560,7 +564,8 @@ Returns information about the block matching the specified block number.
 
     - `transactionIndex`: _quantity, integer_ - Index position of the transaction in the block. `null` when transaction is pending.
 
-    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md). `0x0` for legacy, `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
+    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md): `0x0` for legacy, 
+      `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
 
     - `value`: _quantity_ - Value transferred, in Wei.
 
@@ -834,7 +839,10 @@ gas used and any event logs that might have been produced by a smart contract du
 
     - `data`: _data_ - Non-indexed arguments of the log.
 
-    - `topics`: _array of data, 32 bytes each_ - Topics the log emitted. A log can contain 0 to 4 topics. The first topic is the [event signature hash](../../../concepts/events-and-logs.md#event-signature-hash) only when the event is not anonymous.
+    - `topics`: _array of data, 32 bytes each_ - Topics the log emitted.
+      A log can contain 0 to 4 topics.
+      When the event is not anonymous, the first topic is the
+      [event signature hash](../../../concepts/events-and-logs.md#event-signature-hash).
 
     </Fields>
 
@@ -842,7 +850,9 @@ gas used and any event logs that might have been produced by a smart contract du
 
   - `status`: _quantity_ - Either `0x0` (failure), `0x1` (success), or `0x2` (invalid).
 
-  - `to`: _data, 20 bytes_ - Address of the receiver. `null` for a contract creation transaction. A zero-value call still includes `to` when the transaction has a recipient.
+  - `to`: _data, 20 bytes_ - Address of the receiver.
+    `null` for a contract creation transaction.
+    A zero-value call still includes `to` when the transaction has a recipient.
 
   - `transactionHash`: _data, 32 bytes_ - Hash of the transaction.
 
@@ -1337,7 +1347,9 @@ Returns uncle specified by block hash and index.
 
     - `gas`: _quantity_ - Gas provided by the sender.
 
-    - `gasPrice`: _quantity_ - Gas price, in Wei. Present for every transaction. For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of an included transaction, or `maxFeePerGas` when the transaction is not yet included. Use `type`, not the presence of `gasPrice`, to identify the transaction type.
+    - `gasPrice`: _quantity_ - Gas price, in Wei.
+      For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of 
+      an included transaction, or `maxFeePerGas` when the transaction is not yet included.
 
     - `maxPriorityFeePerGas`: _quantity, integer_ - (Optional) Maximum fee, in Wei, the sender is willing to pay per gas above the base fee. Used only in [`EIP1559` transactions](../../../concepts/transactions/types.md#eip1559-transactions).
 
@@ -1353,7 +1365,8 @@ Returns uncle specified by block hash and index.
 
     - `transactionIndex`: _quantity, integer_ - Index position of the transaction in the block. `null` when transaction is pending.
 
-    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md). `0x0` for legacy, `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
+    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md): `0x0` for legacy, 
+      `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
 
     - `value`: _quantity_ - Value transferred, in Wei.
 
@@ -1618,7 +1631,9 @@ Returns uncle specified by block number and index.
 
     - `gas`: _quantity_ - Gas provided by the sender.
 
-    - `gasPrice`: _quantity_ - Gas price, in Wei. Present for every transaction. For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of an included transaction, or `maxFeePerGas` when the transaction is not yet included. Use `type`, not the presence of `gasPrice`, to identify the transaction type.
+    - `gasPrice`: _quantity_ - Gas price, in Wei.
+      For [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) transactions, this is the effective gas price of 
+      an included transaction, or `maxFeePerGas` when the transaction is not yet included.
 
     - `maxPriorityFeePerGas`: _quantity, integer_ - (Optional) Maximum fee, in Wei, the sender is willing to pay per gas above the base fee. Used only in [`EIP1559` transactions](../../../concepts/transactions/types.md#eip1559-transactions).
 
@@ -1634,7 +1649,8 @@ Returns uncle specified by block number and index.
 
     - `transactionIndex`: _quantity, integer_ - Index position of the transaction in the block. `null` when transaction is pending.
 
-    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md). `0x0` for legacy, `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
+    - `type`: _quantity_ - [Transaction type](../../../concepts/transactions/types.md): `0x0` for legacy, 
+      `0x1` for access list, `0x2` for EIP-1559, and `0x3` for blob transactions.
 
     - `value`: _quantity_ - Value transferred, in Wei.
 
