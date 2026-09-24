@@ -17,7 +17,7 @@ Returns a list of account addresses a client owns.
 
 :::note
 
-This method returns an empty object because Besu [doesn't support key management](../../../how-to/send-transactions.md) inside the client.
+This method returns an empty array (`[]`) because Besu [doesn't support key management](../../../how-to/send-transactions.md) inside the client.
 
 To provide access to your key store and then sign transactions, use [Web3Signer](https://docs.web3signer.consensys.net/) with Besu.
 
