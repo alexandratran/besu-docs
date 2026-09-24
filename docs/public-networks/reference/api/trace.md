@@ -658,16 +658,14 @@ the requested transaction must be contained in a block within the number of
 
 - `transaction`: _string_ - Transaction hash.
 
-- `indexPositions`: _array_ of _strings_ - Trace address of the one trace to return.
-  Each entry is a hex quantity and the next step down the call tree.
-  `[]` selects the top-level trace.
-  `["0x0"]` selects its first child.
-  `["0x0", "0x1"]` selects the second child of that first child.
+- `indexPositions`: _array_ of _strings_ - Index position of the trace.
+  Each array item is a hex quantity and the next step down the call tree.
+  For example: `[]` selects the top-level trace; `["0x0"]` selects its first child; `["0x0", "0x1"]` 
+  selects the second child of that first child.
 
 <h3>Returns</h3>
 
-- One [trace object](#trace) at the requested position, or `null` when no trace matches.
-  `indexPositions` selects a single trace address. Besu does not wrap the result in an array.
+- A [trace object](#trace) at the requested position, or `null` when no trace matches.
 
 <h3>Example</h3>
 
