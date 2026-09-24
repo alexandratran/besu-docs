@@ -275,8 +275,8 @@ Sets a new value for the extra data field that is used when producing blocks.
 
 ### Returns
 
-- `true` when the extra data is accepted. An invalid value returns an error.
-  The result is the JSON boolean `true`, not the string `"true"`.
+- `true` when the extra data is accepted.
+  An invalid value returns an error.
 
 ### Example
 
