@@ -85,12 +85,10 @@ The following services are typically used in `register`:
 The remaining services only become available at `start`:
 
 - [`BesuEvents`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/BesuEvents.html)
-- [`BftQueryService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/query/BftQueryService.html)
 - [`BlockSimulationService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/BlockSimulationService.html)
 - [`MetricsSystem`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/MetricsSystem.html)
 - [`MiningService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/mining/MiningService.html)
 - [`P2PService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/p2p/P2PService.html)
-- [`PoaQueryService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/query/PoaQueryService.html)
 - [`RlpConverterService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/rlp/RlpConverterService.html)
 - [`SynchronizationService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/sync/SynchronizationService.html)
 - [`TraceService`](pathname:///plugins/reference/plugin-api/org/hyperledger/besu/plugin/services/TraceService.html)
