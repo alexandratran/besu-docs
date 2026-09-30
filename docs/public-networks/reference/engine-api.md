@@ -29,6 +29,9 @@ A consensus client calls the version appropriate for the network's currently act
   Sends the transition configuration to the consensus client to verify the configuration between both clients.
 - [`engine_forkchoiceUpdatedV1`](https://ethereum.github.io/execution-apis/api/methods/engine_forkchoiceUpdatedV1), [`V2`](https://ethereum.github.io/execution-apis/api/methods/engine_forkchoiceUpdatedV2), [`V3`](https://ethereum.github.io/execution-apis/api/methods/engine_forkchoiceUpdatedV3), [`V4`](https://ethereum.github.io/execution-apis/api/methods/engine_forkchoiceUpdatedV4) - Updates the fork choice with the consensus client.
 - [`engine_getBlobsV1`](https://ethereum.github.io/execution-apis/api/methods/engine_getBlobsV1), [`V2`](https://ethereum.github.io/execution-apis/api/methods/engine_getBlobsV2), [`V3`](https://ethereum.github.io/execution-apis/api/methods/engine_getBlobsV3) - Returns the blobs corresponding to the specified blob versioned hashes.
+- [`engine_getBlobsV4`](https://ethereum.github.io/execution-apis/api/methods/engine_getBlobsV4) -
+  Returns the blob cells and proofs for the specified versioned hashes and
+  cell-index bitarray.
 - [`engine_getClientVersionV1`](https://github.com/ethereum/execution-apis/blob/main/src/engine/identification.md#engine_getclientversionv1) - Exchanges the current client version.
 - [`engine_getPayloadV1`](https://ethereum.github.io/execution-apis/api/methods/engine_getPayloadV1), [`V2`](https://ethereum.github.io/execution-apis/api/methods/engine_getPayloadV2), [`V3`](https://ethereum.github.io/execution-apis/api/methods/engine_getPayloadV3),
 [`V4`](https://ethereum.github.io/execution-apis/api/methods/engine_getPayloadV4),
