@@ -290,40 +290,36 @@ curl -v 'http://localhost:8545/readiness?minPeers=0&maxBlocksBehind=10'
 
 The readiness response object contains the following fields:
 
-- `status`: _string_ - readiness status of the node, either `UP` or `DOWN`
+- `status`: _string_ - Readiness status of the node, either `UP` or `DOWN`.
 
-- `checks`: _object_ - peer and sync diagnostics.
+- `checks`: _object_ - Peer and sync diagnostics.
   Included when at least one check has details.
 
-  - `peers`: _object_ - peer connectivity diagnostics.
-    Included only when [P2P communication](../../reference/options.md#p2p-enabled)
-    is enabled.
+  - `peers`: _object_ - Peer connectivity diagnostics.
+    Included only when [P2P communication](../../reference/options.md#p2p-enabled) is enabled.
 
-    - `status`: _boolean_ - whether the peer requirement is met
+    - `status`: _boolean_ - Whether the peer requirement is met.
 
-    - `currentPeers`: _number_ - number of connected peers
+    - `currentPeers`: _number_ - Number of connected peers.
 
-    - `requiredPeers`: _number_ - minimum number of peers required, from the
-      `minPeers` query parameter or the default of `1`.
+    - `requiredPeers`: _number_ - Minimum number of peers required, from the `minPeers` query parameter or the 
+      default of `1`.
       Omitted when `minPeers` is invalid.
 
-    - `error`: _string_ - included when the `minPeers` query parameter is
-      invalid
+    - `error`: _string_ - Included when the `minPeers` query parameter is invalid.
 
-  - `sync`: _object_ - sync diagnostics.
+  - `sync`: _object_ - Sync diagnostics.
     Included only when sync status is available.
 
-    - `status`: _boolean_ - whether the node is within the block tolerance
+    - `status`: _boolean_ - Whether the node is within the block tolerance.
 
-    - `blocksBehind`: _number_ - number of blocks the node is behind the best
-      known block
+    - `blocksBehind`: _number_ - Number of blocks the node is behind the best known block.
 
-    - `maxBlocksBehind`: _number_ - maximum number of blocks the node can be
-      behind, from the `maxBlocksBehind` query parameter or the default of `2`.
+    - `maxBlocksBehind`: _number_ - Maximum number of blocks the node can be behind, from the 
+      `maxBlocksBehind` query parameter or the default of `2`.
       Omitted when `maxBlocksBehind` is invalid.
 
-    - `error`: _string_ - included when the `maxBlocksBehind` query parameter
-      is invalid
+    - `error`: _string_ - Included when the `maxBlocksBehind` query parameter is invalid.
 
 ### Liveness
 
