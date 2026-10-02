@@ -4970,19 +4970,17 @@ rpc-max-logs-range=500
 
 </Tabs>
 
-The maximum number of blocks to retrieve logs from when using
-[`eth_getLogs`](api/eth/filter.md#eth_getlogs),
+The maximum number of blocks to retrieve logs from when using [`eth_getLogs`](api/eth/filter.md#eth_getlogs),
 [`eth_newFilter`](api/eth/filter.md#eth_newfilter), or
 [`eth_getFilterLogs`](api/eth/filter.md#eth_getfilterlogs).
 Besu checks the range when a filter is installed and again when its logs are retrieved.
-A request whose block range is larger than this limit returns an error:
-`Requested range exceeds maximum RPC range limit`.
-Set to 0 to specify no limit.
-The default is 5000.
+A request whose block range is larger than this limit returns an error.
+Set to `0` to specify no limit.
+The default is `5000`.
 
 :::caution
 
-Using `eth_getLogs` to get logs from a large range of blocks, especially an entire chain from its
+Using `eth_getLogs` or `eth_getFilterLogs` to get logs from a large range of blocks, especially an entire chain from its
 genesis block, might cause Besu to stop responding for an indeterminable amount of time while
 generating the response.
 
@@ -5062,15 +5060,11 @@ The maximum number of EVM steps captured by one [`debug_traceCall`](api/debug/tr
 [`debug_traceBlockByHash`](api/debug/trace.md#debug_traceblockbyhash),
 [`debug_traceBlockByNumber`](api/debug/trace.md#debug_traceblockbynumber),
 [`trace_call`](api/trace.md#trace_call), or [`trace_callMany`](api/trace.md#trace_callmany) request.
-
-On the `debug_trace*` methods, [`limit`](api/debug/trace.md#debug_tracetransaction) sets how many opcode steps to capture.
-The default is `0`, which sets no caller limit.
-When `limit` and this cap are both greater than `0`, Besu uses the lower value.
-When the default opcode tracer stops at this cap, [`debug_traceCall`](api/debug/trace.md#debug_tracecall) and
-[`debug_traceTransaction`](api/debug/trace.md#debug_tracetransaction) include `"truncated": true`.
-The field is omitted when the trace is complete.
 Setting this option to `0` disables the cap.
-The default is `1000000`.
+The default is `100000`.
+
+On the `debug_trace*` methods, [`limit`](api/debug/trace.md#debug_tracetransaction) sets how many opcode steps to capture (the default is `0`, which sets no limit).
+When `limit` and this cap are both greater than `0`, Besu uses the lower value.
 
 ---
 

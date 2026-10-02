@@ -169,13 +169,9 @@ Leave the [`--auto-log-bloom-caching-enabled`](../../options.md#auto-log-bloom-c
 
 :::
 
-:::note
+:::caution
 
-[`--rpc-max-logs-range`](../../options.md#rpc-max-logs-range) also limits this method.
-If the filter's resolved block range is larger than the limit, Besu returns
-an error.
-The default limit is `5000`.
-Set the option to `0` to remove the limit.
+Using `eth_getFilterLogs` to get logs from a large range of blocks, especially an entire chain from its genesis block, might cause Besu to hang for an indeterminable amount of time while generating the response. We recommend setting a range limit using the [`--rpc-max-logs-range`](../../options.md#rpc-max-logs-range) option (or leaving it at its default value of `5000`).
 
 :::
 
@@ -300,14 +296,7 @@ Leave the [`--auto-log-bloom-caching-enabled`](../../options.md#auto-log-bloom-c
 
 :::caution
 
-[`--rpc-max-logs-range`](../../options.md#rpc-max-logs-range) limits how many
-blocks this method can query.
-The default is `5000`.
-A request that exceeds the limit returns an error.
-Set the option to `0` to remove the limit.
-With no limit, a query over a large range of blocks, especially an entire
-chain from its genesis block, might cause Besu to stop responding for an
-indeterminable amount of time while generating the response.
+Using `eth_getLogs` to get logs from a large range of blocks, especially an entire chain from its genesis block, might cause Besu to hang for an indeterminable amount of time while generating the response. We recommend setting a range limit using the [`--rpc-max-logs-range`](../../options.md#rpc-max-logs-range) option (or leaving it at its default value of `5000`).
 
 :::
 
@@ -587,12 +576,9 @@ Creates a [log filter](../../../concepts/events-and-logs.md). To poll for logs a
 
 :::note
 
-[`--rpc-max-logs-range`](../../options.md#rpc-max-logs-range) limits the block
-range of a new filter.
-If the resolved block range is larger than the limit, Besu returns an error
-and does not install the filter.
-The default limit is `5000`.
-Set the option to `0` to remove the limit.
+[`--rpc-max-logs-range`](../../options.md#rpc-max-logs-range) limits the block range of a new filter (the 
+default is `5000`).
+If the resolved block range is larger than the limit, Besu returns an error and does not install the filter.
 
 :::
 

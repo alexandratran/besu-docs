@@ -162,15 +162,6 @@ be within the number of [blocks retained](../options.md#bonsai-historical-block-
 default, 512 from the head of the chain).
 :::
 
-:::note
-
-[`--rpc-max-trace-steps`](../options.md#rpc-max-trace-steps) caps the number of
-EVM steps captured by this method.
-The default is `1000000`.
-Set the option to `0` to remove the cap.
-
-:::
-
 <h3>Parameters</h3>
 
 - `call`: _object_ - Transaction call object.
@@ -340,15 +331,6 @@ Performs multiple call traces on top of the same block. You can trace dependent 
 When using [Bonsai](../../concepts/data-storage-formats.md#bonsai-tries), the requested block must
 be within the number of [blocks retained](../options.md#bonsai-historical-block-limit) (by
 default, 512 from the head of the chain).
-:::
-
-:::note
-
-[`--rpc-max-trace-steps`](../options.md#rpc-max-trace-steps) caps the number of
-EVM steps captured for each call in this method.
-The default is `1000000`.
-Set the option to `0` to remove the cap.
-
 :::
 
 <h3>Parameters</h3>
