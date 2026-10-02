@@ -1632,10 +1632,9 @@ graphql-max-blocks-range=1000
 
 </Tabs>
 
-The maximum number of blocks a single GraphQL `blocks(from, to)` or
+The maximum number of blocks a single [GraphQL](../how-to/use-besu-api/graphql.md) `blocks(from, to)` or
 `logs(filter)` query can retrieve.
-Besu measures the requested range before it reduces an end block past the
-chain head.
+Besu measures the requested range before it reduces an end block past the chain head.
 A query that exceeds this limit is rejected.
 The value must be equal to or greater than `0`.
 Setting this option to `0` indicates there is no limit.
@@ -5034,7 +5033,7 @@ The maximum number of blocks you can supply to the [`trace_filter`](api/trace.md
 <TabItem value="Command line example">
 
 ```bash
---rpc-max-trace-steps=100000
+--rpc-max-trace-steps=50000
 ```
 
 </TabItem>
@@ -5042,7 +5041,7 @@ The maximum number of blocks you can supply to the [`trace_filter`](api/trace.md
 <TabItem value="Environment variable example">
 
 ```bash
-BESU_RPC_MAX_TRACE_STEPS=100000
+BESU_RPC_MAX_TRACE_STEPS=50000
 ```
 
 </TabItem>
@@ -5050,28 +5049,25 @@ BESU_RPC_MAX_TRACE_STEPS=100000
 <TabItem value="Config file example">
 
 ```bash
-rpc-max-trace-steps=100000
+rpc-max-trace-steps=50000
 ```
 
 </TabItem>
 
 </Tabs>
 
-The maximum number of EVM steps captured by one
-[`debug_traceCall`](api/debug/trace.md#debug_tracecall),
+The maximum number of EVM steps captured by one [`debug_traceCall`](api/debug/trace.md#debug_tracecall),
 [`debug_traceTransaction`](api/debug/trace.md#debug_tracetransaction),
 [`debug_traceBlock`](api/debug/trace.md#debug_traceblock),
 [`debug_traceBlockByHash`](api/debug/trace.md#debug_traceblockbyhash),
 [`debug_traceBlockByNumber`](api/debug/trace.md#debug_traceblockbynumber),
-[`trace_call`](api/trace.md#trace_call), or
-[`trace_callMany`](api/trace.md#trace_callmany) request.
-On the `debug_trace*` methods, the trace options `limit` field can ask for
-fewer steps.
-Besu reduces a higher `limit` to this cap.
-When the default opcode tracer stops at this cap,
-[`debug_traceCall`](api/debug/trace.md#debug_tracecall) and
-[`debug_traceTransaction`](api/debug/trace.md#debug_tracetransaction)
-include `"truncated": true`.
+[`trace_call`](api/trace.md#trace_call), or [`trace_callMany`](api/trace.md#trace_callmany) request.
+
+On the `debug_trace*` methods, [`limit`](api/debug/trace.md#debug_tracetransaction) sets how many opcode steps to capture.
+The default is `0`, which sets no caller limit.
+When `limit` and this cap are both greater than `0`, Besu uses the lower value.
+When the default opcode tracer stops at this cap, [`debug_traceCall`](api/debug/trace.md#debug_tracecall) and
+[`debug_traceTransaction`](api/debug/trace.md#debug_tracetransaction) include `"truncated": true`.
 The field is omitted when the trace is complete.
 Setting this option to `0` disables the cap.
 The default is `1000000`.

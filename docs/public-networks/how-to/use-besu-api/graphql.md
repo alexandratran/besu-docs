@@ -27,12 +27,6 @@ Configure `<HOST>` and `<PORT>` using [`graphql-http-host`](../../reference/opti
 and [`graphql-http-port`](../../reference/options.md#graphql-http-port).
 The default endpoint is `http://127.0.0.1:8547/graphql`.
 
-[`--graphql-max-blocks-range`](../../reference/options.md#graphql-max-blocks-range)
-limits how many blocks one `blocks(from, to)` or `logs(filter)` query can
-retrieve.
-The default is `5000`.
-A query that exceeds the limit is rejected.
-
 ## GraphQL requests with cURL
 
 [Besu JSON-RPC API methods](../../reference/api/index.md) with an equivalent
