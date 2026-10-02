@@ -11,12 +11,6 @@ import TabItem from '@theme/TabItem';
 
 These methods trace transactions, blocks, and calls to inspect low-level execution.
 
-[`--rpc-max-trace-steps`](../../options.md#rpc-max-trace-steps) caps the
-number of EVM steps captured by `debug_traceCall`, `debug_traceTransaction`,
-`debug_traceBlock`, `debug_traceBlockByHash`, and `debug_traceBlockByNumber`.
-The default is `1000000`.
-Set the option to `0` to remove the cap.
-
 ## `debug_standardTraceBlockToFile`
 
 Generates files containing the block trace. A separate file is generated for each transaction in the block.

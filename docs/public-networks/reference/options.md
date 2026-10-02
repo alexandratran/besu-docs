@@ -1636,8 +1636,7 @@ The maximum number of blocks a single [GraphQL](../how-to/use-besu-api/graphql.m
 `logs(filter)` query can retrieve.
 Besu measures the requested range before it reduces an end block past the chain head.
 A query that exceeds this limit is rejected.
-The value must be equal to or greater than `0`.
-Setting this option to `0` indicates there is no limit.
+Set to `0` to specify no limit.
 The default is `5000`.
 
 ---
@@ -5060,11 +5059,12 @@ The maximum number of EVM steps captured by one [`debug_traceCall`](api/debug/tr
 [`debug_traceBlockByHash`](api/debug/trace.md#debug_traceblockbyhash),
 [`debug_traceBlockByNumber`](api/debug/trace.md#debug_traceblockbynumber),
 [`trace_call`](api/trace.md#trace_call), or [`trace_callMany`](api/trace.md#trace_callmany) request.
-Setting this option to `0` disables the cap.
+Set to `0` to specify no limit.
 The default is `100000`.
 
-On the `debug_trace*` methods, [`limit`](api/debug/trace.md#debug_tracetransaction) sets how many opcode steps to capture (the default is `0`, which sets no limit).
-When `limit` and this cap are both greater than `0`, Besu uses the lower value.
+On the `debug_trace*` methods, [`limit`](api/debug/trace.md#debug_tracetransaction) sets how many opcode 
+steps to capture (the default is `0`, which sets no limit).
+When `limit` and `--rpc-max-trace-steps` are both greater than `0`, Besu uses the lower value.
 
 ---
 
