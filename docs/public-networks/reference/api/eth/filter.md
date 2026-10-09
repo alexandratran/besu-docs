@@ -31,7 +31,7 @@ Polls the specified filter and returns an array of changes that have occurred si
 
     <Fields>
 
-    - `removed`: _tag_ - `true` if log removed because of a chain reorganization. `false` if a valid log.
+    - `removed`: _boolean_ - `true` if log removed because of a chain reorganization. `false` if a valid log.
 
     - `logIndex`: _quantity, integer_ - Log index position in the block. `null` when log is pending.
 
@@ -185,7 +185,7 @@ Using `eth_getFilterLogs` to get logs from a large range of blocks, especially a
 
   <Fields>
 
-  - `removed`: _tag_ - `true` if log removed because of a chain reorganization. `false` if a valid log.
+  - `removed`: _boolean_ - `true` if log removed because of a chain reorganization. `false` if a valid log.
 
   - `logIndex`: _quantity, integer_ - Log index position in the block. `null` when log is pending.
 
@@ -326,7 +326,7 @@ Using `eth_getLogs` to get logs from a large range of blocks, especially an enti
 
   <Fields>
 
-  - `removed`: _tag_ - `true` if log removed because of a chain reorganization. `false` if a valid log.
+  - `removed`: _boolean_ - `true` if log removed because of a chain reorganization. `false` if a valid log.
 
   - `logIndex`: _quantity, integer_ - Log index position in the block. `null` when log is pending.
 
