@@ -5060,7 +5060,7 @@ The maximum number of EVM steps captured by one [`debug_traceCall`](api/debug/tr
 [`debug_traceBlockByNumber`](api/debug/trace.md#debug_traceblockbynumber),
 [`trace_call`](api/trace.md#trace_call), or [`trace_callMany`](api/trace.md#trace_callmany) request.
 Set to `0` to specify no limit.
-The default is `100000`.
+The default is `1000000`.
 
 On the `debug_trace*` methods, [`limit`](api/debug/trace.md#debug_tracetransaction) sets how many opcode 
 steps to capture (the default is `0`, which sets no limit).
